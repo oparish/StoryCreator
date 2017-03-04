@@ -1,5 +1,7 @@
 package frontEnd;
 
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -11,12 +13,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 @SuppressWarnings("serial")
 public class EditorDialog extends JFrame implements ActionListener
@@ -28,6 +30,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
 	
+	private StringBuilder storyBuilder;
+	
 	public EditorDialog()
 	{
 		super();
@@ -37,7 +41,9 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.add(this.setupLeftPanel(), this.setupGridBagConstraints(0, 0, 2, 1));
 		this.add(this.setupRightPanel(), this.setupGridBagConstraints(2, 0, 1, 1));
 				
-		this.setSize(WIDTH, HEIGHT);	
+		this.setSize(WIDTH, HEIGHT);
+		
+		this.storyBuilder = new StringBuilder("");
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
@@ -56,11 +62,16 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JPanel setupLeftPanel()
 	{
 		JPanel leftPanel = new JPanel();
+		
 		this.displayPanel = this.setupDisplayPanel();
 		this.editorPanel = this.setupEditorPane();
 		leftPanel.setLayout(new GridLayout(2, 1));	
 		leftPanel.add(new JScrollPane(this.displayPanel));
-		leftPanel.add(new JScrollPane(this.editorPanel));
+		
+		JScrollPane scrollPane = new JScrollPane(this.editorPanel);
+		scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+		leftPanel.add(scrollPane);
+		
 		return leftPanel;
 	}
 	
@@ -103,7 +114,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void saveText()
 	{
-		
+		this.storyBuilder.append(this.editorPanel.getText() + "\n\n");
+		this.displayPanel.setText(this.storyBuilder.toString());
+		this.editorPanel.setText("");
 	}
 	
 	public static void main(String[] args)
