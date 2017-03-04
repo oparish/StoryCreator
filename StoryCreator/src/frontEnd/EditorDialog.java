@@ -11,26 +11,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
-import javax.swing.Box;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
+
+import main.Main;
 
 @SuppressWarnings("serial")
 public class EditorDialog extends JFrame implements ActionListener
 {
 	private static final String SAVE = "Save";
+	private static final String SAVETOFILE = "Save To File";
+	
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
+	
 	private JEditorPane editorPanel;
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
 	
 	private StringBuilder storyBuilder;
+	private StringBuilder techBuilder;
 	
 	public EditorDialog()
 	{
@@ -44,6 +50,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.setSize(WIDTH, HEIGHT);
 		
 		this.storyBuilder = new StringBuilder("");
+		this.techBuilder = new StringBuilder("Test");
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
@@ -86,16 +93,21 @@ public class EditorDialog extends JFrame implements ActionListener
 		return rightPanel;
 	}
 	
-	private Box setupButtonPanel()
+	private JPanel setupButtonPanel()
 	{
-		Box verticalBox = Box.createVerticalBox();
-		verticalBox.add(Box.createVerticalGlue());
-		
-		MyButton saveButton = new MyButton(SAVE, ButtonID.SAVE);
-		saveButton.addActionListener(this);
-		saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		verticalBox.add(saveButton);
-		return verticalBox;
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.add(this.makeButton(SAVE, ButtonID.SAVE));
+		buttonPanel.add(this.makeButton(SAVETOFILE, ButtonID.SAVETOFILE));
+		return buttonPanel;
+	}
+	
+	private MyButton makeButton (String text, ButtonID buttonID)
+	{
+		MyButton myButton = new MyButton(text, buttonID);
+		myButton.addActionListener(this);
+		myButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		return myButton;
 	}
 	
 	private JTextArea setupDisplayPanel()
@@ -117,6 +129,17 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.storyBuilder.append(this.editorPanel.getText() + "\n\n");
 		this.displayPanel.setText(this.storyBuilder.toString());
 		this.editorPanel.setText("");
+	}
+	
+	private void saveToFile()
+	{
+		JFileChooser chooser = new JFileChooser();
+		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File saveFile = chooser.getSelectedFile();
+			Main.saveTextToFile(saveFile, this.storyBuilder, this.techBuilder);
+		}
+		
 	}
 	
 	public static void main(String[] args)
@@ -141,6 +164,11 @@ public class EditorDialog extends JFrame implements ActionListener
 			case SAVE:
 				this.saveText();
 			break;
+			case SAVETOFILE:
+				this.saveToFile();
+				break;
+			default:
+				break;
 		}
 	}
 }
