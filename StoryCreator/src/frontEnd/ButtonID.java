@@ -2,5 +2,5 @@ package frontEnd;
 
 public enum ButtonID
 {
-	SAVE, SAVETOFILE;
+	SAVE, SAVETOFILE, NEW_SCENARIO;
 }

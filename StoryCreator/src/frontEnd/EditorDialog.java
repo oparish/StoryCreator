@@ -31,6 +31,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
 	
+	private static final int INITIALOPTIONNUMBER = 3;
+	
 	private JEditorPane editorPanel;
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
@@ -96,7 +98,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JPanel setupButtonPanel()
 	{
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.setLayout(new GridLayout(1, 2));
 		buttonPanel.add(this.makeButton(SAVE, ButtonID.SAVE));
 		buttonPanel.add(this.makeButton(SAVETOFILE, ButtonID.SAVETOFILE));
 		return buttonPanel;
@@ -138,8 +140,15 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			File saveFile = chooser.getSelectedFile();
 			Main.saveTextToFile(saveFile, this.storyBuilder, this.techBuilder);
-		}
-		
+		}	
+	}
+	
+	private void newScenario()
+	{
+		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(this, true, INITIALOPTIONNUMBER);
+		Dimension screenCentre = main.Main.getScreenCentre();
+		newScenarioDialog.setLocation(screenCentre.width - newScenarioDialog.getWidth()/2, screenCentre.height - newScenarioDialog.getHeight()/2);
+		newScenarioDialog.setVisible(true);
 	}
 	
 	public static void main(String[] args)
@@ -166,7 +175,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			break;
 			case SAVETOFILE:
 				this.saveToFile();
-				break;
+			break;
 			default:
 				break;
 		}

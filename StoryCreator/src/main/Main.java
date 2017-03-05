@@ -11,9 +11,12 @@ import storyElements.Scenario;
 
 public class Main
 {
-	private static Random random = new Random();
+	public static final int BRANCHLENGTH = 4;
+	public static final int SUBPLOTLENGTH = 2;
 	
+	private static Random random = new Random();
 	private static Scenario mainScenario;
+	
 	
 	public static Dimension getScreenCentre()
 	{
