@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import storyElements.optionLists.OptionList;
 import storyElements.optionLists.RepeatingOptionList;
 import storyElements.options.BranchOption;
 import storyElements.options.Option;
@@ -24,16 +25,16 @@ public class NewOptionDialog extends JDialog
 	private static final String DESCRIPTION = "Description";
 	
 	private JTextField descriptionField;
-	private RepeatingOptionList repeatingOptionList;
+	private OptionList optionList;
 	
-	public RepeatingOptionList getRepeatingOptionList() {
-		return repeatingOptionList;
+	public OptionList getOptionList() {
+		return optionList;
 	}
 
-	public NewOptionDialog(Frame owner, boolean modal, RepeatingOptionList repeatingOptionList)
+	public NewOptionDialog(Frame owner, boolean modal, OptionList repeatingOptionList)
 	{
 		super(owner, modal);
-		this.repeatingOptionList = repeatingOptionList;
+		this.optionList = repeatingOptionList;
 		
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());

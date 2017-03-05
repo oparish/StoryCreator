@@ -53,7 +53,7 @@ public class RepeatingOptionList<T extends Option> extends OptionList<T>
 		            	BranchOption branchOption = newOptionDialog.getOption();
 		            	EditorDialog editorDialog = (EditorDialog) newOptionDialog.getOwner();
 		                editorDialog.setOption(branchOption);
-		                newOptionDialog.getRepeatingOptionList().add(branchOption);
+		                newOptionDialog.getOptionList().add(branchOption);
 		            }  
 		        });
 				Main.showWindowInCentre(newScenarioDialog);
