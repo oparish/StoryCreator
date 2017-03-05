@@ -49,6 +49,11 @@ public class Main
 		return random.nextInt(99);
 	}
 	
+	public static int getRandomNumberInRange(int range)
+	{
+		return random.nextInt(range);
+	}
+	
 	public static Scenario getMainScenario()
 	{
 		return Main.mainScenario;

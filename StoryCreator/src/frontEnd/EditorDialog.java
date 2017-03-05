@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import storyElements.Scenario;
+import storyElements.optionLists.RepeatingOptionList.Generator;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -40,6 +42,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	
+	private Generator generator = null;
+	
 	public EditorDialog()
 	{
 		super();
@@ -53,6 +57,8 @@ public class EditorDialog extends JFrame implements ActionListener
 		
 		this.storyBuilder = new StringBuilder("");
 		this.techBuilder = new StringBuilder("Test");
+		
+		this.generate();
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
@@ -131,6 +137,31 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.storyBuilder.append(this.editorPanel.getText() + "\n\n");
 		this.displayPanel.setText(this.storyBuilder.toString());
 		this.editorPanel.setText("");
+		this.generate();
+	}
+	
+	private void generate()
+	{
+		this.infoPanel.setText(this.getInfo());
+	}
+	
+	private String getInfo()
+	{
+		StringBuilder infoBuilder = new StringBuilder();
+		Scenario currentScenario = Main.getMainScenario();
+		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
+		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
+		Generator generator = this.getGenerator();
+		infoBuilder.append("Current Option: " + generator.getOption().getDescription());
+		return infoBuilder.toString();
+	}
+	
+	private Generator getGenerator()
+	{
+		if (this.generator != null)
+			return this.generator;
+		else
+			return Main.getMainScenario().getCurrentBranch().getGenerator();
 	}
 	
 	private void saveToFile()

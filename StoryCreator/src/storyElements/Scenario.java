@@ -16,19 +16,34 @@ public class Scenario
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
 	HashMap<Integer, EndingOption> endings = new HashMap<Integer, EndingOption>();
-	Branch startingBranch;
+	Branch currentBranch;
+
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewBranch = null;
 	Chance flavourHasSubFlavour = null;
 	int branchLength;
 	int subplotLength;
+	String description;
 
-	public Scenario(ArrayList<SimpleBranchOption> initialBranchOptions,	String initialBranchDescription, int branchLength, int subplotLength)
+	public Scenario(String description, ArrayList<SimpleBranchOption> initialBranchOptions,	String initialBranchDescription, int branchLength, int subplotLength)
 	{
-		this.startingBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription);
-		branches.put(0, this.startingBranch);
+		this.description = description;
+		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription);
+		branches.put(0, this.currentBranch);
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
+	}
+	
+	public Branch getCurrentBranch() {
+		return currentBranch;
+	}
+
+	public void setCurrentBranch(Branch currentBranch) {
+		this.currentBranch = currentBranch;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 	
 	public int getSubplotLength() {

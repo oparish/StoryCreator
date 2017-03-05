@@ -23,10 +23,12 @@ public class NewScenarioDialog extends JDialog
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
 	
-	private static final String DESCRIPTION = "Description";
+	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
+	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
 	
-	private JTextField descriptionField;
+	private JTextField scenarioDescriptionField;
+	private JTextField initialBranchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
 	
 	public NewScenarioDialog(Frame owner, boolean modal, int initialOptionNumber)
@@ -37,8 +39,12 @@ public class NewScenarioDialog extends JDialog
 		
 		int yPos = 0;
 		
-		this.descriptionField = new JTextField();
-		this.addTextField(this.descriptionField, DESCRIPTION, yPos);
+		this.scenarioDescriptionField = new JTextField();
+		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION, yPos);
+		yPos++;
+		
+		this.initialBranchDescriptionField = new JTextField();
+		this.addTextField(this.initialBranchDescriptionField, INITIAL_BRANCH_DESCRIPTION, yPos);
 		yPos++;
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
@@ -64,7 +70,7 @@ public class NewScenarioDialog extends JDialog
 		{
 			initialOptions.add(new SimpleBranchOption(textField.getText()));
 		}
-		return new Scenario(initialOptions, this.descriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH);
+		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH);
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)

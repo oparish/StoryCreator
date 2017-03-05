@@ -16,4 +16,8 @@ public abstract class StorySection<T extends Option> extends RepeatingOptionList
 		super(initialOptions);
 		this.description = description;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
 }
