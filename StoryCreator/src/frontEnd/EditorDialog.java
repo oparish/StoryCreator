@@ -22,6 +22,7 @@ import javax.swing.JTextArea;
 
 import storyElements.Scenario;
 import storyElements.optionLists.RepeatingOptionList.Generator;
+import storyElements.options.Option;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -142,26 +143,29 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void generate()
 	{
-		this.infoPanel.setText(this.getInfo());
+		Generator generator = this.getGenerator();
+		generator.generateOption(this);
 	}
 	
-	private String getInfo()
+	public void setOption(Option option)
 	{
 		StringBuilder infoBuilder = new StringBuilder();
 		Scenario currentScenario = Main.getMainScenario();
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
 		Generator generator = this.getGenerator();
-		infoBuilder.append("Current Option: " + generator.getOption().getDescription());
-		return infoBuilder.toString();
+		infoBuilder.append("Current Option: " + option.getDescription());
+	
+		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
 	private Generator getGenerator()
 	{
-		if (this.generator != null)
-			return this.generator;
-		else
-			return Main.getMainScenario().getCurrentBranch().getGenerator();
+		if (this.generator == null)
+		{
+			this.generator = Main.getMainScenario().getCurrentBranch().getGenerator();;
+		}
+		return this.generator;
 	}
 	
 	private void saveToFile()

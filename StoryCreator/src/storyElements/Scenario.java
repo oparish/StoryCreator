@@ -8,7 +8,6 @@ import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Subplot;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
-import storyElements.options.SimpleBranchOption;
 
 public class Scenario
 {
@@ -25,7 +24,7 @@ public class Scenario
 	int subplotLength;
 	String description;
 
-	public Scenario(String description, ArrayList<SimpleBranchOption> initialBranchOptions,	String initialBranchDescription, int branchLength, int subplotLength)
+	public Scenario(String description, ArrayList<BranchOption> initialBranchOptions,	String initialBranchDescription, int branchLength, int subplotLength)
 	{
 		this.description = description;
 		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription);
@@ -78,14 +77,9 @@ public class Scenario
 		this.optionBecomesSubplot = optionBecomesSubplot;
 	}
 	
-	private Branch setupNewBranch(ArrayList<SimpleBranchOption> initialBranchOptions, String initialBranchDescription)
+	private Branch setupNewBranch(ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription)
 	{
-		ArrayList<BranchOption> branchOptions = new ArrayList<BranchOption>();
-		for (SimpleBranchOption simpleBranchOption : initialBranchOptions)
-		{
-			branchOptions.add(simpleBranchOption);
-		}
-		Branch newBranch = new Branch(branchOptions, initialBranchDescription);
+		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription);
 		return newBranch;
 	}
 }

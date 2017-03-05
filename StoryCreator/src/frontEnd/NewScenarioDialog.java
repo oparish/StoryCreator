@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import main.Main;
 import storyElements.Scenario;
-import storyElements.options.SimpleBranchOption;
+import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
 public class NewScenarioDialog extends JDialog
@@ -65,10 +65,10 @@ public class NewScenarioDialog extends JDialog
 	
 	public Scenario getNewScenario()
 	{
-		ArrayList<SimpleBranchOption> initialOptions = new ArrayList<SimpleBranchOption>();
+		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
 		for (JTextField textField : this.initialOptionFields)
 		{
-			initialOptions.add(new SimpleBranchOption(textField.getText()));
+			initialOptions.add(new BranchOption(textField.getText()));
 		}
 		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH);
 	}

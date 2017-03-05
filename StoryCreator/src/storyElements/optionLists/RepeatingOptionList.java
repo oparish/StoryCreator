@@ -1,8 +1,14 @@
 package storyElements.optionLists;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import frontEnd.EditorDialog;
+import frontEnd.NewOptionDialog;
+import frontEnd.NewScenarioDialog;
 import main.Main;
+import storyElements.options.BranchOption;
 import storyElements.options.Option;
 
 @SuppressWarnings("serial")
@@ -22,15 +28,36 @@ public class RepeatingOptionList<T extends Option> extends OptionList<T>
 	public class Generator
 	{
 		private Subplot currentSubplot = null;
+		private Integer lastNumber = null;
+		
 		private Generator()
 		{
 			
 		}
 		
-		public Option getOption()
+		public void generateOption(EditorDialog editorDialog)
 		{
 			int rnd = Main.getRandomNumberInRange(RepeatingOptionList.this.size());
-			return RepeatingOptionList.this.get(rnd);
+			if (this.lastNumber == null || this.lastNumber != rnd)
+			{
+				this.lastNumber = rnd;
+				editorDialog.setOption(RepeatingOptionList.this.get(rnd));
+			}
+			else
+			{
+				this.lastNumber = null;
+				NewOptionDialog newScenarioDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
+				newScenarioDialog.addWindowListener(new WindowAdapter() {  
+		            public void windowClosing(WindowEvent e) {
+		            	NewOptionDialog newOptionDialog = (NewOptionDialog) e.getWindow();
+		            	BranchOption branchOption = newOptionDialog.getOption();
+		            	EditorDialog editorDialog = (EditorDialog) newOptionDialog.getOwner();
+		                editorDialog.setOption(branchOption);
+		                newOptionDialog.getRepeatingOptionList().add(branchOption);
+		            }  
+		        });
+				Main.showWindowInCentre(newScenarioDialog);
+			}	
 		}
 		
 
