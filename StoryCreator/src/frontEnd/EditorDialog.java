@@ -143,14 +143,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		}	
 	}
 	
-	private void newScenario()
-	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(this, true, INITIALOPTIONNUMBER);
-		Dimension screenCentre = main.Main.getScreenCentre();
-		newScenarioDialog.setLocation(screenCentre.width - newScenarioDialog.getWidth()/2, screenCentre.height - newScenarioDialog.getHeight()/2);
-		newScenarioDialog.setVisible(true);
-	}
-	
 	public static void main(String[] args)
 	{
 		EditorDialog editorDialog = new EditorDialog();

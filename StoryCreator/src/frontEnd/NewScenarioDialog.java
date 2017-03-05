@@ -83,7 +83,7 @@ public class NewScenarioDialog extends JDialog
 	
 	public static void main(String[] args)
 	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, 3);
+		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, Main.INITIALOPTIONNUMBER);
 		newScenarioDialog.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
                 System.exit(0);  
