@@ -4,15 +4,22 @@ import main.Main;
 
 public class Chance
 {
-	int prob;
+	Integer prob;
 	
-	public Chance(int prob)
+	public Integer getProb() {
+		return prob;
+	}
+
+	public Chance(Integer prob)
 	{
 		this.prob = prob;
 	}
 	
 	private boolean check()
 	{
-		return Main.getRandomPercent() < this.prob;
+		if (prob == null)
+			return false;
+		else
+			return Main.getRandomPercent() < this.prob;
 	}
 }

@@ -9,9 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
+
 import frontEnd.EditorDialog;
 import frontEnd.InitialDialog;
+import storyElements.ExitPoint;
 import storyElements.Scenario;
+import storyElements.optionLists.Branch;
+import storyElements.options.EndingOption;
 
 
 public class Main
@@ -19,10 +26,50 @@ public class Main
 	public static final int INITIALOPTIONNUMBER = 3;
 	public static final int BRANCHLENGTH = 4;
 	public static final int SUBPLOTLENGTH = 2;
+	public static final int SCENARIOLENGTH = 3;
+	
+	public static final String TYPE = "type";
+	public static final String BRANCH = "branch";
+	public static final String ENDINGOPTION = "endingoption";
+	public static final String EXITPOINT = "exitpoint";
+	public static final String DESCRIPTION = "description";
+	public static final String BRANCH_LENGTH = "branch_length";
+	public static final String SUBPLOT_LENGTH = "subplot_length";
+	public static final String SCENARIO_LENGTH = "scenario_length";
+	public static final String OPTION_BECOMES_SUBPLOT = "optionBecomesSubplot";
+	public static final String OPTION_BECOMES_NEW_BRANCH = "optionBecomesNewBranch";
+	public static final String FLAVOUR_HAS_SUBFLAVOUR = "flavourHasSubFlavour";
+	public static final String EXITPOINTS = "exitpoints";
+	public static final String FLAVOURLISTS = "flavourLists";
+	public static final String SUBPLOTS = "subplots";
+	public static final String STARTING_BRANCH = "startingbranch";
+	public static final String OPTIONS = "options";
+	public static final String SUBPLOT = "subplot";
+	public static final String FLAVOURLIST = "flavour";
+	public static final String SUBFLAVOURLIST = "subflavourlist";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
 	
+	public static ExitPoint getFromJson(JsonObject jsonObject)
+	{
+		if (jsonObject.getString(Main.TYPE).matches(Main.BRANCH))
+		{
+			return new Branch(jsonObject);
+		}
+		else
+		{
+			return new EndingOption(jsonObject);
+		}
+	}
+	
+	public static Integer processJsonInt(JsonObject jsonObject, String key)
+	{
+		if (jsonObject.containsKey(key))
+			return jsonObject.getInt(key);
+		else
+			return null;
+	}
 	
 	public static Dimension getScreenCentre()
 	{
@@ -37,6 +84,21 @@ public class Main
 			FileWriter fileWriter = new FileWriter(saveFile);
 			fileWriter.write(saveText.toString() + "\r\n" + saveText2.toString());
 			fileWriter.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveScenario(File saveFile, Scenario scenario)
+	{
+		try
+		{
+			FileWriter fileWriter = new FileWriter(saveFile);
+			JsonWriter jsonWriter = Json.createWriter(fileWriter);
+			jsonWriter.writeObject(scenario.getJsonObject());
+			jsonWriter.close();
 		}
 		catch (IOException e)
 		{

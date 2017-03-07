@@ -70,7 +70,7 @@ public class NewScenarioDialog extends JDialog
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH);
+		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH, Main.SCENARIOLENGTH);
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)

@@ -4,6 +4,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.json.JsonObject;
+
 import main.Main;
 import frontEnd.EditorDialog;
 import frontEnd.NewOptionDialog;
@@ -17,7 +19,12 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 	{
 		super(initialOptions);
 	}
-
+	
+	public NonRepeatingOptionList()
+	{
+		super();
+	}
+		
 	public void generateOption(EditorDialog editorDialog)
 	{
 		int rnd = Main.getRandomNumberInRange(NonRepeatingOptionList.this.size() + 1);

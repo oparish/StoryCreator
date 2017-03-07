@@ -12,9 +12,13 @@ import storyElements.options.BranchOption;
 import storyElements.options.Option;
 
 @SuppressWarnings("serial")
-public class RepeatingOptionList<T extends Option> extends OptionList<T>
+public abstract class RepeatingOptionList<T extends Option> extends OptionList<T>
 {
-
+	public RepeatingOptionList()
+	{
+		super();
+	}
+	
 	public RepeatingOptionList(ArrayList<T> initialOptions)
 	{
 		super(initialOptions);
