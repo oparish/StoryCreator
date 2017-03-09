@@ -32,6 +32,7 @@ public class Scenario
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
 	Branch currentBranch;
 	Integer startingBranch;
+	int branchCounter = 0;
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewBranch = null;
@@ -88,6 +89,16 @@ public class Scenario
 		{
 			this.subplots.put(Integer.valueOf(entry.getKey()), new Subplot((JsonObject) entry.getValue()));
 		}
+	}
+
+	public void incrementBranchCounter()
+	{
+		this.branchCounter++;
+	}
+	
+	public boolean checkLastBranch()
+	{
+		return this.branchCounter >= this.scenarioLength;
 	}
 	
 	public JsonObject getJsonObject()

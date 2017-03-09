@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
+import frontEnd.EditorDialog;
 import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.SubplotOption;
@@ -25,6 +26,12 @@ public class Subplot extends StorySection<SubplotOption>
 			this.add(new SubplotOption((JsonObject) optionJson));
 		}
 		this.description = jsonObject.getString(Main.DESCRIPTION);
+	}
+
+	@Override
+	protected void end(EditorDialog editorDialog)
+	{
+		
 	}
 
 }

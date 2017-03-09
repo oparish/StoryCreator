@@ -24,7 +24,7 @@ import storyElements.options.EndingOption;
 public class Main
 {
 	public static final int INITIALOPTIONNUMBER = 3;
-	public static final int BRANCHLENGTH = 4;
+	public static final int BRANCHLENGTH = 2;
 	public static final int SUBPLOTLENGTH = 2;
 	public static final int SCENARIOLENGTH = 3;
 	

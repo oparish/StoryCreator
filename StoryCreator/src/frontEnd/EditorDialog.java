@@ -153,17 +153,22 @@ public class EditorDialog extends JFrame implements ActionListener
 		Scenario currentScenario = Main.getMainScenario();
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
-		Generator generator = this.getGenerator();
 		infoBuilder.append("Current Option: " + option.getDescription());
 	
 		this.infoPanel.setText(infoBuilder.toString());
+	}
+	
+	public void startNewBranch()
+	{
+		this.generator = null;
+		this.generate();
 	}
 	
 	private Generator getGenerator()
 	{
 		if (this.generator == null)
 		{
-			this.generator = Main.getMainScenario().getCurrentBranch().getGenerator();;
+			this.generator = Main.getMainScenario().getCurrentBranch().getGenerator();
 		}
 		return this.generator;
 	}

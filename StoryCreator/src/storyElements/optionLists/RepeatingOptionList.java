@@ -23,6 +23,8 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 	{
 		super(initialOptions);
 	}
+	
+	protected abstract void end(EditorDialog editorDialog);
 
 	public Generator getGenerator()
 	{
@@ -33,6 +35,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 	{
 		private Subplot currentSubplot = null;
 		private Integer lastNumber = null;
+		private int counter = 0;
 		
 		private Generator()
 		{
@@ -41,6 +44,13 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 		
 		public void generateOption(EditorDialog editorDialog)
 		{
+			if (counter == Main.getMainScenario().getBranchLength())
+			{
+				RepeatingOptionList.this.end(editorDialog);
+				return;
+			}
+			
+			counter++;
 			int rnd = Main.getRandomNumberInRange(RepeatingOptionList.this.size());
 			if (this.lastNumber == null || this.lastNumber != rnd)
 			{
@@ -50,8 +60,9 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			else
 			{
 				this.lastNumber = null;
-				NewOptionDialog newScenarioDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
-				newScenarioDialog.addWindowListener(new WindowAdapter() {  
+				NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
+				newOptionDialog.setTitle("New Option");
+				newOptionDialog.addWindowListener(new WindowAdapter() {  
 		            public void windowClosing(WindowEvent e) {
 		            	NewOptionDialog newOptionDialog = (NewOptionDialog) e.getWindow();
 		            	BranchOption branchOption = newOptionDialog.getOption();
@@ -60,7 +71,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 		                newOptionDialog.getOptionList().add(branchOption);
 		            }  
 		        });
-				Main.showWindowInCentre(newScenarioDialog);
+				Main.showWindowInCentre(newOptionDialog);
 			}	
 		}
 		

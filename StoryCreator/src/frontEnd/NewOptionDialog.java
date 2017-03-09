@@ -15,9 +15,10 @@ import javax.swing.JTextField;
 import storyElements.optionLists.OptionList;
 import storyElements.optionLists.RepeatingOptionList;
 import storyElements.options.BranchOption;
+import storyElements.options.EndingOption;
 import storyElements.options.Option;
 
-public class NewOptionDialog extends JDialog
+public class NewOptionDialog extends FieldDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -47,29 +48,14 @@ public class NewOptionDialog extends JDialog
 
 	}
 	
-	private void addTextField(JTextField jTextField, String labelText, int yPos)
-	{		
-		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
-		this.add(jTextField, this.setupGridBagConstraints(1, yPos, 1, 1));
-	}
-	
-	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
-	{
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = gridx;
-		gridBagConstraints.gridy = gridy;
-		gridBagConstraints.gridwidth = gridWidth;
-		gridBagConstraints.gridheight = gridHeight;
-		gridBagConstraints.weightx = 1;
-		gridBagConstraints.weighty = 1;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
-		return gridBagConstraints;
-	}
-	
 	public BranchOption getOption()
 	{
 		return new BranchOption(this.descriptionField.getText());
+	}
+	
+	public EndingOption getEndingOption()
+	{
+		return new EndingOption(this.descriptionField.getText());
 	}
 	
 	public static void main(String[] args)

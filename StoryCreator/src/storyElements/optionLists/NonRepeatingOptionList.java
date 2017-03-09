@@ -34,8 +34,9 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		}
 		else
 		{
-			NewOptionDialog newScenarioDialog = new NewOptionDialog(editorDialog, true, NonRepeatingOptionList.this);
-			newScenarioDialog.addWindowListener(new WindowAdapter() {  
+			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, NonRepeatingOptionList.this);
+			newOptionDialog.setTitle("New Option");
+			newOptionDialog.addWindowListener(new WindowAdapter() {  
 	            public void windowClosing(WindowEvent e) {
 	            	NewOptionDialog newOptionDialog = (NewOptionDialog) e.getWindow();
 	            	BranchOption branchOption = newOptionDialog.getOption();
@@ -44,7 +45,7 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 	                newOptionDialog.getOptionList().add(branchOption);
 	            }  
 	        });
-			Main.showWindowInCentre(newScenarioDialog);
+			Main.showWindowInCentre(newOptionDialog);
 		}	
 	}
 	

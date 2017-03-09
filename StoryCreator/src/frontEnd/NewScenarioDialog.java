@@ -18,7 +18,7 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
-public class NewScenarioDialog extends JDialog
+public class NewScenarioDialog extends FieldDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -57,12 +57,6 @@ public class NewScenarioDialog extends JDialog
 		}
 	}
 	
-	private void addTextField(JTextField jTextField, String labelText, int yPos)
-	{		
-		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
-		this.add(jTextField, this.setupGridBagConstraints(1, yPos, 1, 1));
-	}
-	
 	public Scenario getNewScenario()
 	{
 		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
@@ -71,20 +65,6 @@ public class NewScenarioDialog extends JDialog
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
 		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH, Main.SCENARIOLENGTH);
-	}
-	
-	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
-	{
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = gridx;
-		gridBagConstraints.gridy = gridy;
-		gridBagConstraints.gridwidth = gridWidth;
-		gridBagConstraints.gridheight = gridHeight;
-		gridBagConstraints.weightx = 1;
-		gridBagConstraints.weighty = 1;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
-		return gridBagConstraints;
 	}
 	
 	public static void main(String[] args)
