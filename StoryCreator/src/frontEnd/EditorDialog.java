@@ -63,7 +63,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.setSize(WIDTH, HEIGHT);
 		
 		this.storyBuilder = new StringBuilder("");
-		this.techBuilder = new StringBuilder("Test");
+		this.techBuilder = new StringBuilder("Scenario: " + Main.getMainScenario().getDescription());
 		
 		this.generate();
 	}
@@ -152,6 +152,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public void reachEnding(EndingOption ending)
 	{
+		this.techBuilder.append("\r\nEnding: " + ending.getDescription());
 		this.progressButton.setEnabled(false);
 		this.setOption(ending);
 	}
@@ -170,11 +171,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
 		infoBuilder.append("Current Option: " + option.getDescription());
 	
+		this.techBuilder.append("\r\n" + option.getDescription());
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
 	public void startNewBranch()
 	{
+		this.techBuilder.append("\r\nNew Branch: " + Main.getMainScenario().getCurrentBranch().getDescription());
 		this.generator = null;
 		this.generate();
 	}
