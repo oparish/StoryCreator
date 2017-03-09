@@ -7,9 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import storyElements.Scenario;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -67,9 +76,32 @@ public class InitialDialog extends JFrame implements ActionListener
 	
 	private void loadScenario()
 	{
-		
+		this.setVisible(false);
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
+		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+		{
+			try {
+				File loadFile = chooser.getSelectedFile();
+				Main.setScenarioFile(loadFile);
+				FileReader fileReader;
+				fileReader = new FileReader(loadFile);
+				JsonReader jsonReader= Json.createReader(fileReader);	
+				JsonObject scenarioObject = jsonReader.readObject();
+				Main.setMainScenario(new Scenario(scenarioObject));
+				jsonReader.close();		
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            EditorDialog editorDialog = new EditorDialog();
+            Main.showWindowInCentre(editorDialog);
+		}
+		else
+		{
+			System.exit(0);
+		}
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e)

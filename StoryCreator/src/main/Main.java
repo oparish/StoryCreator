@@ -5,13 +5,18 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.JsonWriter;
+import javax.json.stream.JsonParser;
+import javax.swing.JFileChooser;
 
 import frontEnd.EditorDialog;
 import frontEnd.InitialDialog;
@@ -24,7 +29,7 @@ import storyElements.options.EndingOption;
 public class Main
 {
 	public static final int INITIALOPTIONNUMBER = 3;
-	public static final int BRANCHLENGTH = 2;
+	public static final int BRANCHLENGTH = 3;
 	public static final int SUBPLOTLENGTH = 2;
 	public static final int SCENARIOLENGTH = 3;
 	
@@ -50,6 +55,7 @@ public class Main
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
+	private static File scenarioFile;
 	
 	public static ExitPoint getFromJson(JsonObject jsonObject)
 	{
@@ -91,13 +97,24 @@ public class Main
 		}
 	}
 	
-	public static void saveScenario(File saveFile, Scenario scenario)
+	public static File getScenarioFile()
+	{
+		return Main.scenarioFile;
+	}
+	
+	public static void setScenarioFile(File file)
+	{
+		Main.scenarioFile = file;
+	}
+	
+	public static void saveScenarioToFile(File saveFile, Scenario scenario)
 	{
 		try
 		{
 			FileWriter fileWriter = new FileWriter(saveFile);
 			JsonWriter jsonWriter = Json.createWriter(fileWriter);
 			jsonWriter.writeObject(scenario.getJsonObject());
+			fileWriter.close();
 			jsonWriter.close();
 		}
 		catch (IOException e)

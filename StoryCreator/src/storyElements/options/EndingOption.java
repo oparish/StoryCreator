@@ -30,7 +30,7 @@ public class EndingOption extends Option implements ExitPoint
 	@Override
 	public void useAsExitPoint(EditorDialog editorDialog)
 	{
-		editorDialog.setOption(this);
+		editorDialog.reachEnding(this);
 	}
 	
 }

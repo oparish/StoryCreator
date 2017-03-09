@@ -55,6 +55,7 @@ public class Scenario
 	
 	public Scenario(JsonObject jsonObject)
 	{
+		System.out.println(jsonObject);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLength = Main.processJsonInt(jsonObject, Main.BRANCH_LENGTH);
 		this.subplotLength = Main.processJsonInt(jsonObject, Main.SUBPLOT_LENGTH);
@@ -69,12 +70,12 @@ public class Scenario
 		JsonObject exitPointObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointObject.entrySet())
 		{
-			this.exitPoints.put(Integer.valueOf(entry.getKey()), Main.getFromJson((JsonObject) entry.getValue()));
+			ExitPoint exitPoint = Main.getFromJson((JsonObject) entry.getValue());
+			this.exitPoints.put(Integer.valueOf(entry.getKey()), exitPoint);
 			if (((JsonObject) entry.getValue()).containsKey(Main.STARTING_BRANCH))
 			{
-				Branch branch = (Branch) this.exitPoints.get(entry.getKey());
 				this.startingBranch = Integer.valueOf(entry.getKey());
-				this.currentBranch= branch;
+				this.currentBranch = (Branch) exitPoint;
 			}
 		}
 		

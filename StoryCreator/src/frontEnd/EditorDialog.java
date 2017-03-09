@@ -19,17 +19,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import storyElements.Scenario;
 import storyElements.optionLists.RepeatingOptionList.Generator;
+import storyElements.options.EndingOption;
 import storyElements.options.Option;
 import main.Main;
 
 @SuppressWarnings("serial")
 public class EditorDialog extends JFrame implements ActionListener
 {
-	private static final String SAVE = "Save";
-	private static final String SAVETOFILE = "Save To File";
+	private static final String PROGRESS = "Progress";
+	private static final String SAVESTORYTOFILE = "Save Story To File";
+	private static final String SAVE_SCENARIO = "Save Scenario";
+	private static final String SAVE_SCENARIO_AS = "Save Scenario As";
 	
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
@@ -42,6 +46,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
+	
+	MyButton progressButton;
 	
 	private Generator generator = null;
 	
@@ -105,9 +111,12 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JPanel setupButtonPanel()
 	{
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(1, 2));
-		buttonPanel.add(this.makeButton(SAVE, ButtonID.SAVE));
-		buttonPanel.add(this.makeButton(SAVETOFILE, ButtonID.SAVETOFILE));
+		buttonPanel.setLayout(new GridLayout(2, 2));
+		this.progressButton = this.makeButton(PROGRESS, ButtonID.PROGRESS);
+		buttonPanel.add(this.progressButton);
+		buttonPanel.add(this.makeButton(SAVESTORYTOFILE, ButtonID.SAVESTORYTOFILE));
+		buttonPanel.add(this.makeButton(SAVE_SCENARIO, ButtonID.SAVE_SCENARIO));
+		buttonPanel.add(this.makeButton(SAVE_SCENARIO_AS, ButtonID.SAVE_SCENARIO_AS));
 		return buttonPanel;
 	}
 	
@@ -139,6 +148,12 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.displayPanel.setText(this.storyBuilder.toString());
 		this.editorPanel.setText("");
 		this.generate();
+	}
+	
+	public void reachEnding(EndingOption ending)
+	{
+		this.progressButton.setEnabled(false);
+		this.setOption(ending);
 	}
 	
 	private void generate()
@@ -173,14 +188,41 @@ public class EditorDialog extends JFrame implements ActionListener
 		return this.generator;
 	}
 	
-	private void saveToFile()
+	private void saveStoryToFile()
 	{
 		JFileChooser chooser = new JFileChooser();
+		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
 		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
 			File saveFile = chooser.getSelectedFile();
+			String filename = saveFile.getName();
+			if (!filename.endsWith(".txt"))
+				saveFile = new File(saveFile.getAbsolutePath() + ".txt");	
 			Main.saveTextToFile(saveFile, this.storyBuilder, this.techBuilder);
 		}	
+	}
+	
+	private void saveScenario()
+	{
+		if (Main.getScenarioFile() != null)
+			Main.saveScenarioToFile(Main.getScenarioFile(), Main.getMainScenario());
+		else
+			this.saveScenarioAs();
+	}
+	
+	private void saveScenarioAs()
+	{
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
+		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File saveFile = chooser.getSelectedFile();
+			String filename = saveFile.getName();
+			if (!filename.endsWith(".txt"))
+				saveFile = new File(saveFile.getAbsolutePath() + ".txt");		
+			Main.setScenarioFile(saveFile);
+			Main.saveScenarioToFile(saveFile, Main.getMainScenario());
+		}
 	}
 	
 	public static void main(String[] args)
@@ -202,11 +244,17 @@ public class EditorDialog extends JFrame implements ActionListener
 		MyButton sourceButton = (MyButton) e.getSource();
 		switch(sourceButton.getId())
 		{
-			case SAVE:
+			case PROGRESS:
 				this.saveText();
 			break;
-			case SAVETOFILE:
-				this.saveToFile();
+			case SAVESTORYTOFILE:
+				this.saveStoryToFile();
+			break;
+			case SAVE_SCENARIO:
+				this.saveScenario();
+			break;
+			case SAVE_SCENARIO_AS:
+				this.saveScenarioAs();
 			break;
 			default:
 				break;
