@@ -131,6 +131,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JTextArea setupDisplayPanel()
 	{
 		JTextArea displayPanel = new JTextArea();
+		displayPanel.setLineWrap(true);
 		displayPanel.setEditable(false);
 		return displayPanel;
 	}
