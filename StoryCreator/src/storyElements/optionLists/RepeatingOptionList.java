@@ -59,7 +59,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			}
 			else
 			{
-				this.lastNumber = null;
+				this.lastNumber = RepeatingOptionList.this.size();
 				NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
 				newOptionDialog.setTitle("New Option");
 				newOptionDialog.addWindowListener(new WindowAdapter() {  
