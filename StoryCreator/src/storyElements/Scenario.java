@@ -63,9 +63,12 @@ public class Scenario
 		Integer optionBecomesSubplotProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_SUBPLOT);
 		Integer optionBecomesNewBranchProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_BRANCH);
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
-		this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
-		this.optionBecomesNewBranch = new Chance(optionBecomesNewBranchProb);
-		this.flavourHasSubFlavour = new Chance(flavourHasSubFlavourProb);
+		if (optionBecomesSubplotProb != null)
+			this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
+		if (optionBecomesNewBranchProb != null)
+			this.optionBecomesNewBranch = new Chance(optionBecomesNewBranchProb);
+		if (flavourHasSubFlavourProb != null)
+			this.flavourHasSubFlavour = new Chance(flavourHasSubFlavourProb);
 		
 		JsonObject exitPointObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointObject.entrySet())

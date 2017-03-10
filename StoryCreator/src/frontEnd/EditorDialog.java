@@ -145,7 +145,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void saveText()
 	{
-		this.storyBuilder.append(this.editorPanel.getText() + "\n\n");
+		this.storyBuilder.append(this.editorPanel.getText() + "\r\n\r\n");
 		this.displayPanel.setText(this.storyBuilder.toString());
 		this.editorPanel.setText("");
 		this.generate();
