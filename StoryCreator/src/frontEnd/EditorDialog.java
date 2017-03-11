@@ -152,7 +152,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		return editorPanel;
 	}
 	
-	private void saveText()
+	private void progress()
 	{
 		this.storyBuilder.append(this.editorPanel.getText() + "\r\n\r\n");
 		this.displayPanel.setText(this.storyBuilder.toString());
@@ -264,7 +264,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		switch(sourceButton.getId())
 		{
 			case PROGRESS:
-				this.saveText();
+				this.progress();
 			break;
 			case SAVESTORYTOFILE:
 				this.saveStoryToFile();

@@ -62,7 +62,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	private void createDefaultExitPoint(EditorDialog editorDialog)
 	{
 		Scenario scenario = Main.getMainScenario();
-		scenario.incrementBranchCounter();
 		if (scenario.checkLastBranch())
 			this.createEndingOption(editorDialog);
 		else

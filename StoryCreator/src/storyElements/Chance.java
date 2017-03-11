@@ -15,7 +15,7 @@ public class Chance
 		this.prob = prob;
 	}
 	
-	private boolean check()
+	public boolean check()
 	{
 		if (prob == null)
 			return false;

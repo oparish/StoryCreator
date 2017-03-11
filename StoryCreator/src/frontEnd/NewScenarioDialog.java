@@ -15,6 +15,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import main.Main;
+import storyElements.Chance;
 import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
@@ -27,16 +28,16 @@ public class NewScenarioDialog extends FieldDialog
 	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
 	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
-	private static final String OPTION_WITH_BRANCH = "Option With Branch";
+	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
 	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
 	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
 	
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
-	private JSpinner optionToBranchSpinner;
-	private JSpinner optionWithSubPlotSpinner;
-	private JSpinner optionWithFlavourSpinner;
+	private NumberSpinner optionToBranchSpinner;
+	private NumberSpinner optionWithSubPlotSpinner;
+	private NumberSpinner optionWithFlavourSpinner;
 	
 	public NewScenarioDialog(Frame owner, boolean modal, int initialOptionNumber)
 	{
@@ -63,15 +64,15 @@ public class NewScenarioDialog extends FieldDialog
 			yPos++;
 		}
 		
-		this.optionToBranchSpinner = new JSpinner();
-		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_BRANCH, yPos);
+		this.optionToBranchSpinner = new NumberSpinner();
+		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_EXITPOINT, yPos);
 		yPos++;
 		
-		this.optionWithSubPlotSpinner = new JSpinner();
+		this.optionWithSubPlotSpinner = new NumberSpinner();
 		this.addSpinner(this.optionWithSubPlotSpinner, OPTION_WITH_SUBPLOT, yPos);
 		yPos++;
 		
-		this.optionWithFlavourSpinner = new JSpinner();
+		this.optionWithFlavourSpinner = new NumberSpinner();
 		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR, yPos);
 		yPos++;
 	}
@@ -83,7 +84,9 @@ public class NewScenarioDialog extends FieldDialog
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		return new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH, Main.SCENARIOLENGTH);
+		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH, Main.SCENARIOLENGTH);
+		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
+		return newScenario;
 	}
 	
 	public static void main(String[] args)

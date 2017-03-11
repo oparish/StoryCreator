@@ -35,7 +35,7 @@ public class Scenario
 	int branchCounter = 0;
 
 	Chance optionBecomesSubplot = null;
-	Chance optionBecomesNewBranch = null;
+	Chance optionBecomesNewExitPoint = null;
 	Chance flavourHasSubFlavour = null;
 	int branchLength;
 	int subplotLength;
@@ -55,18 +55,17 @@ public class Scenario
 	
 	public Scenario(JsonObject jsonObject)
 	{
-		System.out.println(jsonObject);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLength = Main.processJsonInt(jsonObject, Main.BRANCH_LENGTH);
 		this.subplotLength = Main.processJsonInt(jsonObject, Main.SUBPLOT_LENGTH);
 		this.scenarioLength = Main.processJsonInt(jsonObject, Main.SCENARIO_LENGTH);
 		Integer optionBecomesSubplotProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_SUBPLOT);
-		Integer optionBecomesNewBranchProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_BRANCH);
+		Integer optionBecomesNewExitPointProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_EXITPOINT);
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
 		if (optionBecomesSubplotProb != null)
 			this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
-		if (optionBecomesNewBranchProb != null)
-			this.optionBecomesNewBranch = new Chance(optionBecomesNewBranchProb);
+		if (optionBecomesNewExitPointProb != null)
+			this.optionBecomesNewExitPoint = new Chance(optionBecomesNewExitPointProb);
 		if (flavourHasSubFlavourProb != null)
 			this.flavourHasSubFlavour = new Chance(flavourHasSubFlavourProb);
 		
@@ -94,14 +93,10 @@ public class Scenario
 			this.subplots.put(Integer.valueOf(entry.getKey()), new Subplot((JsonObject) entry.getValue()));
 		}
 	}
-
-	public void incrementBranchCounter()
-	{
-		this.branchCounter++;
-	}
 	
 	public boolean checkLastBranch()
 	{
+		this.branchCounter++;
 		return this.branchCounter >= this.scenarioLength;
 	}
 	
@@ -114,8 +109,8 @@ public class Scenario
 				.add(Main.SCENARIO_LENGTH, this.scenarioLength);
 		if (this.optionBecomesSubplot != null)
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_SUBPLOT, this.optionBecomesSubplot.getProb());
-		if (this.optionBecomesNewBranch != null)
-			jsonObjectBuilder.add(Main.OPTION_BECOMES_NEW_BRANCH, this.optionBecomesNewBranch.getProb());
+		if (this.optionBecomesNewExitPoint != null)
+			jsonObjectBuilder.add(Main.OPTION_BECOMES_NEW_EXITPOINT, this.optionBecomesNewExitPoint.getProb());
 		if (this.flavourHasSubFlavour != null)
 			jsonObjectBuilder.add(Main.FLAVOUR_HAS_SUBFLAVOUR, this.flavourHasSubFlavour.getProb());
 		
@@ -208,12 +203,12 @@ public class Scenario
 		return branchLength;
 	}
 	
-	public Chance getOptionBecomesNewBranch() {
-		return optionBecomesNewBranch;
+	public Chance getOptionBecomesNewExitPoint() {
+		return optionBecomesNewExitPoint;
 	}
 
-	public void setOptionBecomesNewBranch(Chance optionBecomesNewBranch) {
-		this.optionBecomesNewBranch = optionBecomesNewBranch;
+	public void setOptionBecomesNewExitPoint(Chance optionBecomesNewExitPoint) {
+		this.optionBecomesNewExitPoint = optionBecomesNewExitPoint;
 	}
 
 	public Chance getFlavourHasSubFlavour() {
@@ -289,7 +284,7 @@ public class Scenario
 		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 0);
 		testScenario.setFlavourHasSubFlavour(new Chance(50));
 		testScenario.setOptionBecomesSubplot(new Chance(50));
-		testScenario.setOptionBecomesNewBranch(new Chance(50));
+		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
 		
 		Branch newBranch = new Branch(branchOptions2, "Descrip2");	
 		Integer newBranchId = testScenario.addExitPoint(newBranch);;

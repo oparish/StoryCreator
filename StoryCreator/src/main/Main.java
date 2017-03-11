@@ -42,7 +42,7 @@ public class Main
 	public static final String SUBPLOT_LENGTH = "subplot_length";
 	public static final String SCENARIO_LENGTH = "scenario_length";
 	public static final String OPTION_BECOMES_SUBPLOT = "optionBecomesSubplot";
-	public static final String OPTION_BECOMES_NEW_BRANCH = "optionBecomesNewBranch";
+	public static final String OPTION_BECOMES_NEW_EXITPOINT = "optionBecomesExitPoint";
 	public static final String FLAVOUR_HAS_SUBFLAVOUR = "flavourHasSubFlavour";
 	public static final String EXITPOINTS = "exitpoints";
 	public static final String FLAVOURLISTS = "flavourLists";
