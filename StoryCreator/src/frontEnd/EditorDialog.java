@@ -44,6 +44,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
 	
+	private Option currentOption;
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	
@@ -79,6 +80,14 @@ public class EditorDialog extends JFrame implements ActionListener
 		gridBagConstraints.weighty = 1;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		return gridBagConstraints;
+	}
+	
+	public String getCurrentOptionDescription()
+	{
+		if (this.currentOption == null)
+			return "";
+		else
+			return this.currentOption.getDescription();
 	}
 	
 	private JPanel setupLeftPanel()
@@ -166,13 +175,18 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public void setOption(Option option)
 	{
+		this.currentOption = option;
+		this.techBuilder.append("\r\n" + option.getDescription());
+		this.updateDisplay();
+	}
+	
+	private void updateDisplay()
+	{
 		StringBuilder infoBuilder = new StringBuilder();
 		Scenario currentScenario = Main.getMainScenario();
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
-		infoBuilder.append("Current Option: " + option.getDescription());
-	
-		this.techBuilder.append("\r\n" + option.getDescription());
+		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription());		
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
@@ -180,7 +194,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		this.techBuilder.append("\r\nNew Branch: " + Main.getMainScenario().getCurrentBranch().getDescription());
 		this.generator = null;
-		this.generate();
+		this.currentOption = null;
+		this.updateDisplay();
 	}
 	
 	private Generator getGenerator()
