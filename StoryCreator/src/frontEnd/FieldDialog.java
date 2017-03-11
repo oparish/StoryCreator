@@ -7,6 +7,7 @@ import java.awt.Insets;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import storyElements.optionLists.Branch;
@@ -24,6 +25,12 @@ public class FieldDialog extends JDialog
 	{		
 		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
 		this.add(jTextField, this.setupGridBagConstraints(1, yPos, 1, 1));
+	}
+	
+	protected void addSpinner(JSpinner jSpinner, String labelText, int yPos)
+	{		
+		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
+		this.add(jSpinner, this.setupGridBagConstraints(1, yPos, 1, 1));
 	}
 	
 	public void setBranch(Branch branch)

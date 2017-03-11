@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import main.Main;
@@ -26,10 +27,16 @@ public class NewScenarioDialog extends FieldDialog
 	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
 	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
+	private static final String OPTION_WITH_BRANCH = "Option With Branch";
+	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
+	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
 	
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
+	private JSpinner optionToBranchSpinner;
+	private JSpinner optionWithSubPlotSpinner;
+	private JSpinner optionWithFlavourSpinner;
 	
 	public NewScenarioDialog(Frame owner, boolean modal, int initialOptionNumber)
 	{
@@ -55,6 +62,18 @@ public class NewScenarioDialog extends FieldDialog
 			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i, yPos);
 			yPos++;
 		}
+		
+		this.optionToBranchSpinner = new JSpinner();
+		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_BRANCH, yPos);
+		yPos++;
+		
+		this.optionWithSubPlotSpinner = new JSpinner();
+		this.addSpinner(this.optionWithSubPlotSpinner, OPTION_WITH_SUBPLOT, yPos);
+		yPos++;
+		
+		this.optionWithFlavourSpinner = new JSpinner();
+		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR, yPos);
+		yPos++;
 	}
 	
 	public Scenario getNewScenario()
