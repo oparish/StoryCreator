@@ -32,7 +32,7 @@ public class Scenario
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
 	Branch currentBranch;
 	Integer startingBranch;
-	int branchCounter = 0;
+	int branchCounter = 1;
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewExitPoint = null;
@@ -94,9 +94,13 @@ public class Scenario
 		}
 	}
 	
-	public boolean checkLastBranch()
+	public void incrementBranchCounter()
 	{
 		this.branchCounter++;
+	}
+	
+	public boolean checkLastBranch()
+	{
 		return this.branchCounter >= this.scenarioLength;
 	}
 	

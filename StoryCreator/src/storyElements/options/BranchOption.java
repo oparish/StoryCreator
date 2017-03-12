@@ -12,7 +12,7 @@ import storyElements.optionLists.Subplot;
 
 public class BranchOption extends Option
 {
-	private Integer exitPoint;
+	private Integer exitPointID;
 	private Integer flavourList;
 	private Integer subPlot;
 	
@@ -33,7 +33,7 @@ public class BranchOption extends Option
 	public BranchOption(JsonObject jsonObject)
 	{
 		super(jsonObject);	
-		this.exitPoint = Main.processJsonInt(jsonObject, Main.EXITPOINT);
+		this.exitPointID = Main.processJsonInt(jsonObject, Main.EXITPOINT);
 		this.flavourList = Main.processJsonInt(jsonObject, Main.FLAVOURLIST);
 		this.subPlot = Main.processJsonInt(jsonObject, Main.SUBPLOT);
 	}
@@ -48,11 +48,11 @@ public class BranchOption extends Option
 	}
 	
 	public ExitPoint getExitPoint() {
-		return Main.getMainScenario().getExitPoint(this.exitPoint);
+		return Main.getMainScenario().getExitPoint(this.exitPointID);
 	}
 
 	public void setExitPoint(Integer exitPoint) {
-		this.exitPoint = exitPoint;
+		this.exitPointID = exitPoint;
 	}
 	
 	
@@ -60,8 +60,8 @@ public class BranchOption extends Option
 	{
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
 		Scenario currentScenario = Main.getMainScenario();
-		if (this.exitPoint != null)
-			jsonObjectBuilder.add(Main.EXITPOINT, this.exitPoint);
+		if (this.exitPointID != null)
+			jsonObjectBuilder.add(Main.EXITPOINT, this.exitPointID);
 		if (this.subPlot != null)
 			jsonObjectBuilder.add(Main.SUBPLOT, this.subPlot);
 		if (this.flavourList != null)

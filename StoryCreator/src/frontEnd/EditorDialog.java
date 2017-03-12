@@ -21,8 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.optionLists.RepeatingOptionList.Generator;
+import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
 import main.Main;
@@ -175,6 +177,16 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public void setOption(Option option)
 	{
+		if (option instanceof BranchOption)
+		{
+			ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
+			if (exitPoint != null)
+			{
+				exitPoint.useAsExitPoint(this);
+				return;
+			}
+		}
+
 		this.currentOption = option;
 		this.techBuilder.append("\r\n" + option.getDescription());
 		this.updateDisplay();
@@ -192,7 +204,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public void startNewBranch()
 	{
-		this.techBuilder.append("\r\nNew Branch: " + Main.getMainScenario().getCurrentBranch().getDescription());
+		Scenario scenario = Main.getMainScenario();
+		scenario.incrementBranchCounter();
+		this.techBuilder.append("\r\nNew Branch: " + scenario.getCurrentBranch().getDescription());
 		this.generator = null;
 		this.currentOption = null;
 		this.updateDisplay();
