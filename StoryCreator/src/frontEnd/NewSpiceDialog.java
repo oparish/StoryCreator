@@ -16,13 +16,21 @@ public class NewSpiceDialog extends NewOptionListDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
+	ArrayList<JTextField> suggestionFields;
 	
 	public NewSpiceDialog(Frame owner, boolean modal)
 	{
 		super(owner, modal);
 		this.setSize(WIDTH, HEIGHT);
-		this.setLayout(new GridBagLayout());
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SPICE);
+		
+		this.suggestionFields = new ArrayList<JTextField>();
+		for (int i = 0; i < Main.SUGGESTION_NUMBER; i++)
+		{
+			JTextField newField = new JTextField();
+			this.suggestionFields.add(newField);
+			this.addTextField(newField, "Suggestion " + i);
+		}
 	}
 
 	public Spice getNewSpice()
@@ -32,7 +40,13 @@ public class NewSpiceDialog extends NewOptionListDialog
 		{
 			twistList.add(new TwistOption(textField.getText()));
 		}
-		return new Spice(twistList);
+		ArrayList<String> suggestions = new ArrayList<String>();
+		for (JTextField textField : this.suggestionFields)
+		{
+			suggestions.add(textField.getText());
+		}
+		
+		return new Spice(twistList, suggestions);
 	}
 	
 }

@@ -19,7 +19,7 @@ import storyElements.options.EndingOption;
 import storyElements.options.Option;
 import storyElements.options.TwistOption;
 
-public class NewOptionDialog extends FieldDialog
+public class NewOptionDialog extends NewStoryElementDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -39,7 +39,6 @@ public class NewOptionDialog extends FieldDialog
 		this.optionList = repeatingOptionList;
 		
 		this.setSize(WIDTH, HEIGHT);
-		this.setLayout(new GridBagLayout());
 		
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);

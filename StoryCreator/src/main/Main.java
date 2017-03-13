@@ -32,6 +32,7 @@ public class Main
 {
 	public static final int INITIALOPTIONS_FOR_SCENARIO = 3;
 	public static final int INITIALOPTIONS_FOR_SPICE = 3;
+	public static final int SUGGESTION_NUMBER = 4;
 	public static final int BRANCHLENGTH = 3;
 	public static final int SUBPLOTLENGTH = 2;
 	public static final int SCENARIOLENGTH = 3;
@@ -56,6 +57,7 @@ public class Main
 	public static final String FLAVOURLIST = "flavour";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
 	public static final String TWISTLIST = "twistlist";
+	public static final String SUGGESTIONS = "suggestions";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;

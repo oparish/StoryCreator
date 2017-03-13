@@ -2,6 +2,7 @@ package frontEnd;
 
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JDialog;
@@ -20,6 +21,13 @@ public class FieldDialog extends JDialog
 	public FieldDialog(Frame owner, boolean modal)
 	{
 		super(owner, modal);
+		this.setLayout(new GridBagLayout());
+	}
+	
+	protected void addJLabel(String labelText)
+	{		
+		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, this.yPos, 1, 1));
+		this.yPos++;
 	}
 	
 	protected void addTextField(JTextField jTextField, String labelText)

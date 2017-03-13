@@ -41,7 +41,6 @@ public class NewScenarioDialog extends NewOptionListDialog
 	{
 		super(owner, modal);
 		this.setSize(WIDTH, HEIGHT);
-		this.setLayout(new GridBagLayout());
 		
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);

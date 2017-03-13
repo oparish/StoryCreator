@@ -11,7 +11,7 @@ import storyElements.Scenario;
 import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
 
-public class NewBranchDialog extends FieldDialog
+public class NewBranchDialog extends NewStoryElementDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -25,7 +25,6 @@ public class NewBranchDialog extends FieldDialog
 	{
 		super(owner, modal);
 		this.setSize(WIDTH, HEIGHT);
-		this.setLayout(new GridBagLayout());
 		
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
