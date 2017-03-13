@@ -19,16 +19,19 @@ import javax.json.stream.JsonParser;
 import javax.swing.JFileChooser;
 
 import frontEnd.EditorDialog;
-import frontEnd.InitialDialog;
+import frontEnd.InitialScenarioDialog;
 import storyElements.ExitPoint;
+import storyElements.JsonStructure;
 import storyElements.Scenario;
+import storyElements.Spice;
 import storyElements.optionLists.Branch;
 import storyElements.options.EndingOption;
 
 
 public class Main
 {
-	public static final int INITIALOPTIONNUMBER = 3;
+	public static final int INITIALOPTIONS_FOR_SCENARIO = 3;
+	public static final int INITIALOPTIONS_FOR_SPICE = 3;
 	public static final int BRANCHLENGTH = 3;
 	public static final int SUBPLOTLENGTH = 2;
 	public static final int SCENARIOLENGTH = 3;
@@ -52,10 +55,13 @@ public class Main
 	public static final String SUBPLOT = "subplot";
 	public static final String FLAVOURLIST = "flavour";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
+	public static final String TWISTLIST = "twistlist";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
 	private static File scenarioFile;
+	private static Spice mainSpice;
+	private static File spiceFile;
 	
 	public static ExitPoint getFromJson(JsonObject jsonObject)
 	{
@@ -68,6 +74,17 @@ public class Main
 			return new EndingOption(jsonObject);
 		}
 	}
+	
+	public static Spice getMainSpice()
+	{
+		return Main.mainSpice;
+	}
+
+	public static void setMainSpice(Spice mainSpice)
+	{
+		Main.mainSpice = mainSpice;
+	}
+	
 	
 	public static Integer processJsonInt(JsonObject jsonObject, String key)
 	{
@@ -83,12 +100,12 @@ public class Main
 		return new Dimension(screenSize.width/2, screenSize.height/2);
 	}
 	
-	public static void saveTextToFile(File saveFile, StringBuilder saveText, StringBuilder saveText2)
+	public static void saveTextToFile(File saveFile, StringBuilder saveText, String editorText, StringBuilder saveText2)
 	{
 		try
 		{
 			FileWriter fileWriter = new FileWriter(saveFile);
-			fileWriter.write(saveText.toString() + "\r\n" + saveText2.toString());
+			fileWriter.write(saveText.toString() + "\r\n" + editorText + "\r\n" + saveText2.toString());
 			fileWriter.close();
 		}
 		catch (IOException e)
@@ -107,13 +124,23 @@ public class Main
 		Main.scenarioFile = file;
 	}
 	
-	public static void saveScenarioToFile(File saveFile, Scenario scenario)
+	public static File getSpiceFile()
+	{
+		return Main.spiceFile;
+	}
+	
+	public static void setSpiceFile(File file)
+	{
+		Main.spiceFile = file;
+	}
+	
+	public static void saveJsonStructureToFile(File saveFile, JsonStructure jsonStructure)
 	{
 		try
 		{
 			FileWriter fileWriter = new FileWriter(saveFile);
 			JsonWriter jsonWriter = Json.createWriter(fileWriter);
-			jsonWriter.writeObject(scenario.getJsonObject());
+			jsonWriter.writeObject(jsonStructure.getJsonObject());
 			fileWriter.close();
 			jsonWriter.close();
 		}
@@ -152,7 +179,7 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		InitialDialog initialDialog = new InitialDialog();
+		InitialScenarioDialog initialDialog = new InitialScenarioDialog();
 		initialDialog.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
                 System.exit(0);  

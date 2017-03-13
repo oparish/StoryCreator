@@ -68,7 +68,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 
 		private void makeNewBranch(EditorDialog editorDialog)
 		{
-			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONNUMBER);
+			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO);
 			newBranchDialog.setTitle("New Branch");
 			newBranchDialog.addWindowListener(new WindowAdapter() {  
 			    public void windowClosing(WindowEvent e) {

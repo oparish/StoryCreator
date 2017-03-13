@@ -27,19 +27,15 @@ public class NewBranchDialog extends FieldDialog
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());
 		
-		int yPos = 0;
-		
 		this.branchDescriptionField = new JTextField();
-		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION, yPos);
-		yPos++;
+		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
 		for (int i = 0; i < initialOptionNumber; i++)
 		{
 			JTextField initialOptionField = new JTextField();
 			this.initialOptionFields.add(initialOptionField);
-			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i, yPos);
-			yPos++;
+			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i);
 		}
 	}
 	

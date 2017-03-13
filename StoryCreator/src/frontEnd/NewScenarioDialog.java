@@ -20,21 +20,19 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
-public class NewScenarioDialog extends FieldDialog
+public class NewScenarioDialog extends NewOptionListDialog
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
 	
 	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
 	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";
-	private static final String INITIAL_OPTION = "Initial Option";
 	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
 	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
 	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
 	
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
-	private ArrayList<JTextField> initialOptionFields;
 	private NumberSpinner optionToBranchSpinner;
 	private NumberSpinner optionWithSubPlotSpinner;
 	private NumberSpinner optionWithFlavourSpinner;
@@ -45,36 +43,22 @@ public class NewScenarioDialog extends FieldDialog
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());
 		
-		int yPos = 0;
-		
 		this.scenarioDescriptionField = new JTextField();
-		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION, yPos);
-		yPos++;
+		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
 		
 		this.initialBranchDescriptionField = new JTextField();
-		this.addTextField(this.initialBranchDescriptionField, INITIAL_BRANCH_DESCRIPTION, yPos);
-		yPos++;
+		this.addTextField(this.initialBranchDescriptionField, INITIAL_BRANCH_DESCRIPTION);
 		
-		this.initialOptionFields = new ArrayList<JTextField>();
-		for (int i = 0; i < initialOptionNumber; i++)
-		{
-			JTextField initialOptionField = new JTextField();
-			this.initialOptionFields.add(initialOptionField);
-			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i, yPos);
-			yPos++;
-		}
+		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SCENARIO);
 		
 		this.optionToBranchSpinner = new NumberSpinner();
-		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_EXITPOINT, yPos);
-		yPos++;
+		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_EXITPOINT);
 		
 		this.optionWithSubPlotSpinner = new NumberSpinner();
-		this.addSpinner(this.optionWithSubPlotSpinner, OPTION_WITH_SUBPLOT, yPos);
-		yPos++;
+		this.addSpinner(this.optionWithSubPlotSpinner, OPTION_WITH_SUBPLOT);
 		
 		this.optionWithFlavourSpinner = new NumberSpinner();
-		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR, yPos);
-		yPos++;
+		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR);
 	}
 	
 	public Scenario getNewScenario()
@@ -91,7 +75,7 @@ public class NewScenarioDialog extends FieldDialog
 	
 	public static void main(String[] args)
 	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, Main.INITIALOPTIONNUMBER);
+		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, Main.INITIALOPTIONS_FOR_SCENARIO);
 		newScenarioDialog.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
                 System.exit(0);  

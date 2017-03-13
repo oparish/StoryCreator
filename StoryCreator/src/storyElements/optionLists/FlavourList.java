@@ -16,6 +16,7 @@ import storyElements.options.Option;
 @SuppressWarnings("serial")
 public class FlavourList extends NonRepeatingOptionList<FlavourOption>
 {
+	protected String type = "Flavour";
 	String description;
 	
 	public FlavourList(ArrayList<FlavourOption> initialOptions, String description)

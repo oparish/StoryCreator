@@ -17,6 +17,7 @@ import storyElements.optionLists.RepeatingOptionList;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.TwistOption;
 
 public class NewOptionDialog extends FieldDialog
 {
@@ -40,12 +41,8 @@ public class NewOptionDialog extends FieldDialog
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());
 		
-		int yPos = 0;
-		
 		this.descriptionField = new JTextField();
-		this.addTextField(this.descriptionField, DESCRIPTION, yPos);
-		yPos++;
-
+		this.addTextField(this.descriptionField, DESCRIPTION);
 	}
 	
 	public BranchOption getOption()
@@ -56,6 +53,11 @@ public class NewOptionDialog extends FieldDialog
 	public EndingOption getEndingOption()
 	{
 		return new EndingOption(this.descriptionField.getText());
+	}
+	
+	public TwistOption getTwistOption()
+	{
+		return new TwistOption(this.descriptionField.getText());
 	}
 	
 	public static void main(String[] args)

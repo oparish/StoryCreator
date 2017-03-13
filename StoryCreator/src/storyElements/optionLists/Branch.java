@@ -89,7 +89,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	
 	private void createBranch(EditorDialog editorDialog)
 	{
-		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONNUMBER);
+		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO);
 		newBranchDialog.setBranch(this);
 		newBranchDialog.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  

@@ -27,6 +27,7 @@ import storyElements.optionLists.RepeatingOptionList.Generator;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.TwistOption;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -36,6 +37,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	private static final String SAVESTORYTOFILE = "Save Story To File";
 	private static final String SAVE_SCENARIO = "Save Scenario";
 	private static final String SAVE_SCENARIO_AS = "Save Scenario As";
+	private static final String SAVE_SPICE = "Save Spice";
+	private static final String SAVE_SPICE_AS = "Save Spice As";
 	
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
@@ -46,13 +49,14 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
 	
+	private TwistOption twistOption;
 	private Option currentOption;
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	
 	MyButton progressButton;
 	
-	private Generator generator = null;
+	private Generator mainGenerator = null;
 	
 	public EditorDialog()
 	{
@@ -68,7 +72,19 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.storyBuilder = new StringBuilder("");
 		this.techBuilder = new StringBuilder("Scenario: " + Main.getMainScenario().getDescription());
 		
-		this.generate();
+		this.twistGenerate();
+		this.updateDisplay();
+	}
+	
+	private void twistGenerate()
+	{
+		Main.getMainSpice().getTwistList().generateOption(this);
+	}
+	
+	public void setTwistOption(TwistOption twistOption)
+	{
+		this.twistOption = twistOption;
+		this.techBuilder.append("\r\n" + twistOption.getDescription());
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
@@ -122,12 +138,14 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JPanel setupButtonPanel()
 	{
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(2, 2));
+		buttonPanel.setLayout(new GridLayout(2, 3));
 		this.progressButton = this.makeButton(PROGRESS, ButtonID.PROGRESS);
 		buttonPanel.add(this.progressButton);
 		buttonPanel.add(this.makeButton(SAVESTORYTOFILE, ButtonID.SAVESTORYTOFILE));
 		buttonPanel.add(this.makeButton(SAVE_SCENARIO, ButtonID.SAVE_SCENARIO));
 		buttonPanel.add(this.makeButton(SAVE_SCENARIO_AS, ButtonID.SAVE_SCENARIO_AS));
+		buttonPanel.add(this.makeButton(SAVE_SPICE, ButtonID.SAVE_SPICE));
+		buttonPanel.add(this.makeButton(SAVE_SPICE_AS, ButtonID.SAVE_SPICE_AS));
 		return buttonPanel;
 	}
 	
@@ -166,7 +184,8 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		this.techBuilder.append("\r\nEnding: " + ending.getDescription());
 		this.progressButton.setEnabled(false);
-		this.setOption(ending);
+		this.currentOption = ending;
+		this.updateDisplay();
 	}
 	
 	private void generate()
@@ -197,8 +216,9 @@ public class EditorDialog extends JFrame implements ActionListener
 		StringBuilder infoBuilder = new StringBuilder();
 		Scenario currentScenario = Main.getMainScenario();
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
+		infoBuilder.append("Twist: " + this.twistOption.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
-		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription());		
+		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription());	
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
@@ -207,18 +227,18 @@ public class EditorDialog extends JFrame implements ActionListener
 		Scenario scenario = Main.getMainScenario();
 		scenario.incrementBranchCounter();
 		this.techBuilder.append("\r\nNew Branch: " + scenario.getCurrentBranch().getDescription());
-		this.generator = null;
+		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
 	}
 	
 	private Generator getGenerator()
 	{
-		if (this.generator == null)
+		if (this.mainGenerator == null)
 		{
-			this.generator = Main.getMainScenario().getCurrentBranch().getGenerator();
+			this.mainGenerator = Main.getMainScenario().getCurrentBranch().getGenerator();
 		}
-		return this.generator;
+		return this.mainGenerator;
 	}
 	
 	private void saveStoryToFile()
@@ -231,19 +251,34 @@ public class EditorDialog extends JFrame implements ActionListener
 			String filename = saveFile.getName();
 			if (!filename.endsWith(".txt"))
 				saveFile = new File(saveFile.getAbsolutePath() + ".txt");	
-			Main.saveTextToFile(saveFile, this.storyBuilder, this.techBuilder);
+			Main.saveTextToFile(saveFile, this.storyBuilder, this.editorPanel.getText(),this.techBuilder);
 		}	
 	}
 	
 	private void saveScenario()
 	{
 		if (Main.getScenarioFile() != null)
-			Main.saveScenarioToFile(Main.getScenarioFile(), Main.getMainScenario());
+			Main.saveJsonStructureToFile(Main.getScenarioFile(), Main.getMainScenario());
 		else
 			this.saveScenarioAs();
 	}
 	
-	private void saveScenarioAs()
+	private void saveSpice()
+	{
+		if (Main.getSpiceFile() != null)
+			Main.saveJsonStructureToFile(Main.getSpiceFile(), Main.getMainSpice());
+		else
+			this.saveSpiceAs();
+	}
+	
+	private void saveSpiceAs()
+	{
+		File spiceFile = this.chooseFile();
+		Main.setSpiceFile(spiceFile);
+		Main.saveJsonStructureToFile(spiceFile, Main.getMainSpice());
+	}
+	
+	private File chooseFile()
 	{
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
@@ -253,9 +288,16 @@ public class EditorDialog extends JFrame implements ActionListener
 			String filename = saveFile.getName();
 			if (!filename.endsWith(".txt"))
 				saveFile = new File(saveFile.getAbsolutePath() + ".txt");		
-			Main.setScenarioFile(saveFile);
-			Main.saveScenarioToFile(saveFile, Main.getMainScenario());
+			return saveFile;
 		}
+		return null;
+	}
+	
+	private void saveScenarioAs()
+	{
+		File scenarioFile = this.chooseFile();
+		Main.setScenarioFile(scenarioFile);
+		Main.saveJsonStructureToFile(scenarioFile, Main.getMainScenario());
 	}
 	
 	public static void main(String[] args)
@@ -288,6 +330,12 @@ public class EditorDialog extends JFrame implements ActionListener
 			break;
 			case SAVE_SCENARIO_AS:
 				this.saveScenarioAs();
+			break;
+			case SAVE_SPICE:
+				this.saveSpice();
+			break;
+			case SAVE_SPICE_AS:
+				this.saveSpiceAs();
 			break;
 			default:
 				break;

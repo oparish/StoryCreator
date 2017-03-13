@@ -15,22 +15,25 @@ import storyElements.optionLists.Branch;
 public class FieldDialog extends JDialog
 {
 	Branch branch;
+	protected int yPos = 0;
 	
 	public FieldDialog(Frame owner, boolean modal)
 	{
 		super(owner, modal);
 	}
 	
-	protected void addTextField(JTextField jTextField, String labelText, int yPos)
+	protected void addTextField(JTextField jTextField, String labelText)
 	{		
-		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
-		this.add(jTextField, this.setupGridBagConstraints(1, yPos, 1, 1));
+		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, this.yPos, 1, 1));
+		this.add(jTextField, this.setupGridBagConstraints(1, this.yPos, 1, 1));
+		this.yPos++;
 	}
 	
-	protected void addSpinner(JSpinner jSpinner, String labelText, int yPos)
+	protected void addSpinner(JSpinner jSpinner, String labelText)
 	{		
-		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, yPos, 1, 1));
-		this.add(jSpinner, this.setupGridBagConstraints(1, yPos, 1, 1));
+		this.add(new JLabel(labelText), this.setupGridBagConstraints(0, this.yPos, 1, 1));
+		this.add(jSpinner, this.setupGridBagConstraints(1, this.yPos, 1, 1));
+		this.yPos++;
 	}
 	
 	public void setBranch(Branch branch)

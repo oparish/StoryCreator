@@ -25,7 +25,7 @@ import storyElements.options.FlavourOption;
 import storyElements.options.Option;
 import storyElements.options.SubplotOption;
 
-public class Scenario
+public class Scenario implements JsonStructure
 {	
 	HashMap<Integer, ExitPoint> exitPoints = new HashMap<Integer, ExitPoint>();
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
