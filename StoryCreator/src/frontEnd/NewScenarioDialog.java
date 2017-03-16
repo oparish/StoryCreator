@@ -30,12 +30,18 @@ public class NewScenarioDialog extends NewOptionListDialog
 	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
 	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
 	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
+	private static final String BRANCH_LENGTH = "Branch Length";
+	private static final String SUBPLOT_LENGTH = "Subplot Length";
+	private static final String SCENARIO_LENGTH = "Scenario Length";
 
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
 	private NumberSpinner optionToBranchSpinner;
 	private NumberSpinner optionWithSubPlotSpinner;
 	private NumberSpinner optionWithFlavourSpinner;
+	private NumberSpinner branchLengthSpinner;
+	private NumberSpinner subplotLengthSpinner;
+	private NumberSpinner scenarioLengthSpinner;
 	
 	public NewScenarioDialog(Frame owner, boolean modal, int initialOptionNumber)
 	{
@@ -58,6 +64,18 @@ public class NewScenarioDialog extends NewOptionListDialog
 		
 		this.optionWithFlavourSpinner = new NumberSpinner();
 		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR);
+		
+		this.branchLengthSpinner = new NumberSpinner();
+		this.branchLengthSpinner.setValue(Main.DEFAULTBRANCHLENGTH);
+		this.addSpinner(this.branchLengthSpinner, BRANCH_LENGTH);
+		
+		this.subplotLengthSpinner = new NumberSpinner();
+		this.subplotLengthSpinner.setValue(Main.DEFAULTSUBPLOTLENGTH);
+		this.addSpinner(this.subplotLengthSpinner, SUBPLOT_LENGTH);
+		
+		this.scenarioLengthSpinner = new NumberSpinner();
+		this.scenarioLengthSpinner.setValue(Main.DEFAULTSCENARIOLENGTH);
+		this.addSpinner(this.scenarioLengthSpinner, SCENARIO_LENGTH);
 	}
 	
 	public Scenario getNewScenario()
@@ -67,7 +85,7 @@ public class NewScenarioDialog extends NewOptionListDialog
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), Main.BRANCHLENGTH, Main.SUBPLOTLENGTH, Main.SCENARIOLENGTH);
+		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
 		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
 		return newScenario;
 	}

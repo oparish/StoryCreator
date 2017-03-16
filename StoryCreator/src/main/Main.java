@@ -37,9 +37,9 @@ public class Main
 	public static final int INITIALOPTIONS_FOR_SCENARIO = 3;
 	public static final int INITIALOPTIONS_FOR_SPICE = 3;
 	public static final int SUGGESTION_NUMBER = 4;
-	public static final int BRANCHLENGTH = 3;
-	public static final int SUBPLOTLENGTH = 2;
-	public static final int SCENARIOLENGTH = 3;
+	public static final int DEFAULTBRANCHLENGTH = 3;
+	public static final int DEFAULTSUBPLOTLENGTH = 2;
+	public static final int DEFAULTSCENARIOLENGTH = 3;
 	
 	public static final String TYPE = "type";
 	public static final String BRANCH = "branch";
