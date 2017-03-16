@@ -1,5 +1,6 @@
 package frontEnd;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,37 +28,30 @@ public class InitialScenarioDialog extends InitialDialog
 	private static final String NEW_SCENARIO = "New Scenario";
 	private static final String LOAD_SCENARIO = "Load Scenario";
 	
-	public InitialScenarioDialog()
+	public InitialScenarioDialog(Frame owner, boolean modal)
 	{
-		super();
+		super(owner, modal);
 		this.add(this.makeButton(NEW_SCENARIO, ButtonID.NEW_SCENARIO), this.setupGridBagConstraints(0, 0, 1, 1));
 		this.add(this.makeButton(LOAD_SCENARIO, ButtonID.LOAD_SCENARIO), this.setupGridBagConstraints(1, 0, 1, 1));
 	}
 	
 	private void newScenario()
 	{
-		this.setVisible(false);
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, Main.INITIALOPTIONS_FOR_SCENARIO);
-		newScenarioDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                Main.setMainScenario(((NewScenarioDialog) e.getWindow()).getNewScenario());
-                InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog();
-                Main.showWindowInCentre(initialSpiceDialog);
-            }  
-        });
+		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
 		Main.showWindowInCentre(newScenarioDialog);
+        Main.setMainScenario(newScenarioDialog.getNewScenario());
+		this.setVisible(false);
 	}
 	
 	private void loadScenario()
 	{
-		this.setVisible(false);
+
 		File file = this.loadFile();
 		Main.setScenarioFile(file);
 		JsonObject scenarioObject = this.loadJsonObject(file);
 		Scenario newScenario = new Scenario(scenarioObject);
 		Main.setMainScenario(newScenario);
-		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog();
-        Main.showWindowInCentre(initialSpiceDialog);
+		this.setVisible(false);
 	}
 
 	@Override

@@ -1,9 +1,12 @@
 package frontEnd;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -11,11 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import main.Main;
 import storyElements.optionLists.Branch;
 
 public class FieldDialog extends JDialog
 {
-	Branch branch;
 	protected int yPos = 0;
 	
 	public FieldDialog(Frame owner, boolean modal)
@@ -44,16 +47,6 @@ public class FieldDialog extends JDialog
 		this.yPos++;
 	}
 	
-	public void setBranch(Branch branch)
-	{
-		this.branch = branch;
-	}
-	
-	public Branch getBranch()
-	{
-		return this.branch;
-	}
-	
 	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
 	{
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -66,5 +59,12 @@ public class FieldDialog extends JDialog
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		return gridBagConstraints;
+	}
+	
+	public static void main(String[] args)
+	{
+		FieldDialog fieldDialog = new FieldDialog(null, true);
+		Main.showWindowInCentre(fieldDialog);
+		System.out.println("END");
 	}
 }

@@ -8,6 +8,8 @@ import javax.json.JsonValue;
 import frontEnd.EditorDialog;
 import main.Main;
 import storyElements.options.BranchOption;
+import storyElements.options.Option;
+import storyElements.options.StoryElement;
 import storyElements.options.SubplotOption;
 
 @SuppressWarnings("serial")
@@ -29,9 +31,9 @@ public class Subplot extends StorySection<SubplotOption>
 	}
 
 	@Override
-	protected void end(EditorDialog editorDialog)
+	protected StoryElement getDefaultExitPoint(EditorDialog editorDialog)
 	{
-		
+		return new BranchOption("");
 	}
 
 }

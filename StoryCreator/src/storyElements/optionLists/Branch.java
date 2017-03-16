@@ -11,12 +11,15 @@ import javax.json.JsonValue;
 
 import frontEnd.EditorDialog;
 import frontEnd.NewBranchDialog;
+import frontEnd.NewEndingDialog;
 import frontEnd.NewOptionDialog;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.options.BranchOption;
+import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.StoryElement;
 
 @SuppressWarnings("serial")
 public class Branch extends StorySection<BranchOption> implements ExitPoint
@@ -47,62 +50,46 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 	}
 	
-	protected void end(EditorDialog editorDialog)
+	protected ExitPoint getDefaultExitPoint(EditorDialog editorDialog)
 	{
 		if (this.defaultExitPoint == null)
 		{
-			this.createDefaultExitPoint(editorDialog);
+			return this.createDefaultExitPoint(editorDialog);
 		}
 		else
 		{
-			Main.getMainScenario().getExitPoint(this.defaultExitPoint).useAsExitPoint(editorDialog);
+			return Main.getMainScenario().getExitPoint(this.defaultExitPoint);
 		}
 	}
 	
-	private void createDefaultExitPoint(EditorDialog editorDialog)
+	private ExitPoint createDefaultExitPoint(EditorDialog editorDialog)
 	{
 		Scenario scenario = Main.getMainScenario();
 		if (scenario.checkLastBranch())
-			this.createEndingOption(editorDialog);
+			return this.createDefaultEndingOption(editorDialog);
 		else
-			this.createBranch(editorDialog);
+			return this.createBranch(editorDialog);
 	}
 	
-	private void createEndingOption(EditorDialog editorDialog)
+	private ExitPoint createDefaultEndingOption(EditorDialog editorDialog)
 	{
-		NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, null);
-		newOptionDialog.setTitle("New Ending");
-		newOptionDialog.setBranch(this);
-		newOptionDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {
-        		Scenario currentScenario = Main.getMainScenario();
-        		NewOptionDialog newOptionDialog = (NewOptionDialog)e.getWindow();
-            	Integer defaultExitPoint = currentScenario.addExitPoint(newOptionDialog.getEndingOption());
-            	newOptionDialog.getBranch().setDefaultExitPoint(defaultExitPoint);
-        		currentScenario.getExitPoint(defaultExitPoint).useAsExitPoint((EditorDialog) e.getWindow().getOwner());
-            }  
-        });
-		Dimension screenCentre = main.Main.getScreenCentre();
-		newOptionDialog.setLocation(screenCentre.width - newOptionDialog.getWidth()/2, screenCentre.height - newOptionDialog.getHeight()/2);
-		newOptionDialog.setVisible(true);
+		NewEndingDialog newEndingDialog = new NewEndingDialog(editorDialog, true, false);
+		newEndingDialog.setTitle("New Ending");
+		Main.showWindowInCentre(newEndingDialog);
+		Scenario currentScenario = Main.getMainScenario();
+		EndingOption endingOption = newEndingDialog.getEndingOption();
+		this.defaultExitPoint = currentScenario.addExitPoint(endingOption);
+		return endingOption;
 	}
 	
-	private void createBranch(EditorDialog editorDialog)
+	private ExitPoint createBranch(EditorDialog editorDialog)
 	{
-		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO);
-		newBranchDialog.setBranch(this);
-		newBranchDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-        		Scenario currentScenario = Main.getMainScenario();
-        		NewBranchDialog newBranchDialog = (NewBranchDialog) e.getWindow();
-            	Integer defaultExitPoint = currentScenario.addExitPoint(newBranchDialog.getNewBranch());
-            	newBranchDialog.getBranch().setDefaultExitPoint(defaultExitPoint);
-        		currentScenario.getExitPoint(defaultExitPoint).useAsExitPoint((EditorDialog) e.getWindow().getOwner());
-            }  
-        });
-		Dimension screenCentre = main.Main.getScreenCentre();
-		newBranchDialog.setLocation(screenCentre.width - newBranchDialog.getWidth()/2, screenCentre.height - newBranchDialog.getHeight()/2);
-		newBranchDialog.setVisible(true);	
+		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, false);
+		Main.showWindowInCentre(newBranchDialog);
+		Scenario currentScenario = Main.getMainScenario();
+		Branch newBranch = newBranchDialog.getNewBranch();
+		this.defaultExitPoint = currentScenario.addExitPoint(newBranch);
+		return newBranch; 
 	}
 	
 	public JsonObjectBuilder getJsonObjectBuilder()
@@ -113,13 +100,5 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		if (this.defaultExitPoint != null)
 			jsonObjectBuilder.add(Main.EXITPOINT, this.defaultExitPoint);
 		return jsonObjectBuilder;
-	}
-
-	@Override
-	public void useAsExitPoint(EditorDialog editorDialog)
-	{
-		Scenario currentScenario = Main.getMainScenario();
-		currentScenario.setCurrentBranch(this);
-		editorDialog.startNewBranch();
 	}
 }

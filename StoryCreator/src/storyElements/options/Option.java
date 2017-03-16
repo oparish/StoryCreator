@@ -6,7 +6,7 @@ import javax.json.JsonObjectBuilder;
 
 import main.Main;
 
-public abstract class Option
+public abstract class Option implements StoryElement
 {	
 	String description;
 	

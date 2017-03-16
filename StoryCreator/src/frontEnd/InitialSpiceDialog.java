@@ -1,5 +1,6 @@
 package frontEnd;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -15,36 +16,28 @@ public class InitialSpiceDialog extends InitialDialog
 	private static final String NEW_SPICE = "New Spice";
 	private static final String LOAD_SPICE = "Load Spice";
 	
-	public InitialSpiceDialog()
+	public InitialSpiceDialog(Frame owner, boolean modal)
 	{
-		super();
+		super(owner, modal);
 		this.add(this.makeButton(NEW_SPICE, ButtonID.NEW_SPICE), this.setupGridBagConstraints(0, 0, 1, 1));
 		this.add(this.makeButton(LOAD_SPICE, ButtonID.LOAD_SPICE), this.setupGridBagConstraints(1, 0, 1, 1));
 	}
 
 	private void newSpice()
 	{
-		this.setVisible(false);
-		NewSpiceDialog newSpiceDialog = new NewSpiceDialog(null, false);
-		newSpiceDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                Main.setMainSpice(((NewSpiceDialog) e.getWindow()).getNewSpice());
-                EditorDialog editorDialog = new EditorDialog();
-                Main.showWindowInCentre(editorDialog);
-            }  
-        });
+		NewSpiceDialog newSpiceDialog = new NewSpiceDialog(null, true);
 		Main.showWindowInCentre(newSpiceDialog);
+        Main.setMainSpice(newSpiceDialog.getNewSpice());
+		this.setVisible(false);
 	}
 	
 	private void loadSpice()
 	{
-		this.setVisible(false);
 		File file = this.loadFile();
 		Main.setSpiceFile(file);
 		JsonObject spiceObject = this.loadJsonObject(file);
 		Main.setMainSpice(new Spice(spiceObject));
-		EditorDialog editorDialog = new EditorDialog();
-        Main.showWindowInCentre(editorDialog);
+		this.setVisible(false);
 	}
 	
 	@Override

@@ -25,12 +25,5 @@ public class EndingOption extends Option implements ExitPoint
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
 		jsonObjectBuilder.add(Main.TYPE, Main.ENDINGOPTION);
 		return jsonObjectBuilder;
-	}
-
-	@Override
-	public void useAsExitPoint(EditorDialog editorDialog)
-	{
-		editorDialog.reachEnding(this);
-	}
-	
+	}	
 }

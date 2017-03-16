@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import frontEnd.EditorDialog;
 import frontEnd.NewBranchDialog;
+import frontEnd.NewEndingDialog;
 import frontEnd.NewOptionDialog;
 import frontEnd.NewScenarioDialog;
 import main.Main;
@@ -13,6 +14,7 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.StoryElement;
 
 @SuppressWarnings("serial")
 public abstract class RepeatingOptionList<T extends Option> extends OptionList<T>
@@ -27,7 +29,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 		super(initialOptions);
 	}
 	
-	protected abstract void end(EditorDialog editorDialog);
+	protected abstract StoryElement getDefaultExitPoint(EditorDialog editorDialog);
 
 	public Generator getGenerator()
 	{
@@ -45,12 +47,11 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			
 		}
 		
-		public void generateOption(EditorDialog editorDialog)
+		public StoryElement generateStoryElement(EditorDialog editorDialog)
 		{
-			if (counter == Main.getMainScenario().getBranchLength())
+			if (this.counter == Main.getMainScenario().getBranchLength())
 			{
-				RepeatingOptionList.this.end(editorDialog);
-				return;
+				return RepeatingOptionList.this.getDefaultExitPoint(editorDialog);
 			}
 			
 			counter++;
@@ -58,81 +59,70 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			if (this.lastNumber == null || this.lastNumber != rnd)
 			{
 				this.lastNumber = rnd;
-				editorDialog.setOption(RepeatingOptionList.this.get(rnd));
+				return RepeatingOptionList.this.get(rnd);
 			}
 			else
 			{
-				this.tryNewOption(editorDialog);
+				StoryElement storyElement = this.tryNewOption(editorDialog);
+				return storyElement;
 			}	
 		}
 
-		private void makeNewBranch(EditorDialog editorDialog)
+		private BranchOption makeNewBranch(EditorDialog editorDialog)
 		{
-			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO);
+			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, true);
 			newBranchDialog.setTitle("New Branch");
-			newBranchDialog.addWindowListener(new WindowAdapter() {  
-			    public void windowClosing(WindowEvent e) {
-			    	NewBranchDialog newBranchDialog = (NewBranchDialog) e.getWindow();
-			    	Branch branch = newBranchDialog.getNewBranch();
-			    	EditorDialog editorDialog = (EditorDialog) newBranchDialog.getOwner();
-			    	Scenario scenario = Main.getMainScenario();
-			    	scenario.addExitPoint(branch);
-			    	scenario.setCurrentBranch(branch);
-			        editorDialog.startNewBranch();
-			    }  
-			});
 			Main.showWindowInCentre(newBranchDialog);
+	    	Branch branch = newBranchDialog.getNewBranch();
+	    	Scenario scenario = Main.getMainScenario();
+	    	Integer exitPointID = scenario.addExitPoint(branch);
+	    	BranchOption branchOption = new BranchOption(newBranchDialog.getOptionHeader());
+	    	branchOption.setExitPoint(exitPointID);
+	    	return branchOption;
 		}
 		
-		private void makeNewEnding(EditorDialog editorDialog)
+		private Option makeNewEnding(EditorDialog editorDialog)
 		{
-			NewOptionDialog newEndingDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
+			NewEndingDialog newEndingDialog = new NewEndingDialog(editorDialog, true, true);
 			newEndingDialog.setTitle("New Ending");
-			newEndingDialog.addWindowListener(new WindowAdapter() {  
-			    public void windowClosing(WindowEvent e) {
-			    	NewOptionDialog newEndingDialog = (NewOptionDialog) e.getWindow();
-			    	EndingOption endingOption = newEndingDialog.getEndingOption();		
-			        newEndingDialog.getOptionList().add(endingOption);
-			    	EditorDialog editorDialog = (EditorDialog) newEndingDialog.getOwner();
-			    	endingOption.useAsExitPoint(editorDialog);
-			    }  
-			});
 			Main.showWindowInCentre(newEndingDialog);
+			BranchOption branchOption = newEndingDialog.getBranchOption();
+			EndingOption endingOption = newEndingDialog.getEndingOption();
+			Scenario currentScenario = Main.getMainScenario();
+			Integer exitPointID = currentScenario.addExitPoint(endingOption);
+			branchOption.setExitPoint(exitPointID);
+	        return branchOption;
 		}
 		
-		private void tryNewOption(EditorDialog editorDialog)
+		private Option tryNewOption(EditorDialog editorDialog)
 		{
 			this.lastNumber = RepeatingOptionList.this.size();
 			Scenario currentScenario = Main.getMainScenario();
+			Option option;
 			
 			if (currentScenario.getOptionBecomesNewExitPoint().check())
 			{
 				if (currentScenario.checkLastBranch())
-					this.makeNewEnding(editorDialog);
+					option = this.makeNewEnding(editorDialog);
 				else
-					this.makeNewBranch(editorDialog);
+					option = this.makeNewBranch(editorDialog);
 			}
 			else
 			{
-				this.makeNewOption(editorDialog);
+				option = this.makeNewOption(editorDialog);
 			}
+			RepeatingOptionList.this.add(option);
+			return option;
 		}
 		
 
-		private void makeNewOption(EditorDialog editorDialog)
+		private BranchOption makeNewOption(EditorDialog editorDialog)
 		{
-			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, RepeatingOptionList.this);
+			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true);
 			newOptionDialog.setTitle("New Option");
-			newOptionDialog.addWindowListener(new WindowAdapter() {  
-			    public void windowClosing(WindowEvent e) {
-			    	NewOptionDialog newOptionDialog = (NewOptionDialog) e.getWindow();
-			    	BranchOption branchOption = newOptionDialog.getOption();
-			    	EditorDialog editorDialog = (EditorDialog) newOptionDialog.getOwner();
-			        editorDialog.setOption(branchOption);
-			        newOptionDialog.getOptionList().add(branchOption);
-			    }  
-			});
 			Main.showWindowInCentre(newOptionDialog);
+	    	BranchOption branchOption = newOptionDialog.getOption();
+	        return branchOption;
 		}
 		
 

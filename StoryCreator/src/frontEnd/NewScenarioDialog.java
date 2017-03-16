@@ -30,7 +30,7 @@ public class NewScenarioDialog extends NewOptionListDialog
 	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
 	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
 	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
-	
+
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
 	private NumberSpinner optionToBranchSpinner;
@@ -74,7 +74,7 @@ public class NewScenarioDialog extends NewOptionListDialog
 	
 	public static void main(String[] args)
 	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, false, Main.INITIALOPTIONS_FOR_SCENARIO);
+		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
 		newScenarioDialog.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
                 System.exit(0);  

@@ -27,17 +27,11 @@ public class NewOptionDialog extends NewStoryElementDialog
 	private static final String DESCRIPTION = "Description";
 	
 	private JTextField descriptionField;
-	private OptionList optionList;
-	
-	public OptionList getOptionList() {
-		return optionList;
-	}
 
-	public NewOptionDialog(Frame owner, boolean modal, OptionList repeatingOptionList)
+	public NewOptionDialog(Frame owner, boolean modal)
 	{
 		super(owner, modal);
-		this.optionList = repeatingOptionList;
-		
+
 		this.setSize(WIDTH, HEIGHT);
 		
 		this.descriptionField = new JTextField();
@@ -49,11 +43,6 @@ public class NewOptionDialog extends NewStoryElementDialog
 		return new BranchOption(this.descriptionField.getText());
 	}
 	
-	public EndingOption getEndingOption()
-	{
-		return new EndingOption(this.descriptionField.getText());
-	}
-	
 	public TwistOption getTwistOption()
 	{
 		return new TwistOption(this.descriptionField.getText());
@@ -61,12 +50,7 @@ public class NewOptionDialog extends NewStoryElementDialog
 	
 	public static void main(String[] args)
 	{
-		NewOptionDialog newOptionDialog = new NewOptionDialog(null, false, null);
-		newOptionDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                System.exit(0);  
-            }  
-        });
+		NewOptionDialog newOptionDialog = new NewOptionDialog(null, true);
 		Dimension screenCentre = main.Main.getScreenCentre();
 		newOptionDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
 		newOptionDialog.setVisible(true);

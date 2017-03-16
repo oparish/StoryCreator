@@ -23,10 +23,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import storyElements.ExitPoint;
 import storyElements.Scenario;
+import storyElements.optionLists.Branch;
 import storyElements.optionLists.RepeatingOptionList.Generator;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import main.Main;
 
@@ -57,10 +59,17 @@ public class EditorDialog extends JFrame implements ActionListener
 	MyButton progressButton;
 	
 	private Generator mainGenerator = null;
+	private ExitPoint nextExitPoint = null;
 	
 	public EditorDialog()
 	{
 		super();
+		
+		this.addWindowListener(new WindowAdapter() {  
+            public void windowClosing(WindowEvent e) {  
+                System.exit(0);  
+            }  
+        });
 
 		this.setLayout(new GridBagLayout());	
 		
@@ -78,7 +87,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void twistGenerate()
 	{
-		Main.getMainSpice().getTwistList().generateOption(this);
+		this.twistOption = (TwistOption) Main.getMainSpice().getTwistList().generateOption(this);
 	}
 	
 	public void setTwistOption(TwistOption twistOption)
@@ -190,19 +199,37 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void generate()
 	{
-		Generator generator = this.getGenerator();
-		generator.generateOption(this);
+		if (this.nextExitPoint != null)
+		{
+			if (this.nextExitPoint instanceof EndingOption)
+				this.reachEnding((EndingOption) this.nextExitPoint);
+			else
+				this.startNewBranch((Branch) this.nextExitPoint);
+			this.nextExitPoint = null;
+		}
+		else
+		{
+			Generator generator = this.getGenerator();
+			StoryElement storyElement = generator.generateStoryElement(this);
+			
+			if (storyElement instanceof EndingOption)
+				this.reachEnding((EndingOption) storyElement);
+			else if (storyElement instanceof Option)
+				this.setOption((Option) storyElement);
+			else
+				this.startNewBranch((Branch) storyElement);
+		}
 	}
 	
-	public void setOption(Option option)
+	private void setOption(Option option)
 	{
 		if (option instanceof BranchOption)
 		{
 			ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
 			if (exitPoint != null)
 			{
-				exitPoint.useAsExitPoint(this);
-				return;
+				this.mainGenerator = null;
+				this.nextExitPoint = exitPoint;
 			}
 		}
 
@@ -222,11 +249,12 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
-	public void startNewBranch()
+	private void startNewBranch(Branch branch)
 	{
 		Scenario scenario = Main.getMainScenario();
 		scenario.incrementBranchCounter();
-		this.techBuilder.append("\r\nNew Branch: " + scenario.getCurrentBranch().getDescription());
+		scenario.setCurrentBranch(branch);
+		this.techBuilder.append("\r\nNew Branch: " + branch.getDescription());
 		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
@@ -251,7 +279,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			String filename = saveFile.getName();
 			if (!filename.endsWith(".txt"))
 				saveFile = new File(saveFile.getAbsolutePath() + ".txt");	
-			Main.saveTextToFile(saveFile, this.storyBuilder, this.editorPanel.getText(),this.techBuilder);
+			Main.saveTextToFile(saveFile, this.storyBuilder, this.editorPanel.getText(), this.techBuilder);
 		}	
 	}
 	

@@ -1,5 +1,6 @@
 package frontEnd;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.io.FileReader;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -18,14 +20,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import main.Main;
 import storyElements.Scenario;
 
-public abstract class InitialDialog extends JFrame implements ActionListener
+public abstract class InitialDialog extends JDialog implements ActionListener
 {
 	protected static final int WIDTH = 400;
 	protected static final int HEIGHT = 150;
 	
-	public InitialDialog()
+	public InitialDialog(Frame owner, boolean modal)
 	{
-		super();
+		super(owner, modal);
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());
 	}

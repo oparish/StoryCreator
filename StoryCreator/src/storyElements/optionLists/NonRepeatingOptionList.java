@@ -27,27 +27,21 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		super();
 	}
 		
-	public void generateOption(EditorDialog editorDialog)
+	public Option generateOption(EditorDialog editorDialog)
 	{
 		int rnd = Main.getRandomNumberInRange(this.size() + 1);
 		if (rnd < this.size())
 		{
-			editorDialog.setOption(this.get(rnd));
+			return this.get(rnd);
 		}
 		else
 		{
-			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true, this);
+			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true);
 			newOptionDialog.setTitle("New " + this.type);
-			newOptionDialog.addWindowListener(new WindowAdapter() {  
-	            public void windowClosing(WindowEvent e) {
-	            	NewOptionDialog newOptionDialog = (NewOptionDialog) e.getWindow();
-	            	BranchOption branchOption = newOptionDialog.getOption();
-	            	EditorDialog editorDialog = (EditorDialog) newOptionDialog.getOwner();
-	                editorDialog.setOption(branchOption);
-	                newOptionDialog.getOptionList().add(branchOption);
-	            }  
-	        });
 			Main.showWindowInCentre(newOptionDialog);
+        	BranchOption branchOption = newOptionDialog.getOption();
+            NonRepeatingOptionList.this.add(branchOption);
+            return branchOption;
 		}	
 	}
 	

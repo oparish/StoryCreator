@@ -16,10 +16,14 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.stream.JsonParser;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 import frontEnd.EditorDialog;
+import frontEnd.FieldDialog;
 import frontEnd.InitialScenarioDialog;
+import frontEnd.InitialSpiceDialog;
+import frontEnd.NewOptionDialog;
 import storyElements.ExitPoint;
 import storyElements.JsonStructure;
 import storyElements.Scenario;
@@ -54,7 +58,7 @@ public class Main
 	public static final String STARTING_BRANCH = "startingbranch";
 	public static final String OPTIONS = "options";
 	public static final String SUBPLOT = "subplot";
-	public static final String FLAVOURLIST = "flavour";
+	public static final String FLAVOURLIST = "flavourlist";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
 	public static final String TWISTLIST = "twistlist";
 	public static final String SUGGESTIONS = "suggestions";
@@ -107,7 +111,7 @@ public class Main
 		try
 		{
 			FileWriter fileWriter = new FileWriter(saveFile);
-			fileWriter.write(saveText.toString() + "\r\n" + editorText + "\r\n" + saveText2.toString());
+			fileWriter.write(saveText.toString() + "\r\n" + editorText + "\r\n\r\n" + saveText2.toString());
 			fileWriter.close();
 		}
 		catch (IOException e)
@@ -181,14 +185,11 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		InitialScenarioDialog initialDialog = new InitialScenarioDialog();
-		initialDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                System.exit(0);  
-            }  
-        });
-		Dimension screenCentre = main.Main.getScreenCentre();
-		initialDialog.setLocation(screenCentre.width - initialDialog.getWidth()/2, screenCentre.height - initialDialog.getHeight()/2);
-		initialDialog.setVisible(true);
+		InitialScenarioDialog initialDialog = new InitialScenarioDialog(null, true);
+		Main.showWindowInCentre(initialDialog);
+		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog(null, true);
+        Main.showWindowInCentre(initialSpiceDialog);
+		EditorDialog editorDialog = new EditorDialog();
+        Main.showWindowInCentre(editorDialog); 
 	}
 }
