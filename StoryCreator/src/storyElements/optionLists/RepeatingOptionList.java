@@ -5,10 +5,12 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import frontEnd.EditorDialog;
-import frontEnd.NewBranchDialog;
-import frontEnd.NewEndingDialog;
-import frontEnd.NewOptionDialog;
-import frontEnd.NewScenarioDialog;
+import frontEnd.FieldDialog;
+import frontEnd.FieldPanel;
+import frontEnd.NewBranchPanel;
+import frontEnd.NewEndingPanel;
+import frontEnd.NewOptionPanel;
+import frontEnd.NewScenarioPanel;
 import main.Main;
 import storyElements.Scenario;
 import storyElements.options.BranchOption;
@@ -70,24 +72,28 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 
 		private BranchOption makeNewBranch(EditorDialog editorDialog)
 		{
-			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, true);
+			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
+			FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel, newBranchPanel});
 			newBranchDialog.setTitle("New Branch");
 			Main.showWindowInCentre(newBranchDialog);
 	    	Scenario scenario = Main.getMainScenario();
-	    	Branch branch = newBranchDialog.getNewBranch(scenario.getNextBranch());
+	    	Branch branch = newBranchPanel.getNewBranch(scenario.getNextBranch());
 	    	Integer exitPointID = scenario.addExitPoint(branch);
-	    	BranchOption branchOption = new BranchOption(newBranchDialog.getOptionHeader());
+	    	BranchOption branchOption = newOptionPanel.getOption();
 	    	branchOption.setExitPoint(exitPointID);
 	    	return branchOption;
 		}
 		
 		private Option makeNewEnding(EditorDialog editorDialog)
 		{
-			NewEndingDialog newEndingDialog = new NewEndingDialog(editorDialog, true, true);
+			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			NewEndingPanel newEndingPanel = new NewEndingPanel();
+			FieldDialog newEndingDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newEndingPanel, newOptionPanel});
 			newEndingDialog.setTitle("New Ending");
 			Main.showWindowInCentre(newEndingDialog);
-			BranchOption branchOption = newEndingDialog.getBranchOption();
-			EndingOption endingOption = newEndingDialog.getEndingOption();
+			EndingOption endingOption = newEndingPanel.getEndingOption();
+			BranchOption branchOption = newOptionPanel.getOption();
 			Scenario currentScenario = Main.getMainScenario();
 			Integer exitPointID = currentScenario.addExitPoint(endingOption);
 			branchOption.setExitPoint(exitPointID);
@@ -118,10 +124,11 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 
 		private BranchOption makeNewOption(EditorDialog editorDialog)
 		{
-			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true);
+			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New Option");
 			Main.showWindowInCentre(newOptionDialog);
-	    	BranchOption branchOption = newOptionDialog.getOption();
+	    	BranchOption branchOption = newOptionPanel.getOption();
 	        return branchOption;
 		}
 		

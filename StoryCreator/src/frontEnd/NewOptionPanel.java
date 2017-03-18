@@ -19,7 +19,7 @@ import storyElements.options.EndingOption;
 import storyElements.options.Option;
 import storyElements.options.TwistOption;
 
-public class NewOptionDialog extends NewStoryElementDialog
+public class NewOptionPanel extends NewStoryElementPanel
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -28,11 +28,11 @@ public class NewOptionDialog extends NewStoryElementDialog
 	
 	private JTextField descriptionField;
 
-	public NewOptionDialog(Frame owner, boolean modal)
+	public NewOptionPanel()
 	{
-		super(owner, modal);
+		super();
 
-		this.setSize(WIDTH, HEIGHT);
+		//this.setSize(WIDTH, HEIGHT);
 		
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
@@ -50,7 +50,7 @@ public class NewOptionDialog extends NewStoryElementDialog
 	
 	public static void main(String[] args)
 	{
-		NewOptionDialog newOptionDialog = new NewOptionDialog(null, true);
+		NewOptionPanel newOptionDialog = new NewOptionPanel();
 		Dimension screenCentre = main.Main.getScreenCentre();
 		newOptionDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
 		newOptionDialog.setVisible(true);

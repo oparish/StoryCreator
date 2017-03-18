@@ -20,7 +20,7 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
-public class NewScenarioDialog extends NewOptionListDialog
+public class NewScenarioPanel extends NewOptionListPanel
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
@@ -43,10 +43,10 @@ public class NewScenarioDialog extends NewOptionListDialog
 	private NumberSpinner subplotLengthSpinner;
 	private NumberSpinner scenarioLengthSpinner;
 	
-	public NewScenarioDialog(Frame owner, boolean modal, int initialOptionNumber)
+	public NewScenarioPanel(Frame owner, boolean modal, int initialOptionNumber)
 	{
-		super(owner, modal);
-		this.setSize(WIDTH, HEIGHT);
+		super();
+		//this.setSize(WIDTH, HEIGHT);
 		
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
@@ -92,12 +92,8 @@ public class NewScenarioDialog extends NewOptionListDialog
 	
 	public static void main(String[] args)
 	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
-		newScenarioDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                System.exit(0);  
-            }  
-        });
+		NewScenarioPanel newScenarioDialog = new NewScenarioPanel(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
+
 		Dimension screenCentre = main.Main.getScreenCentre();
 		newScenarioDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
 		newScenarioDialog.setVisible(true);

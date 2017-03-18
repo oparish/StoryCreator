@@ -37,9 +37,10 @@ public class InitialScenarioDialog extends InitialDialog
 	
 	private void newScenario()
 	{
-		NewScenarioDialog newScenarioDialog = new NewScenarioDialog(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
+		NewScenarioPanel newScenarioPanel = new NewScenarioPanel(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
+		FieldDialog newScenarioDialog = new FieldDialog(null, true, new FieldPanel[]{newScenarioPanel});
 		Main.showWindowInCentre(newScenarioDialog);
-        Main.setMainScenario(newScenarioDialog.getNewScenario());
+        Main.setMainScenario(newScenarioPanel.getNewScenario());
 		this.setVisible(false);
 	}
 	

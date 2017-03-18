@@ -8,7 +8,9 @@ import javax.json.JsonObject;
 
 import main.Main;
 import frontEnd.EditorDialog;
-import frontEnd.NewOptionDialog;
+import frontEnd.FieldDialog;
+import frontEnd.FieldPanel;
+import frontEnd.NewOptionPanel;
 import storyElements.options.BranchOption;
 import storyElements.options.Option;
 
@@ -36,10 +38,11 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		}
 		else
 		{
-			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true);
+			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newOptionDialog);
-        	BranchOption branchOption = newOptionDialog.getOption();
+        	BranchOption branchOption = newOptionPanel.getOption();
             NonRepeatingOptionList.this.add(branchOption);
             return branchOption;
 		}	

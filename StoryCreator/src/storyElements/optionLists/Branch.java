@@ -10,9 +10,11 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
 import frontEnd.EditorDialog;
-import frontEnd.NewBranchDialog;
-import frontEnd.NewEndingDialog;
-import frontEnd.NewOptionDialog;
+import frontEnd.FieldDialog;
+import frontEnd.FieldPanel;
+import frontEnd.NewBranchPanel;
+import frontEnd.NewEndingPanel;
+import frontEnd.NewOptionPanel;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
@@ -76,21 +78,23 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	
 	private ExitPoint createDefaultEndingOption(EditorDialog editorDialog)
 	{
-		NewEndingDialog newEndingDialog = new NewEndingDialog(editorDialog, true, false);
+		NewEndingPanel newEndingPanel = new NewEndingPanel();
+		FieldDialog newEndingDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newEndingPanel});
 		newEndingDialog.setTitle("New Ending");
 		Main.showWindowInCentre(newEndingDialog);
 		Scenario currentScenario = Main.getMainScenario();
-		EndingOption endingOption = newEndingDialog.getEndingOption();
+		EndingOption endingOption = newEndingPanel.getEndingOption();
 		this.defaultExitPoint = currentScenario.addExitPoint(endingOption);
 		return endingOption;
 	}
 	
 	private ExitPoint createBranch(EditorDialog editorDialog)
 	{
-		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, false);
+		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
+		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newBranchPanel});
 		Main.showWindowInCentre(newBranchDialog);
 		Scenario currentScenario = Main.getMainScenario();
-		Branch newBranch = newBranchDialog.getNewBranch(currentScenario.getNextBranch());
+		Branch newBranch = newBranchPanel.getNewBranch(currentScenario.getNextBranch());
 		this.defaultExitPoint = currentScenario.addExitPoint(newBranch);
 		return newBranch; 
 	}

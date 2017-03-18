@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-public class NewOptionListDialog extends FieldDialog
+public class NewOptionListPanel extends FieldPanel
 {
 	protected static final String INITIAL_OPTION = "Initial Option";	
 	protected ArrayList<JTextField> initialOptionFields;
 	
-	public NewOptionListDialog(Frame owner, boolean modal)
+	public NewOptionListPanel()
 	{
-		super(owner, modal);
+		super();
 	}
 	
 	protected void addInitialOptions(int initialOptionNumber)

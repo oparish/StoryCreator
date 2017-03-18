@@ -25,9 +25,10 @@ public class InitialSpiceDialog extends InitialDialog
 
 	private void newSpice()
 	{
-		NewSpiceDialog newSpiceDialog = new NewSpiceDialog(null, true);
+		NewSpicePanel newSpicePanel = new NewSpicePanel();
+		FieldDialog newSpiceDialog = new FieldDialog(null, true, new FieldPanel[]{newSpicePanel});
 		Main.showWindowInCentre(newSpiceDialog);
-        Main.setMainSpice(newSpiceDialog.getNewSpice());
+        Main.setMainSpice(newSpicePanel.getNewSpice());
 		this.setVisible(false);
 	}
 	

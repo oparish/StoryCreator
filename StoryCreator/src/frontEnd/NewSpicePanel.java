@@ -12,16 +12,15 @@ import storyElements.options.BranchOption;
 import storyElements.options.TwistOption;
 import main.Main;
 
-public class NewSpiceDialog extends NewOptionListDialog
+public class NewSpicePanel extends NewOptionListPanel
 {
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 500;
 	ArrayList<JTextField> suggestionFields;
 	
-	public NewSpiceDialog(Frame owner, boolean modal)
+	public NewSpicePanel()
 	{
-		super(owner, modal);
-		this.setSize(WIDTH, HEIGHT);
+		super();
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SPICE);
 		
 		this.suggestionFields = new ArrayList<JTextField>();

@@ -9,7 +9,9 @@ import storyElements.options.BranchOption;
 import storyElements.options.Option;
 import storyElements.options.TwistOption;
 import frontEnd.EditorDialog;
-import frontEnd.NewOptionDialog;
+import frontEnd.FieldDialog;
+import frontEnd.FieldPanel;
+import frontEnd.NewOptionPanel;
 import main.Main;
 
 public class TwistList extends NonRepeatingOptionList
@@ -25,10 +27,11 @@ public class TwistList extends NonRepeatingOptionList
 		}
 		else
 		{
-			NewOptionDialog newOptionDialog = new NewOptionDialog(editorDialog, true);
+			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newOptionDialog);
-        	TwistOption branchOption = (TwistOption) newOptionDialog.getTwistOption();
+        	TwistOption branchOption = (TwistOption) newOptionPanel.getTwistOption();
         	TwistList.this.add(branchOption);
             return branchOption;
         }  
