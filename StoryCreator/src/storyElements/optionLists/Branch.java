@@ -25,6 +25,7 @@ import storyElements.options.StoryElement;
 public class Branch extends StorySection<BranchOption> implements ExitPoint
 {	
 	private Integer defaultExitPoint = null;
+	private Integer branchLevel;
 
 	public ExitPoint getDefaultExitPoint() {
 		return Main.getMainScenario().getExitPoint(this.defaultExitPoint);
@@ -34,9 +35,10 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		this.defaultExitPoint = defaultExitPoint;
 	}
 
-	public Branch(ArrayList<BranchOption> initialOptions, String description)
+	public Branch(ArrayList<BranchOption> initialOptions, String description, int branchLevel)
 	{
 		super(initialOptions, description);
+		this.branchLevel = branchLevel;
 	}
 	
 	public Branch(JsonObject jsonObject)
@@ -48,6 +50,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		}
 		this.defaultExitPoint = Main.processJsonInt(jsonObject, Main.EXITPOINT);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
+		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
 	}
 	
 	protected ExitPoint getDefaultExitPoint(EditorDialog editorDialog)
@@ -87,7 +90,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, false);
 		Main.showWindowInCentre(newBranchDialog);
 		Scenario currentScenario = Main.getMainScenario();
-		Branch newBranch = newBranchDialog.getNewBranch();
+		Branch newBranch = newBranchDialog.getNewBranch(currentScenario.getNextBranch());
 		this.defaultExitPoint = currentScenario.addExitPoint(newBranch);
 		return newBranch; 
 	}
@@ -95,8 +98,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	public JsonObjectBuilder getJsonObjectBuilder()
 	{
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
-		Scenario currentScenario = Main.getMainScenario();
-		jsonObjectBuilder.add(Main.TYPE, Main.BRANCH);
+		jsonObjectBuilder.add(Main.BRANCH_LEVEL, this.branchLevel);
 		if (this.defaultExitPoint != null)
 			jsonObjectBuilder.add(Main.EXITPOINT, this.defaultExitPoint);
 		return jsonObjectBuilder;

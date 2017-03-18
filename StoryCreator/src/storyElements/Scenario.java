@@ -30,9 +30,10 @@ public class Scenario implements JsonStructure
 	HashMap<Integer, ExitPoint> exitPoints = new HashMap<Integer, ExitPoint>();
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
+	HashMap<Integer, ArrayList<ExitPoint>> branchLevels = new HashMap<Integer, ArrayList<ExitPoint>>();
 	Branch currentBranch;
 	Integer startingBranch;
-	int branchCounter = 1;
+	int nextBranch = 1;
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewExitPoint = null;
@@ -45,7 +46,7 @@ public class Scenario implements JsonStructure
 	public Scenario(String description, ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLength, int subplotLength, int scenarioLength)
 	{
 		this.description = description;
-		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription);
+		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription, 0);
 		this.startingBranch = 0;
 		exitPoints.put(0, this.currentBranch);
 		this.branchLength = branchLength;
@@ -69,12 +70,20 @@ public class Scenario implements JsonStructure
 		if (flavourHasSubFlavourProb != null)
 			this.flavourHasSubFlavour = new Chance(flavourHasSubFlavourProb);
 		
-		JsonObject exitPointObject = jsonObject.getJsonObject(Main.EXITPOINTS);
-		for (Entry<String, JsonValue> entry:  exitPointObject.entrySet())
+		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
+		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
 		{
-			ExitPoint exitPoint = Main.getFromJson((JsonObject) entry.getValue());
+			JsonObject exitPointObject = (JsonObject) entry.getValue();
+			ExitPoint exitPoint = Main.getFromJson(exitPointObject, this.scenarioLength);
 			this.exitPoints.put(Integer.valueOf(entry.getKey()), exitPoint);
-			if (((JsonObject) entry.getValue()).containsKey(Main.STARTING_BRANCH))
+			int branchLevel = exitPointObject.getInt(Main.BRANCH_LEVEL);
+			
+			if (!this.branchLevels.containsKey(branchLevel))
+				this.branchLevels.put(branchLevel, new ArrayList<ExitPoint>());
+				
+			this.branchLevels.get(branchLevel).add(exitPoint);
+			
+			if (branchLevel == 0)
 			{
 				this.startingBranch = Integer.valueOf(entry.getKey());
 				this.currentBranch = (Branch) exitPoint;
@@ -96,12 +105,16 @@ public class Scenario implements JsonStructure
 	
 	public void incrementBranchCounter()
 	{
-		this.branchCounter++;
+		this.nextBranch++;
 	}
 	
+	public int getNextBranch() {
+		return nextBranch;
+	}
+
 	public boolean checkLastBranch()
 	{
-		return this.branchCounter >= this.scenarioLength;
+		return this.nextBranch >= this.scenarioLength;
 	}
 	
 	public JsonObject getJsonObject()
@@ -122,10 +135,6 @@ public class Scenario implements JsonStructure
 		for (Entry<Integer, ExitPoint> entry : exitPoints.entrySet())
 		{
 			JsonObjectBuilder innerJsonObjectBuilder = entry.getValue().getJsonObjectBuilder();
-			if (entry.getKey() == this.startingBranch)
-			{
-				innerJsonObjectBuilder.add(Main.STARTING_BRANCH, true);
-			}
 			exitPointBuilder.add(String.valueOf(entry.getKey()), innerJsonObjectBuilder.build());
 		}		
 		jsonObjectBuilder.add(Main.EXITPOINTS, exitPointBuilder.build());
@@ -231,9 +240,9 @@ public class Scenario implements JsonStructure
 		this.optionBecomesSubplot = optionBecomesSubplot;
 	}
 	
-	private Branch setupNewBranch(ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription)
+	private Branch setupNewBranch(ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLevel)
 	{
-		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription);
+		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription, branchLevel);
 		return newBranch;
 	}
 	
@@ -285,12 +294,12 @@ public class Scenario implements JsonStructure
 		subplotOptions.add(new SubplotOption("B"));
 		subplotOptions.add(new SubplotOption("C"));
 		
-		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 0);
+		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 2);
 		testScenario.setFlavourHasSubFlavour(new Chance(50));
 		testScenario.setOptionBecomesSubplot(new Chance(50));
 		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
 		
-		Branch newBranch = new Branch(branchOptions2, "Descrip2");	
+		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
 		Integer newBranchId = testScenario.addExitPoint(newBranch);;
 		testScenario.getCurrentBranch().setDefaultExitPoint(newBranchId);
 		
@@ -306,7 +315,7 @@ public class Scenario implements JsonStructure
 		newOption.setFlavourList(flavourListId);
 		newBranch.add(newOption);
 		
-		EndingOption ending1 = new EndingOption("END");
+		EndingOption ending1 = new EndingOption("END", 2);
 		Integer endingPointId = testScenario.addExitPoint(ending1);
 		newOption.setExitPoint(endingPointId);
 		

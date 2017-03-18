@@ -73,8 +73,8 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			NewBranchDialog newBranchDialog = new NewBranchDialog(editorDialog, true, Main.INITIALOPTIONS_FOR_SCENARIO, true);
 			newBranchDialog.setTitle("New Branch");
 			Main.showWindowInCentre(newBranchDialog);
-	    	Branch branch = newBranchDialog.getNewBranch();
 	    	Scenario scenario = Main.getMainScenario();
+	    	Branch branch = newBranchDialog.getNewBranch(scenario.getNextBranch());
 	    	Integer exitPointID = scenario.addExitPoint(branch);
 	    	BranchOption branchOption = new BranchOption(newBranchDialog.getOptionHeader());
 	    	branchOption.setExitPoint(exitPointID);

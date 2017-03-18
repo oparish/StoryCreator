@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import javax.swing.JTextField;
 
+import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 
@@ -40,7 +41,7 @@ public class NewEndingDialog extends FieldDialog
 	
 	public EndingOption getEndingOption()
 	{
-		return new EndingOption(this.endingField.getText());
+		return new EndingOption(this.endingField.getText(), Main.getMainScenario().getNextBranch());
 	}
 	
 }

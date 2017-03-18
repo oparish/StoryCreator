@@ -51,13 +51,13 @@ public class NewBranchDialog extends NewStoryElementDialog
 		return this.optionHeaderField.getText();
 	}
 	
-	public Branch getNewBranch()
+	public Branch getNewBranch(int branchLevel)
 	{
 		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
 		for (JTextField textField : this.initialOptionFields)
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		return new Branch(initialOptions, this.branchDescriptionField.getText());
+		return new Branch(initialOptions, this.branchDescriptionField.getText(), branchLevel);
 	}
 }

@@ -10,20 +10,24 @@ import storyElements.Scenario;
 
 public class EndingOption extends Option implements ExitPoint
 {
-	public EndingOption(String description)
+	private Integer branchLevel;
+	
+	public EndingOption(String description, int branchLevel)
 	{
 		super(description);
+		this.branchLevel = branchLevel;
 	}
 	
 	public EndingOption(JsonObject jsonObject)
 	{
 		super(jsonObject);
+		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
 	}
 
 	public JsonObjectBuilder getJsonObjectBuilder()
 	{
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
-		jsonObjectBuilder.add(Main.TYPE, Main.ENDINGOPTION);
+		jsonObjectBuilder.add(Main.BRANCH_LEVEL, this.branchLevel);
 		return jsonObjectBuilder;
 	}	
 }

@@ -41,7 +41,6 @@ public class Main
 	public static final int DEFAULTSUBPLOTLENGTH = 2;
 	public static final int DEFAULTSCENARIOLENGTH = 3;
 	
-	public static final String TYPE = "type";
 	public static final String BRANCH = "branch";
 	public static final String ENDINGOPTION = "endingoption";
 	public static final String EXITPOINT = "exitpoint";
@@ -55,13 +54,13 @@ public class Main
 	public static final String EXITPOINTS = "exitpoints";
 	public static final String FLAVOURLISTS = "flavourLists";
 	public static final String SUBPLOTS = "subplots";
-	public static final String STARTING_BRANCH = "startingbranch";
 	public static final String OPTIONS = "options";
 	public static final String SUBPLOT = "subplot";
 	public static final String FLAVOURLIST = "flavourlist";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
 	public static final String TWISTLIST = "twistlist";
 	public static final String SUGGESTIONS = "suggestions";
+	public static final String BRANCH_LEVEL = "branchlevel";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
@@ -69,9 +68,9 @@ public class Main
 	private static Spice mainSpice;
 	private static File spiceFile;
 	
-	public static ExitPoint getFromJson(JsonObject jsonObject)
+	public static ExitPoint getFromJson(JsonObject jsonObject, int scenarioLength)
 	{
-		if (jsonObject.getString(Main.TYPE).matches(Main.BRANCH))
+		if (jsonObject.getInt(Main.BRANCH_LEVEL) != scenarioLength)
 		{
 			return new Branch(jsonObject);
 		}
