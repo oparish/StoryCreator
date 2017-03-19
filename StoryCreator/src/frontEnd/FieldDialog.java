@@ -21,13 +21,16 @@ import storyElements.optionLists.Branch;
 
 public class FieldDialog extends JDialog
 {
+	private static final int PANELWIDTH = 500;
+	private static final int PANELHEIGHT = 300;
+	
 	protected int yPos = 0;
 	
 	public FieldDialog(Frame owner, boolean modal, FieldPanel[] panels)
 	{
 		super(owner, modal);
 		this.setLayout(new GridLayout(panels.length, 1));
-		this.setSize(500, 500);
+		this.setSize(PANELWIDTH, PANELHEIGHT * panels.length);
 		for (FieldPanel panel : panels)
 		{
 			this.addPanel(panel);
@@ -39,20 +42,6 @@ public class FieldDialog extends JDialog
 		this.add(jPanel);
 		yPos++;
 	}
-	
-//	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
-//	{
-//		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//		gridBagConstraints.gridx = gridx;
-//		gridBagConstraints.gridy = gridy;
-//		gridBagConstraints.gridwidth = gridWidth;
-//		gridBagConstraints.gridheight = gridHeight;
-//		gridBagConstraints.weightx = 1;
-//		gridBagConstraints.weighty = 1;
-//		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-//		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
-//		return gridBagConstraints;
-//	}
 	
 	public static void main(String[] args)
 	{

@@ -2,13 +2,15 @@ package frontEnd;
 
 import java.awt.Frame;
 
+import storyElements.options.StoryElement;
 import main.Main;
 
-public class NewStoryElementPanel extends FieldPanel
+public abstract class NewStoryElementPanel<T extends StoryElement> extends FieldPanel<T>
 {
 	public NewStoryElementPanel()
 	{
 		super();
-		this.addJLabel(Main.getMainSpice().getSuggestion());
+		if (Main.getMainSpice() != null)
+			this.addJLabel(Main.getMainSpice().getSuggestion());
 	}
 }

@@ -1,5 +1,6 @@
 package storyElements.options;
 
-public interface StoryElement {
-
+public interface StoryElement 
+{
+	public String getDescription();
 }

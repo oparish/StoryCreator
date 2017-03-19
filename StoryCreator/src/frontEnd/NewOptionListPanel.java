@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-public class NewOptionListPanel extends FieldPanel
+import storyElements.options.StoryElement;
+
+public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPanel<T>
 {
 	protected static final String INITIAL_OPTION = "Initial Option";	
 	protected ArrayList<JTextField> initialOptionFields;

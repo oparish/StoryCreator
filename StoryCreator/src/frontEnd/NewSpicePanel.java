@@ -9,13 +9,12 @@ import javax.swing.JTextField;
 import storyElements.Spice;
 import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
+import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import main.Main;
 
-public class NewSpicePanel extends NewOptionListPanel
+public class NewSpicePanel extends NewOptionListPanel<Spice>
 {
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
 	ArrayList<JTextField> suggestionFields;
 	
 	public NewSpicePanel()
@@ -32,7 +31,7 @@ public class NewSpicePanel extends NewOptionListPanel
 		}
 	}
 
-	public Spice getNewSpice()
+	public Spice getResult()
 	{
 		TwistList twistList = new TwistList();
 		for (JTextField textField : this.initialOptionFields)

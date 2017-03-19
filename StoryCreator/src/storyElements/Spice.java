@@ -13,9 +13,10 @@ import javax.json.JsonValue;
 import main.Main;
 import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
+import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 
-public class Spice implements JsonStructure
+public class Spice implements JsonStructure, StoryElement
 {
 	private ArrayList<String> suggestions;
 	private TwistList twistList;
@@ -67,6 +68,12 @@ public class Spice implements JsonStructure
 	{
 		int rnd = Main.getRandomNumberInRange(this.suggestions.size());
 		return this.suggestions.get(rnd);
+	}
+	
+	@Override
+	public String getDescription()
+	{
+		return "";
 	}
 	
 	public static void main(String[] args)

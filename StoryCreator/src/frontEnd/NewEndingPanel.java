@@ -8,10 +8,8 @@ import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 
-public class NewEndingPanel extends FieldPanel
+public class NewEndingPanel extends FieldPanel<EndingOption>
 {	
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
 	private static final String ENDING = "Ending";
 	
 	private JTextField endingField;
@@ -19,13 +17,12 @@ public class NewEndingPanel extends FieldPanel
 	public NewEndingPanel()
 	{
 		super();	
-		//this.setSize(WIDTH, HEIGHT);
 		
 		this.endingField = new JTextField();
 		this.addTextField(this.endingField, ENDING);
 	}
 	
-	public EndingOption getEndingOption()
+	public EndingOption getResult()
 	{
 		return new EndingOption(this.endingField.getText(), Main.getMainScenario().getNextBranch());
 	}

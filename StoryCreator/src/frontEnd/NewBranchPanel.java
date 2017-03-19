@@ -11,10 +11,8 @@ import storyElements.Scenario;
 import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
 
-public class NewBranchPanel extends NewStoryElementPanel
+public class NewBranchPanel extends NewStoryElementPanel<Branch>
 {
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
 	private static final String BRANCH_DESCRIPTION = "Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
 
@@ -23,8 +21,7 @@ public class NewBranchPanel extends NewStoryElementPanel
 	
 	public NewBranchPanel(int initialOptionNumber)
 	{
-		super();
-		//this.setSize(WIDTH, HEIGHT);	
+		super();	
 		
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
@@ -38,13 +35,13 @@ public class NewBranchPanel extends NewStoryElementPanel
 		}
 	}
 	
-	public Branch getNewBranch(int branchLevel)
+	public Branch getResult()
 	{
 		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
 		for (JTextField textField : this.initialOptionFields)
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		return new Branch(initialOptions, this.branchDescriptionField.getText(), branchLevel);
+		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch());
 	}
 }

@@ -42,7 +42,7 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newOptionDialog);
-        	BranchOption branchOption = newOptionPanel.getOption();
+        	BranchOption branchOption = newOptionPanel.getResult();
             NonRepeatingOptionList.this.add(branchOption);
             return branchOption;
 		}	

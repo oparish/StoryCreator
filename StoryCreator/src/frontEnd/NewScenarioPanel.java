@@ -20,11 +20,8 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
-public class NewScenarioPanel extends NewOptionListPanel
-{
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
-	
+public class NewScenarioPanel extends NewOptionListPanel<Scenario>
+{	
 	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
 	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";
 	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
@@ -46,7 +43,6 @@ public class NewScenarioPanel extends NewOptionListPanel
 	public NewScenarioPanel(Frame owner, boolean modal, int initialOptionNumber)
 	{
 		super();
-		//this.setSize(WIDTH, HEIGHT);
 		
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
@@ -78,7 +74,7 @@ public class NewScenarioPanel extends NewOptionListPanel
 		this.addSpinner(this.scenarioLengthSpinner, SCENARIO_LENGTH);
 	}
 	
-	public Scenario getNewScenario()
+	public Scenario getResult()
 	{
 		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
 		for (JTextField textField : this.initialOptionFields)

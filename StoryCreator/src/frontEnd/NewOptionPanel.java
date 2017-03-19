@@ -19,11 +19,8 @@ import storyElements.options.EndingOption;
 import storyElements.options.Option;
 import storyElements.options.TwistOption;
 
-public class NewOptionPanel extends NewStoryElementPanel
-{
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
-	
+public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
+{	
 	private static final String DESCRIPTION = "Description";
 	
 	private JTextField descriptionField;
@@ -31,23 +28,16 @@ public class NewOptionPanel extends NewStoryElementPanel
 	public NewOptionPanel()
 	{
 		super();
-
-		//this.setSize(WIDTH, HEIGHT);
 		
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 	}
 	
-	public BranchOption getOption()
+	public BranchOption getResult()
 	{
 		return new BranchOption(this.descriptionField.getText());
 	}
-	
-	public TwistOption getTwistOption()
-	{
-		return new TwistOption(this.descriptionField.getText());
-	}
-	
+
 	public static void main(String[] args)
 	{
 		NewOptionPanel newOptionDialog = new NewOptionPanel();

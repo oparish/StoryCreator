@@ -12,6 +12,7 @@ import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.FieldPanel;
 import frontEnd.NewOptionPanel;
+import frontEnd.NewTwistOptionPanel;
 import main.Main;
 
 public class TwistList extends NonRepeatingOptionList
@@ -27,13 +28,13 @@ public class TwistList extends NonRepeatingOptionList
 		}
 		else
 		{
-			NewOptionPanel newOptionPanel = new NewOptionPanel();
-			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
-			newOptionDialog.setTitle("New " + this.type);
-			Main.showWindowInCentre(newOptionDialog);
-        	TwistOption branchOption = (TwistOption) newOptionPanel.getTwistOption();
-        	TwistList.this.add(branchOption);
-            return branchOption;
+			NewTwistOptionPanel newTwistOptionPanel = new NewTwistOptionPanel();
+			FieldDialog newTwistOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newTwistOptionPanel});
+			newTwistOptionDialog.setTitle("New " + this.type);
+			Main.showWindowInCentre(newTwistOptionDialog);
+        	TwistOption twistOption = newTwistOptionPanel.getResult();
+        	TwistList.this.add(twistOption);
+            return twistOption;
         }  
 	}
 }

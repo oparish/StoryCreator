@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-public class FieldPanel extends JPanel
+import storyElements.options.StoryElement;
+
+public abstract class FieldPanel<T extends StoryElement> extends JPanel
 {
 	private int yPos = 0;
 	
@@ -52,4 +54,6 @@ public class FieldPanel extends JPanel
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		return gridBagConstraints;
 	}
+	
+	public abstract T getResult();
 }

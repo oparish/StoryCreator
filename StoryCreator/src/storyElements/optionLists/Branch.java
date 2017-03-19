@@ -15,6 +15,7 @@ import frontEnd.FieldPanel;
 import frontEnd.NewBranchPanel;
 import frontEnd.NewEndingPanel;
 import frontEnd.NewOptionPanel;
+import frontEnd.OldOrNewPanel;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
@@ -83,18 +84,27 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		newEndingDialog.setTitle("New Ending");
 		Main.showWindowInCentre(newEndingDialog);
 		Scenario currentScenario = Main.getMainScenario();
-		EndingOption endingOption = newEndingPanel.getEndingOption();
+		EndingOption endingOption = newEndingPanel.getResult();
 		this.defaultExitPoint = currentScenario.addExitPoint(endingOption);
 		return endingOption;
 	}
 	
 	private ExitPoint createBranch(EditorDialog editorDialog)
 	{
-		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
-		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newBranchPanel});
-		Main.showWindowInCentre(newBranchDialog);
 		Scenario currentScenario = Main.getMainScenario();
-		Branch newBranch = newBranchPanel.getNewBranch(currentScenario.getNextBranch());
+		FieldPanel<Branch> fieldPanel;
+		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
+		
+		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(currentScenario.getNextBranch());
+		
+		if (exitPoints == null)	
+			fieldPanel = newBranchPanel;
+		else
+			fieldPanel = new OldOrNewPanel<Branch>((Branch) exitPoints.get(Main.getRandomNumberInRange(exitPoints.size())), newBranchPanel);
+		
+		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{fieldPanel});
+		Main.showWindowInCentre(newBranchDialog);
+		Branch newBranch = fieldPanel.getResult();
 		this.defaultExitPoint = currentScenario.addExitPoint(newBranch);
 		return newBranch; 
 	}

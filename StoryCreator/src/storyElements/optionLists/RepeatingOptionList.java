@@ -11,7 +11,9 @@ import frontEnd.NewBranchPanel;
 import frontEnd.NewEndingPanel;
 import frontEnd.NewOptionPanel;
 import frontEnd.NewScenarioPanel;
+import frontEnd.OldOrNewPanel;
 import main.Main;
+import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
@@ -71,18 +73,27 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 		}
 
 		private BranchOption makeNewBranch(EditorDialog editorDialog)
-		{
+		{	    	
+			Scenario currentScenario = Main.getMainScenario();
 			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			FieldPanel<Branch> fieldPanel;
 			NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
-			FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel, newBranchPanel});
-			newBranchDialog.setTitle("New Branch");
+			
+			ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(currentScenario.getNextBranch());
+			
+			if (exitPoints == null)	
+				fieldPanel = newBranchPanel;
+			else
+				fieldPanel = new OldOrNewPanel<Branch>((Branch) exitPoints.get(Main.getRandomNumberInRange(exitPoints.size())), newBranchPanel);
+			
+			FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel, fieldPanel});
 			Main.showWindowInCentre(newBranchDialog);
-	    	Scenario scenario = Main.getMainScenario();
-	    	Branch branch = newBranchPanel.getNewBranch(scenario.getNextBranch());
-	    	Integer exitPointID = scenario.addExitPoint(branch);
-	    	BranchOption branchOption = newOptionPanel.getOption();
+			Branch newBranch = fieldPanel.getResult();
+	    	Integer exitPointID = currentScenario.addExitPoint(newBranch);
+	    	BranchOption branchOption = newOptionPanel.getResult();
 	    	branchOption.setExitPoint(exitPointID);
-	    	return branchOption;
+			
+			return branchOption; 
 		}
 		
 		private Option makeNewEnding(EditorDialog editorDialog)
@@ -92,8 +103,8 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			FieldDialog newEndingDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newEndingPanel, newOptionPanel});
 			newEndingDialog.setTitle("New Ending");
 			Main.showWindowInCentre(newEndingDialog);
-			EndingOption endingOption = newEndingPanel.getEndingOption();
-			BranchOption branchOption = newOptionPanel.getOption();
+			EndingOption endingOption = newEndingPanel.getResult();
+			BranchOption branchOption = newOptionPanel.getResult();
 			Scenario currentScenario = Main.getMainScenario();
 			Integer exitPointID = currentScenario.addExitPoint(endingOption);
 			branchOption.setExitPoint(exitPointID);
@@ -128,7 +139,7 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New Option");
 			Main.showWindowInCentre(newOptionDialog);
-	    	BranchOption branchOption = newOptionPanel.getOption();
+	    	BranchOption branchOption = newOptionPanel.getResult();
 	        return branchOption;
 		}
 		

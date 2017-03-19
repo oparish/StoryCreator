@@ -23,9 +23,10 @@ import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.Option;
+import storyElements.options.StoryElement;
 import storyElements.options.SubplotOption;
 
-public class Scenario implements JsonStructure
+public class Scenario implements JsonStructure, StoryElement
 {	
 	HashMap<Integer, ExitPoint> exitPoints = new HashMap<Integer, ExitPoint>();
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
@@ -101,6 +102,14 @@ public class Scenario implements JsonStructure
 		{
 			this.subplots.put(Integer.valueOf(entry.getKey()), new Subplot((JsonObject) entry.getValue()));
 		}
+	}
+	
+	public ArrayList<ExitPoint> getBranchLevel(int branchLevel)
+	{
+		if (this.branchLevels.containsKey(branchLevel))
+			return this.branchLevels.get(branchLevel);
+		else
+			return null;
 	}
 	
 	public void incrementBranchCounter()
