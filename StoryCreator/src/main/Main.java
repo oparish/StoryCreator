@@ -36,6 +36,8 @@ public class Main
 {
 	public static final int INITIALOPTIONS_FOR_SCENARIO = 3;
 	public static final int INITIALOPTIONS_FOR_SPICE = 3;
+	public static final int INITIALOPTIONS_FOR_FLAVOURLIST = 3;
+	public static final int INITIALOPTIONS_FOR_BRANCH = 3;
 	public static final int SUGGESTION_NUMBER = 4;
 	public static final int DEFAULTBRANCHLENGTH = 3;
 	public static final int DEFAULTSUBPLOTLENGTH = 2;

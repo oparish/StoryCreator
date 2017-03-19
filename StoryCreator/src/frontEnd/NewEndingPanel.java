@@ -16,15 +16,15 @@ public class NewEndingPanel extends FieldPanel<EndingOption>
 	
 	public NewEndingPanel()
 	{
-		super();	
-		
+		super("New Ending");	
 		this.endingField = new JTextField();
-		this.addTextField(this.endingField, ENDING);
+		this.addTextField(this.endingField, ENDING);	
 	}
-	
+		
 	public EndingOption getResult()
 	{
 		return new EndingOption(this.endingField.getText(), Main.getMainScenario().getNextBranch());
 	}
+
 	
 }

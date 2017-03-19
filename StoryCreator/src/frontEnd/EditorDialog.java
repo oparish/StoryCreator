@@ -24,9 +24,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.optionLists.Branch;
+import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.RepeatingOptionList.Generator;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
+import storyElements.options.FlavourOption;
 import storyElements.options.Option;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
@@ -53,6 +55,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private TwistOption twistOption;
 	private Option currentOption;
+	private FlavourOption flavour;
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	
@@ -115,6 +118,14 @@ public class EditorDialog extends JFrame implements ActionListener
 			return "";
 		else
 			return this.currentOption.getDescription();
+	}
+	
+	public String getCurrentFlavourDescription()
+	{
+		if (this.flavour == null)
+			return "";
+		else
+			return this.flavour.getDescription();
 	}
 	
 	private JPanel setupLeftPanel()
@@ -225,12 +236,18 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		if (option instanceof BranchOption)
 		{
+			FlavourList flavourList = ((BranchOption) option).getFlavourList();
+			if (flavourList != null)
+			{
+				this.flavour = flavourList.getFlavour();
+			}
+			
 			ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
 			if (exitPoint != null)
 			{
 				this.mainGenerator = null;
 				this.nextExitPoint = exitPoint;
-			}
+			}		
 		}
 
 		this.currentOption = option;
@@ -245,7 +262,8 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
 		infoBuilder.append("Twist: " + this.twistOption.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
-		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription());	
+		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription() + "\r\n");	
+		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");	
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	

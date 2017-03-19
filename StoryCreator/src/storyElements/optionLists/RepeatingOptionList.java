@@ -3,10 +3,12 @@ package storyElements.optionLists;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.FieldPanel;
+import frontEnd.FlavourListPanel;
 import frontEnd.NewBranchPanel;
 import frontEnd.NewEndingPanel;
 import frontEnd.NewOptionPanel;
@@ -71,78 +73,76 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 				return storyElement;
 			}	
 		}
-
-		private BranchOption makeNewBranch(EditorDialog editorDialog)
-		{	    	
-			Scenario currentScenario = Main.getMainScenario();
-			NewOptionPanel newOptionPanel = new NewOptionPanel();
-			FieldPanel<Branch> fieldPanel;
-			NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
-			
-			ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(currentScenario.getNextBranch());
-			
-			if (exitPoints == null)	
-				fieldPanel = newBranchPanel;
-			else
-				fieldPanel = new OldOrNewPanel<Branch>((Branch) exitPoints.get(Main.getRandomNumberInRange(exitPoints.size())), newBranchPanel);
-			
-			FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel, fieldPanel});
-			Main.showWindowInCentre(newBranchDialog);
-			Branch newBranch = fieldPanel.getResult();
-	    	Integer exitPointID = currentScenario.addExitPoint(newBranch);
-	    	BranchOption branchOption = newOptionPanel.getResult();
-	    	branchOption.setExitPoint(exitPointID);
-			
-			return branchOption; 
-		}
-		
-		private Option makeNewEnding(EditorDialog editorDialog)
-		{
-			NewOptionPanel newOptionPanel = new NewOptionPanel();
-			NewEndingPanel newEndingPanel = new NewEndingPanel();
-			FieldDialog newEndingDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newEndingPanel, newOptionPanel});
-			newEndingDialog.setTitle("New Ending");
-			Main.showWindowInCentre(newEndingDialog);
-			EndingOption endingOption = newEndingPanel.getResult();
-			BranchOption branchOption = newOptionPanel.getResult();
-			Scenario currentScenario = Main.getMainScenario();
-			Integer exitPointID = currentScenario.addExitPoint(endingOption);
-			branchOption.setExitPoint(exitPointID);
-	        return branchOption;
-		}
 		
 		private Option tryNewOption(EditorDialog editorDialog)
 		{
 			this.lastNumber = RepeatingOptionList.this.size();
 			Scenario currentScenario = Main.getMainScenario();
-			Option option;
 			
-			if (currentScenario.getOptionBecomesNewExitPoint().check())
-			{
-				if (currentScenario.checkLastBranch())
-					option = this.makeNewEnding(editorDialog);
-				else
-					option = this.makeNewBranch(editorDialog);
-			}
-			else
-			{
-				option = this.makeNewOption(editorDialog);
-			}
-			RepeatingOptionList.this.add(option);
-			return option;
-		}
-		
+			boolean becomesExitPoint = currentScenario.getOptionBecomesNewExitPoint().check();
+			boolean hasFlavour = currentScenario.getOptionHasFlavour().check();
+			boolean isLastBranch = currentScenario.checkLastBranch();
 
-		private BranchOption makeNewOption(EditorDialog editorDialog)
-		{
+			ArrayList<ExitPoint> exitPointsAtLevel = currentScenario.getBranchLevel(currentScenario.getNextBranch());
+			HashMap<Integer, FlavourList> flavourLists = currentScenario.getFlavourLists();
+			
+			ArrayList<FieldPanel> fieldPanels = new ArrayList<FieldPanel>();
 			NewOptionPanel newOptionPanel = new NewOptionPanel();
-			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
+			fieldPanels.add(newOptionPanel);
+			
+			FieldPanel<? extends ExitPoint> exitPointPanel = null;
+			if (becomesExitPoint)
+			{
+				if (isLastBranch)
+				{
+					exitPointPanel = new NewEndingPanel();
+				}
+				else if (exitPointsAtLevel == null)
+				{
+					exitPointPanel = new NewBranchPanel();
+				}
+				else
+				{
+					exitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBranchPanel());
+				}
+				fieldPanels.add(exitPointPanel);
+			}
+			
+			FieldPanel<FlavourList> flavourListPanel = null;
+			if (hasFlavour)
+			{
+				if (flavourLists.size() != 0)
+				{
+					flavourListPanel = new OldOrNewPanel<FlavourList>(flavourLists.get(Main.getRandomNumberInRange(flavourLists.size())), new FlavourListPanel());
+				}
+				else
+				{
+					flavourListPanel = new FlavourListPanel();
+				}
+				fieldPanels.add(flavourListPanel);
+			}
+		
+			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, fieldPanels.toArray(new FieldPanel[fieldPanels.size()]));
 			newOptionDialog.setTitle("New Option");
 			Main.showWindowInCentre(newOptionDialog);
-	    	BranchOption branchOption = newOptionPanel.getResult();
-	        return branchOption;
-		}
-		
+			
+			BranchOption branchOption = newOptionPanel.getResult();
+			
+			if (becomesExitPoint)
+			{
+				int exitPointID = currentScenario.getExitPointID(exitPointPanel.getResult());
+				branchOption.setExitPoint(exitPointID);
+			}
+			
+			if (hasFlavour)
+			{
+				int flavourListID = currentScenario.getFlavourListID(flavourListPanel.getResult());
+				branchOption.setFlavourList(flavourListID);
+			}
+			
+			RepeatingOptionList.this.add(branchOption);
+			return branchOption;
+		}	
 
 		public Subplot getCurrentSubplot() {
 			return currentSubplot;

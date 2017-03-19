@@ -85,7 +85,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		Main.showWindowInCentre(newEndingDialog);
 		Scenario currentScenario = Main.getMainScenario();
 		EndingOption endingOption = newEndingPanel.getResult();
-		this.defaultExitPoint = currentScenario.addExitPoint(endingOption);
+		this.defaultExitPoint = currentScenario.getExitPointID(endingOption);
 		return endingOption;
 	}
 	
@@ -93,7 +93,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.INITIALOPTIONS_FOR_SCENARIO);
+		NewBranchPanel newBranchPanel = new NewBranchPanel();
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(currentScenario.getNextBranch());
 		
@@ -105,7 +105,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{fieldPanel});
 		Main.showWindowInCentre(newBranchDialog);
 		Branch newBranch = fieldPanel.getResult();
-		this.defaultExitPoint = currentScenario.addExitPoint(newBranch);
+		this.defaultExitPoint = currentScenario.getExitPointID(newBranch);
 		return newBranch; 
 	}
 	

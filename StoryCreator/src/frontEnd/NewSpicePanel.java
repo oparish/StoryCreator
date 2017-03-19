@@ -19,7 +19,7 @@ public class NewSpicePanel extends NewOptionListPanel<Spice>
 	
 	public NewSpicePanel()
 	{
-		super();
+		super("New Spice");
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SPICE);
 		
 		this.suggestionFields = new ArrayList<JTextField>();

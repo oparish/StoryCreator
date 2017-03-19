@@ -38,7 +38,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewExitPoint = null;
-	Chance flavourHasSubFlavour = null;
+	Chance optionHasFlavourList = null;
 	int branchLength;
 	int subplotLength;
 	int scenarioLength;
@@ -69,7 +69,7 @@ public class Scenario implements JsonStructure, StoryElement
 		if (optionBecomesNewExitPointProb != null)
 			this.optionBecomesNewExitPoint = new Chance(optionBecomesNewExitPointProb);
 		if (flavourHasSubFlavourProb != null)
-			this.flavourHasSubFlavour = new Chance(flavourHasSubFlavourProb);
+			this.optionHasFlavourList = new Chance(flavourHasSubFlavourProb);
 		
 		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
@@ -102,6 +102,11 @@ public class Scenario implements JsonStructure, StoryElement
 		{
 			this.subplots.put(Integer.valueOf(entry.getKey()), new Subplot((JsonObject) entry.getValue()));
 		}
+	}
+	
+	public HashMap<Integer, FlavourList> getFlavourLists()
+	{
+		return flavourLists;
 	}
 	
 	public ArrayList<ExitPoint> getBranchLevel(int branchLevel)
@@ -137,8 +142,8 @@ public class Scenario implements JsonStructure, StoryElement
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_SUBPLOT, this.optionBecomesSubplot.getProb());
 		if (this.optionBecomesNewExitPoint != null)
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_NEW_EXITPOINT, this.optionBecomesNewExitPoint.getProb());
-		if (this.flavourHasSubFlavour != null)
-			jsonObjectBuilder.add(Main.FLAVOUR_HAS_SUBFLAVOUR, this.flavourHasSubFlavour.getProb());
+		if (this.optionHasFlavourList != null)
+			jsonObjectBuilder.add(Main.FLAVOUR_HAS_SUBFLAVOUR, this.optionHasFlavourList.getProb());
 		
 		JsonObjectBuilder exitPointBuilder = Json.createObjectBuilder();		
 		for (Entry<Integer, ExitPoint> entry : exitPoints.entrySet())
@@ -233,12 +238,12 @@ public class Scenario implements JsonStructure, StoryElement
 		this.optionBecomesNewExitPoint = optionBecomesNewExitPoint;
 	}
 
-	public Chance getFlavourHasSubFlavour() {
-		return flavourHasSubFlavour;
+	public Chance getOptionHasFlavour() {
+		return optionHasFlavourList;
 	}
 
-	public void setFlavourHasSubFlavour(Chance flavourHasSubFlavour) {
-		this.flavourHasSubFlavour = flavourHasSubFlavour;
+	public void setOptionHasFlavour(Chance flavourHasSubFlavour) {
+		this.optionHasFlavourList = flavourHasSubFlavour;
 	}
 	
 	public Chance getOptionBecomesSubplot() {
@@ -255,18 +260,28 @@ public class Scenario implements JsonStructure, StoryElement
 		return newBranch;
 	}
 	
-	public Integer addExitPoint(ExitPoint exitPoint)
+	public Integer getExitPointID(ExitPoint exitPoint)
 	{
-		Integer exitPointID = this.exitPoints.size();
-		this.exitPoints.put(exitPointID, exitPoint);
-		return exitPointID;
+		if (this.exitPoints.containsValue(exitPoint))
+			return this.identifyExitPoint(exitPoint);
+		else
+		{
+			Integer exitPointID = this.exitPoints.size();
+			this.exitPoints.put(exitPointID, exitPoint);
+			return exitPointID;
+		}
 	}
 	
-	public Integer addFlavourList(FlavourList flavourList)
+	public Integer getFlavourListID(FlavourList flavourList)
 	{
-		Integer flavourListID = this.flavourLists.size();
-		this.flavourLists.put(flavourListID, flavourList);
-		return flavourListID;
+		if (this.flavourLists.containsValue(flavourList))
+			return this.identifyFlavourList(flavourList);
+		else
+		{
+			Integer flavourListID = this.flavourLists.size();
+			this.flavourLists.put(flavourListID, flavourList);
+			return flavourListID;
+		}
 	}
 	
 	public Integer addSubPlot(Subplot subplot)
@@ -304,19 +319,19 @@ public class Scenario implements JsonStructure, StoryElement
 		subplotOptions.add(new SubplotOption("C"));
 		
 		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 2);
-		testScenario.setFlavourHasSubFlavour(new Chance(50));
+		testScenario.setOptionHasFlavour(new Chance(50));
 		testScenario.setOptionBecomesSubplot(new Chance(50));
 		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
 		
 		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
-		Integer newBranchId = testScenario.addExitPoint(newBranch);;
+		Integer newBranchId = testScenario.getExitPointID(newBranch);;
 		testScenario.getCurrentBranch().setDefaultExitPoint(newBranchId);
 		
 		FlavourList flavourList = new FlavourList(flavourOptions, "Flavour 1");
-		Integer flavourListId = testScenario.addFlavourList(flavourList);
+		Integer flavourListId = testScenario.getFlavourListID(flavourList);
 		
 		FlavourList flavourList2 = new FlavourList(flavourOptions2, "Flavour 2");
-		int flavourListId2 = testScenario.addFlavourList(flavourList2);
+		int flavourListId2 = testScenario.getFlavourListID(flavourList2);
 		
 		((FlavourOption) flavourList.get(0)).setSubFlavourList(flavourListId2);
 		
@@ -325,7 +340,7 @@ public class Scenario implements JsonStructure, StoryElement
 		newBranch.add(newOption);
 		
 		EndingOption ending1 = new EndingOption("END", 2);
-		Integer endingPointId = testScenario.addExitPoint(ending1);
+		Integer endingPointId = testScenario.getExitPointID(ending1);
 		newOption.setExitPoint(endingPointId);
 		
 		BranchOption newOption2 = new BranchOption("Eleven");

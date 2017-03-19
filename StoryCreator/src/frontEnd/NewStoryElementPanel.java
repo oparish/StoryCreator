@@ -7,9 +7,9 @@ import main.Main;
 
 public abstract class NewStoryElementPanel<T extends StoryElement> extends FieldPanel<T>
 {
-	public NewStoryElementPanel()
+	public NewStoryElementPanel(String header)
 	{
-		super();
+		super(header);
 		if (Main.getMainSpice() != null)
 			this.addJLabel(Main.getMainSpice().getSuggestion());
 	}

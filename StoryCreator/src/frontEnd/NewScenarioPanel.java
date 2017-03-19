@@ -40,10 +40,9 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 	private NumberSpinner subplotLengthSpinner;
 	private NumberSpinner scenarioLengthSpinner;
 	
-	public NewScenarioPanel(Frame owner, boolean modal, int initialOptionNumber)
+	public NewScenarioPanel()
 	{
-		super();
-		
+		super("New Scenario");
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
 		
@@ -83,12 +82,13 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 		}
 		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
 		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
+		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
 		return newScenario;
 	}
 	
 	public static void main(String[] args)
 	{
-		NewScenarioPanel newScenarioDialog = new NewScenarioPanel(null, true, Main.INITIALOPTIONS_FOR_SCENARIO);
+		NewScenarioPanel newScenarioDialog = new NewScenarioPanel();
 
 		Dimension screenCentre = main.Main.getScreenCentre();
 		newScenarioDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);

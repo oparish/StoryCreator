@@ -12,9 +12,10 @@ import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.Option;
+import storyElements.options.StoryElement;
 
 @SuppressWarnings("serial")
-public class FlavourList extends NonRepeatingOptionList<FlavourOption>
+public class FlavourList extends NonRepeatingOptionList<FlavourOption> implements StoryElement
 {
 	protected String type = "Flavour";
 	String description;
@@ -40,6 +41,17 @@ public class FlavourList extends NonRepeatingOptionList<FlavourOption>
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
 		jsonObjectBuilder.add(Main.DESCRIPTION, this.description);
 		return jsonObjectBuilder;
+	}
+
+	@Override
+	public String getDescription() 
+	{
+		return this.description;
+	}
+	
+	public FlavourOption getFlavour()
+	{
+		return (FlavourOption) this.get(Main.getRandomNumberInRange(this.size()));
 	}
 	
 }

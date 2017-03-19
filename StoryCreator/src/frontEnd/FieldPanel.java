@@ -15,10 +15,11 @@ public abstract class FieldPanel<T extends StoryElement> extends JPanel
 {
 	private int yPos = 0;
 	
-	public FieldPanel()
+	public FieldPanel(String heading)
 	{
 		super();
 		this.setLayout(new GridBagLayout());
+		this.addJLabel(heading);
 	}
 	
 	protected void addJLabel(String labelText)

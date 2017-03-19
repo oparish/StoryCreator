@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
@@ -21,25 +22,28 @@ import storyElements.optionLists.Branch;
 
 public class FieldDialog extends JDialog
 {
-	private static final int PANELWIDTH = 500;
-	private static final int PANELHEIGHT = 300;
+	private static final int WIDTH = 500;
+	private static final int HEIGHT = 400;
 	
 	protected int yPos = 0;
+	JPanel innerPanel;
 	
 	public FieldDialog(Frame owner, boolean modal, FieldPanel[] panels)
 	{
-		super(owner, modal);
-		this.setLayout(new GridLayout(panels.length, 1));
-		this.setSize(PANELWIDTH, PANELHEIGHT * panels.length);
+		super(owner, modal);	
+		this.setSize(WIDTH, HEIGHT);
+		this.innerPanel = new JPanel();
+		this.innerPanel.setLayout(new GridLayout(panels.length, 1));
 		for (FieldPanel panel : panels)
 		{
 			this.addPanel(panel);
 		}
+		this.add(new JScrollPane(this.innerPanel));
 	}
 	
 	public void addPanel(JPanel jPanel)
 	{
-		this.add(jPanel);
+		this.innerPanel.add(jPanel);
 		yPos++;
 	}
 	

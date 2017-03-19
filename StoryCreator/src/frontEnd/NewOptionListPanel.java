@@ -12,9 +12,9 @@ public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPa
 	protected static final String INITIAL_OPTION = "Initial Option";	
 	protected ArrayList<JTextField> initialOptionFields;
 	
-	public NewOptionListPanel()
+	public NewOptionListPanel(String header)
 	{
-		super();
+		super(header);
 	}
 	
 	protected void addInitialOptions(int initialOptionNumber)
@@ -27,5 +27,4 @@ public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPa
 			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i);
 		}
 	}
-
 }

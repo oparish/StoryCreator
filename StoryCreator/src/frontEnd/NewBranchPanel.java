@@ -19,20 +19,19 @@ public class NewBranchPanel extends NewStoryElementPanel<Branch>
 	private JTextField branchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
 	
-	public NewBranchPanel(int initialOptionNumber)
+	public NewBranchPanel()
 	{
-		super();	
-		
+		super("New Branch");	
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
-		for (int i = 0; i < initialOptionNumber; i++)
+		for (int i = 0; i < Main.INITIALOPTIONS_FOR_BRANCH; i++)
 		{
 			JTextField initialOptionField = new JTextField();
 			this.initialOptionFields.add(initialOptionField);
 			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i);
-		}
+		}	
 	}
 	
 	public Branch getResult()
