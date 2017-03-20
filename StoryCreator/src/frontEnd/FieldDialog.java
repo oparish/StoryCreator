@@ -23,7 +23,7 @@ import storyElements.optionLists.Branch;
 public class FieldDialog extends JDialog
 {
 	private static final int WIDTH = 500;
-	private static final int HEIGHT = 400;
+	private static final int HEIGHT = 800;
 	
 	protected int yPos = 0;
 	JPanel innerPanel;

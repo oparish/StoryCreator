@@ -23,14 +23,13 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel
 		super("Old or New?");
 		this.existingObject = existingObject;
 		this.fieldPanel = fieldPanel;
-		this.setLayout(new GridLayout(3, 1));
-		this.add(new JLabel("Old: " + existingObject.getDescription()));
+		this.addJLabel("Old: " + existingObject.getDescription());
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(this.oldButton);
 		buttonsPanel.add(this.newButton);
-		this.add(buttonsPanel);
+		this.addPanel(buttonsPanel);
 
-		this.add(fieldPanel);
+		this.addPanel(fieldPanel);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(this.oldButton);

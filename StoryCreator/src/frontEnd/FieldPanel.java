@@ -42,6 +42,12 @@ public abstract class FieldPanel<T extends StoryElement> extends JPanel
 		this.yPos++;
 	}
 	
+	protected void addPanel(JPanel panel)
+	{		
+		this.add(panel, this.setupGridBagConstraints(0, this.yPos, 1, 1));
+		this.yPos++;
+	}
+	
 	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
 	{
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();

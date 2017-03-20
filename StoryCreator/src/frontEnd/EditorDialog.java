@@ -25,7 +25,7 @@ import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.optionLists.Branch;
 import storyElements.optionLists.FlavourList;
-import storyElements.optionLists.RepeatingOptionList.Generator;
+import storyElements.optionLists.Branch.Generator;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.FlavourOption;
@@ -209,7 +209,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	}
 	
 	private void generate()
-	{
+	{	
 		if (this.nextExitPoint != null)
 		{
 			if (this.nextExitPoint instanceof EndingOption)
@@ -240,6 +240,10 @@ public class EditorDialog extends JFrame implements ActionListener
 			if (flavourList != null)
 			{
 				this.flavour = flavourList.getFlavour();
+			}
+			else
+			{
+				this.flavour = null;
 			}
 			
 			ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
