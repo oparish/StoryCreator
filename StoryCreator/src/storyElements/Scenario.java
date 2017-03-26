@@ -33,7 +33,6 @@ public class Scenario implements JsonStructure, StoryElement
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
 	HashMap<Integer, ArrayList<ExitPoint>> branchLevels = new HashMap<Integer, ArrayList<ExitPoint>>();
 	Branch currentBranch;
-	Integer startingBranch;
 	int nextBranch = 1;
 
 	Chance optionBecomesSubplot = null;
@@ -48,7 +47,6 @@ public class Scenario implements JsonStructure, StoryElement
 	{
 		this.description = description;
 		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription, 0);
-		this.startingBranch = 0;
 		exitPoints.put(0, this.currentBranch);
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
@@ -83,12 +81,6 @@ public class Scenario implements JsonStructure, StoryElement
 				this.branchLevels.put(branchLevel, new ArrayList<ExitPoint>());
 				
 			this.branchLevels.get(branchLevel).add(exitPoint);
-			
-			if (branchLevel == 0)
-			{
-				this.startingBranch = Integer.valueOf(entry.getKey());
-				this.currentBranch = (Branch) exitPoint;
-			}
 		}
 		
 		JsonObject flavourListsObject = jsonObject.getJsonObject(Main.FLAVOURLISTS);

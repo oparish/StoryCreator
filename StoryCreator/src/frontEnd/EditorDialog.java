@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -85,6 +86,16 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.techBuilder = new StringBuilder("Scenario: " + Main.getMainScenario().getDescription());
 		
 		this.twistGenerate();
+
+		Scenario scenario = Main.getMainScenario();
+		
+		if (scenario.getCurrentBranch() == null)
+		{
+			Branch currentBranch = this.setupStartingBranch();
+			scenario.setCurrentBranch(currentBranch);
+			scenario.getExitPointID(currentBranch);
+		}
+		
 		this.updateDisplay();
 	}
 	
@@ -284,11 +295,31 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private Generator getGenerator()
 	{
+
 		if (this.mainGenerator == null)
 		{
 			this.mainGenerator = Main.getMainScenario().getCurrentBranch().getGenerator();
 		}
 		return this.mainGenerator;
+	}
+	
+	private Branch setupStartingBranch()
+	{
+		Scenario currentScenario = Main.getMainScenario();
+		FieldPanel<Branch> fieldPanel;
+		NewBranchPanel newBranchPanel = new NewBranchPanel();
+		
+		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(0);
+		
+		if (exitPoints == null)	
+			fieldPanel = newBranchPanel;
+		else
+			fieldPanel = new OldOrNewPanel<Branch>((Branch) exitPoints.get(Main.getRandomNumberInRange(exitPoints.size())), newBranchPanel);
+		
+		FieldDialog newBranchDialog = new FieldDialog(this, true, new FieldPanel[]{fieldPanel});
+		Main.showWindowInCentre(newBranchDialog);
+		Branch newBranch = fieldPanel.getResult();
+		return newBranch; 
 	}
 	
 	private void saveStoryToFile()
