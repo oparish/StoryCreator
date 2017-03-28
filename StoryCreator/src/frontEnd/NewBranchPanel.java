@@ -19,9 +19,9 @@ public class NewBranchPanel extends NewStoryElementPanel<Branch>
 	private JTextField branchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
 	
-	public NewBranchPanel()
+	public NewBranchPanel(String suggestion)
 	{
-		super("New Branch");	
+		super("New Branch", suggestion);	
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		

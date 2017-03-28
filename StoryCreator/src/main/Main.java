@@ -9,11 +9,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.json.JsonWriter;
 import javax.json.stream.JsonParser;
 import javax.swing.JDialog;
@@ -46,6 +51,8 @@ public class Main
 	public static final String BRANCH = "branch";
 	public static final String ENDINGOPTION = "endingoption";
 	public static final String EXITPOINT = "exitpoint";
+	public static final String GOOD_EXITPOINT = "goodexitpoint";
+	public static final String BAD_EXITPOINT = "badexitpoint";
 	public static final String DESCRIPTION = "description";
 	public static final String BRANCH_LENGTH = "branch_length";
 	public static final String SUBPLOT_LENGTH = "subplot_length";
@@ -53,6 +60,8 @@ public class Main
 	public static final String OPTION_BECOMES_SUBPLOT = "optionBecomesSubplot";
 	public static final String OPTION_BECOMES_NEW_EXITPOINT = "optionBecomesExitPoint";
 	public static final String FLAVOUR_HAS_SUBFLAVOUR = "flavourHasSubFlavour";
+	public static final String OPTION_HAS_OBSTACLE = "optionHasObstacle";
+	public static final String OPTION_HAS_TOKEN = "optionHasToken";
 	public static final String EXITPOINTS = "exitpoints";
 	public static final String FLAVOURLISTS = "flavourLists";
 	public static final String SUBPLOTS = "subplots";
@@ -62,7 +71,12 @@ public class Main
 	public static final String SUBFLAVOURLIST = "subflavourlist";
 	public static final String TWISTLIST = "twistlist";
 	public static final String SUGGESTIONS = "suggestions";
+	public static final String GOOD_SUGGESTIONS = "goodSuggestions";
+	public static final String BAD_SUGGESTIONS = "badSuggestions";
 	public static final String BRANCH_LEVEL = "branchlevel";
+	public static final String TOKENS = "tokens";
+	public static final String TOKEN = "token";
+	public static final String OBSTACLE = "obstacle";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
@@ -182,6 +196,28 @@ public class Main
 		Dimension screenCentre = main.Main.getScreenCentre();
 		window.setLocation(screenCentre.width - window.getWidth()/2, screenCentre.height - window.getHeight()/2);
 		window.setVisible(true);
+	}
+	
+	public static ArrayList<String> getStringsFromJsonArray(JsonArray jsonArray)
+	{
+		ArrayList<String> strings = new ArrayList<String>();
+		if (jsonArray == null)
+			return strings;
+		for (JsonValue stringJson : jsonArray)
+		{
+			strings.add(((JsonString) stringJson).getString());
+		}
+		return strings;
+	}
+	
+	public static JsonArrayBuilder getJsonBuilderForStrings(ArrayList<String> strings)
+	{
+		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+		for (String string: strings)
+		{
+			jsonArrayBuilder.add(string);
+		}
+		return jsonArrayBuilder;
 	}
 	
 	public static void main(String[] args)

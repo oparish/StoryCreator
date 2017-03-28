@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import storyElements.ExitPoint;
 import storyElements.Scenario;
+import storyElements.Token;
 import storyElements.optionLists.Branch;
 import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Branch.Generator;
@@ -59,15 +60,20 @@ public class EditorDialog extends JFrame implements ActionListener
 	private FlavourOption flavour;
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
+	private Token currentObstacle;
 	
 	MyButton progressButton;
 	
 	private Generator mainGenerator = null;
 	private ExitPoint nextExitPoint = null;
-	
+	private ArrayList<Token> heldTokens;
+	private ArrayList<Token> unheldTokens;
+
 	public EditorDialog()
 	{
 		super();
+	
+		Scenario scenario = Main.getMainScenario();
 		
 		this.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
@@ -83,11 +89,10 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.setSize(WIDTH, HEIGHT);
 		
 		this.storyBuilder = new StringBuilder("");
-		this.techBuilder = new StringBuilder("Scenario: " + Main.getMainScenario().getDescription());
+		this.techBuilder = new StringBuilder("Scenario: " + scenario.getDescription());
 		
 		this.twistGenerate();
-
-		Scenario scenario = Main.getMainScenario();
+		this.setupTokens();
 		
 		if (scenario.getCurrentBranch() == null)
 		{
@@ -97,6 +102,20 @@ public class EditorDialog extends JFrame implements ActionListener
 		}
 		
 		this.updateDisplay();
+	}
+	
+	public ArrayList<Token> getHeldTokens() {
+		return heldTokens;
+	}
+
+	public ArrayList<Token> getUnheldTokens() {
+		return unheldTokens;
+	}
+	
+	private void setupTokens()
+	{
+		 this.unheldTokens = Main.getMainScenario().getTokens();
+		 this.heldTokens = new ArrayList<Token>();
 	}
 	
 	private void twistGenerate()
@@ -137,6 +156,14 @@ public class EditorDialog extends JFrame implements ActionListener
 			return "";
 		else
 			return this.flavour.getDescription();
+	}
+	
+	public String getCurrentObstacleDescription()
+	{
+		if (this.currentObstacle == null)
+			return "";
+		else
+			return this.currentObstacle.getDescription();
 	}
 	
 	private JPanel setupLeftPanel()
@@ -245,8 +272,19 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void setOption(Option option)
 	{
+		Scenario scenario = Main.getMainScenario();
 		if (option instanceof BranchOption)
 		{
+			if (((BranchOption) option).getToken() != null)
+			{
+				Token token = scenario.getTokenByID(((BranchOption) option).getToken());
+				if (!this.heldTokens.contains(token))
+				{
+					this.heldTokens.add(token);
+					this.unheldTokens.remove(token);
+				}
+			}
+			
 			FlavourList flavourList = ((BranchOption) option).getFlavourList();
 			if (flavourList != null)
 			{
@@ -257,12 +295,25 @@ public class EditorDialog extends JFrame implements ActionListener
 				this.flavour = null;
 			}
 			
-			ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
-			if (exitPoint != null)
+			if (((BranchOption) option).getObstacle() != null)
 			{
 				this.mainGenerator = null;
-				this.nextExitPoint = exitPoint;
-			}		
+				Token obstacle = scenario.getTokenByID(((BranchOption) option).getObstacle());
+				this.currentObstacle = obstacle;
+				if (this.heldTokens.contains(obstacle))
+					this.nextExitPoint = ((BranchOption) option).getGoodExitPointID();
+				else
+					this.nextExitPoint = ((BranchOption) option).getBadExitPointID();
+			}
+			else
+			{
+				ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
+				if (exitPoint != null)
+				{
+					this.mainGenerator = null;
+					this.nextExitPoint = exitPoint;
+				}	
+			}
 		}
 
 		this.currentOption = option;
@@ -278,7 +329,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Twist: " + this.twistOption.getDescription() + "\r\n");
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
 		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription() + "\r\n");	
-		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");	
+		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");
+		infoBuilder.append("Current Obstacle: " + this.getCurrentObstacleDescription() + "\r\n");
+		infoBuilder.append("Current Tokens:\r\n");
+		for (Token token : this.heldTokens)
+		{
+			infoBuilder.append(token.getDescription() + "\r\n");
+		}
 		this.infoPanel.setText(infoBuilder.toString());
 	}
 	
@@ -307,7 +364,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel();
+		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.getMainSpice().getSuggestion());
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(0);
 		

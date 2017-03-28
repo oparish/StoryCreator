@@ -32,12 +32,16 @@ public class Scenario implements JsonStructure, StoryElement
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
 	HashMap<Integer, ArrayList<ExitPoint>> branchLevels = new HashMap<Integer, ArrayList<ExitPoint>>();
+	HashMap<Integer, Token> tokens = new HashMap<Integer, Token>();
 	Branch currentBranch;
 	int nextBranch = 1;
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewExitPoint = null;
 	Chance optionHasFlavourList = null;
+	Chance optionHasObstacle = null;
+	Chance optionHasToken = null;
+
 	int branchLength;
 	int subplotLength;
 	int scenarioLength;
@@ -62,12 +66,18 @@ public class Scenario implements JsonStructure, StoryElement
 		Integer optionBecomesSubplotProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_SUBPLOT);
 		Integer optionBecomesNewExitPointProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_EXITPOINT);
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
+		Integer optionHasObstacle = Main.processJsonInt(jsonObject, Main.OPTION_HAS_OBSTACLE);
+		Integer optionHasToken = Main.processJsonInt(jsonObject, Main.OPTION_HAS_TOKEN);
 		if (optionBecomesSubplotProb != null)
 			this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
 		if (optionBecomesNewExitPointProb != null)
 			this.optionBecomesNewExitPoint = new Chance(optionBecomesNewExitPointProb);
 		if (flavourHasSubFlavourProb != null)
 			this.optionHasFlavourList = new Chance(flavourHasSubFlavourProb);
+		if (optionHasObstacle != null)
+			this.optionHasObstacle= new Chance(optionHasObstacle);
+		if (optionHasToken != null)
+			this.optionHasToken = new Chance(optionHasToken);
 		
 		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
@@ -94,12 +104,50 @@ public class Scenario implements JsonStructure, StoryElement
 		{
 			this.subplots.put(Integer.valueOf(entry.getKey()), new Subplot((JsonObject) entry.getValue()));
 		}
+		
+		JsonObject tokensObject = jsonObject.getJsonObject(Main.TOKENS);
+		for (Entry<String, JsonValue> entry:  tokensObject.entrySet())
+		{
+			this.tokens.put(Integer.valueOf(entry.getKey()), new Token((JsonObject) entry.getValue()));
+		}
+	}
+	
+	public ArrayList<Token> getTokens()
+	{
+		ArrayList<Token> tokens = new ArrayList<Token>();
+		for (Token token : this.tokens.values())
+		{
+			tokens.add(token);
+		}
+		return tokens;
+	}
+	
+	public Token getTokenByID(Integer tokenID)
+	{
+		return this.tokens.get(tokenID);
 	}
 	
 	public HashMap<Integer, FlavourList> getFlavourLists()
 	{
 		return flavourLists;
 	}
+	
+	public Chance getOptionHasToken() {
+		return optionHasToken;
+	}
+
+	public void setOptionHasToken(Chance optionHasToken) {
+		this.optionHasToken = optionHasToken;
+	}
+	
+	public Chance getOptionHasObstacle() {
+		return optionHasObstacle;
+	}
+
+	public void setOptionHasObstacle(Chance optionHasObstacle) {
+		this.optionHasObstacle = optionHasObstacle;
+	}
+
 	
 	public ArrayList<ExitPoint> getBranchLevel(int branchLevel)
 	{
@@ -136,6 +184,10 @@ public class Scenario implements JsonStructure, StoryElement
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_NEW_EXITPOINT, this.optionBecomesNewExitPoint.getProb());
 		if (this.optionHasFlavourList != null)
 			jsonObjectBuilder.add(Main.FLAVOUR_HAS_SUBFLAVOUR, this.optionHasFlavourList.getProb());
+		if (this.optionHasObstacle != null)
+			jsonObjectBuilder.add(Main.OPTION_HAS_OBSTACLE, this.optionHasObstacle.getProb());
+		if (this.optionHasToken != null)
+			jsonObjectBuilder.add(Main.OPTION_HAS_TOKEN, this.optionHasToken.getProb());
 		
 		JsonObjectBuilder exitPointBuilder = Json.createObjectBuilder();		
 		for (Entry<Integer, ExitPoint> entry : exitPoints.entrySet())
@@ -159,6 +211,13 @@ public class Scenario implements JsonStructure, StoryElement
 		}		
 		jsonObjectBuilder.add(Main.SUBPLOTS, subPlotBuilder.build());
 		
+		JsonObjectBuilder tokensBuilder = Json.createObjectBuilder();		
+		for (Entry<Integer, Token> entry : tokens.entrySet())
+		{
+			tokensBuilder.add(String.valueOf(entry.getKey()), entry.getValue().getJsonObjectBuilder().build());
+		}		
+		jsonObjectBuilder.add(Main.TOKENS, tokensBuilder.build());
+		
 		return jsonObjectBuilder.build();
 	}
 	
@@ -180,6 +239,11 @@ public class Scenario implements JsonStructure, StoryElement
 	public Integer identifyExitPoint(ExitPoint exitPoint)
 	{
 		return Scenario.identifyObject(this.exitPoints, exitPoint);
+	}
+	
+	public Integer identifyToken(Token token)
+	{
+		return Scenario.identifyObject(this.tokens, token);
 	}
 	
 	public Integer identifySubPlot(Subplot subplot)
@@ -264,6 +328,18 @@ public class Scenario implements JsonStructure, StoryElement
 		}
 	}
 	
+	public Integer getTokenID(Token token)
+	{
+		if (this.tokens.containsValue(token))
+			return this.identifyToken(token);
+		else
+		{
+			Integer tokenID = this.tokens.size();
+			this.tokens.put(tokenID, token);
+			return tokenID;
+		}
+	}
+	
 	public Integer getFlavourListID(FlavourList flavourList)
 	{
 		if (this.flavourLists.containsValue(flavourList))
@@ -314,6 +390,8 @@ public class Scenario implements JsonStructure, StoryElement
 		testScenario.setOptionHasFlavour(new Chance(50));
 		testScenario.setOptionBecomesSubplot(new Chance(50));
 		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
+		testScenario.setOptionHasObstacle(new Chance(50));
+		testScenario.setOptionHasToken(new Chance(50));
 		
 		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
 		Integer newBranchId = testScenario.getExitPointID(newBranch);;
@@ -341,6 +419,9 @@ public class Scenario implements JsonStructure, StoryElement
 		Subplot subplot = new Subplot(subplotOptions, "subplotDescrip");
 		Integer subplotID = testScenario.addSubPlot(subplot);
 		newOption2.setSubPlot(subplotID);
+		
+		Token token = new Token("TestToken");
+		testScenario.getTokenID(token);
 		
 		Main.setMainScenario(testScenario);
 		System.out.println(testScenario.getJsonObject());

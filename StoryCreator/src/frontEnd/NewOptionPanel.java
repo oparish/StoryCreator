@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import main.Main;
 import storyElements.optionLists.OptionList;
 import storyElements.optionLists.RepeatingOptionList;
 import storyElements.options.BranchOption;
@@ -27,7 +28,7 @@ public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
 
 	public NewOptionPanel()
 	{
-		super("New Option");
+		super("New Option", Main.getMainSpice().getSuggestion());
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 	}

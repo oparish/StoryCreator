@@ -13,7 +13,7 @@ public class NewTwistOptionPanel extends NewStoryElementPanel<TwistOption>
 
 	public NewTwistOptionPanel()
 	{
-		super("Twist Option");
+		super("Twist Option", null);
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);	
 	}

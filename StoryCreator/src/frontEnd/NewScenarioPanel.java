@@ -27,6 +27,8 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 	private static final String OPTION_WITH_EXITPOINT = "Option With Exit Point";
 	private static final String OPTION_WITH_SUBPLOT = "Option With Subplot";
 	private static final String OPTION_WITH_FLAVOUR = "Option With Flavour";
+	private static final String OPTION_HAS_OBSTACLE = "Option Has Obstacle";
+	private static final String OPTION_HAS_TOKEN = "Option Has Token";
 	private static final String BRANCH_LENGTH = "Branch Length";
 	private static final String SUBPLOT_LENGTH = "Subplot Length";
 	private static final String SCENARIO_LENGTH = "Scenario Length";
@@ -36,6 +38,8 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 	private NumberSpinner optionToBranchSpinner;
 	private NumberSpinner optionWithSubPlotSpinner;
 	private NumberSpinner optionWithFlavourSpinner;
+	private NumberSpinner optionHasObstacleSpinner;
+	private NumberSpinner optionHasTokenSpinner;
 	private NumberSpinner branchLengthSpinner;
 	private NumberSpinner subplotLengthSpinner;
 	private NumberSpinner scenarioLengthSpinner;
@@ -60,6 +64,12 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 		this.optionWithFlavourSpinner = new NumberSpinner();
 		this.addSpinner(this.optionWithFlavourSpinner, OPTION_WITH_FLAVOUR);
 		
+		this.optionHasObstacleSpinner = new NumberSpinner();
+		this.addSpinner(this.optionHasObstacleSpinner, OPTION_HAS_OBSTACLE);
+		
+		this.optionHasTokenSpinner = new NumberSpinner();
+		this.addSpinner(this.optionHasTokenSpinner, OPTION_HAS_TOKEN);
+		
 		this.branchLengthSpinner = new NumberSpinner();
 		this.branchLengthSpinner.setValue(Main.DEFAULTBRANCHLENGTH);
 		this.addSpinner(this.branchLengthSpinner, BRANCH_LENGTH);
@@ -83,6 +93,8 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
 		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
 		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
+		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));
+		newScenario.setOptionHasToken(new Chance(this.optionHasTokenSpinner.getInt()));
 		return newScenario;
 	}
 	

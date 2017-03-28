@@ -27,4 +27,14 @@ public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPa
 			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i);
 		}
 	}
+	
+	public static ArrayList<String> getStringsFromFields(ArrayList<JTextField> fields)
+	{
+		ArrayList<String> strings = new ArrayList<String>();
+		for (JTextField field : fields)
+		{
+			strings.add(field.getText());
+		}
+		return strings;
+	}
 }
