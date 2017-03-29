@@ -14,12 +14,15 @@ import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.FieldPanel;
 import frontEnd.FlavourListPanel;
+import frontEnd.NewBadBranchPanel;
 import frontEnd.NewBranchPanel;
 import frontEnd.NewEndingPanel;
+import frontEnd.NewGoodBranchPanel;
 import frontEnd.NewObstaclePanel;
 import frontEnd.NewOptionPanel;
 import frontEnd.NewTokenPanel;
 import frontEnd.OldOrNewPanel;
+import frontEnd.OptionContentPanel;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
@@ -27,6 +30,7 @@ import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.Option;
+import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 
 @SuppressWarnings("serial")
@@ -103,7 +107,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel(Main.getMainSpice().getSuggestion());
+		NewBranchPanel newBranchPanel = new NewBranchPanel();
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(currentScenario.getNextBranch());
 		
@@ -172,15 +176,113 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			}	
 		}
 		
+		private FieldPanel<? extends ExitPoint> getExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
+		{
+			FieldPanel<? extends ExitPoint> exitPointPanel;
+			if (isLastBranch)
+			{
+				exitPointPanel = new NewEndingPanel();
+			}
+			else if (exitPointsAtLevel == null)
+			{
+				exitPointPanel = new NewBranchPanel();
+			}
+			else
+			{
+				exitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBranchPanel());
+			}
+			return exitPointPanel;
+		}
+		
+		private FieldPanel<FlavourList> getFlavourListPanel(HashMap<Integer, FlavourList> flavourLists)
+		{
+			FieldPanel<FlavourList> flavourListPanel;
+			if (flavourLists.size() != 0)
+			{
+				flavourListPanel = new OldOrNewPanel<FlavourList>(flavourLists.get(Main.getRandomNumberInRange(flavourLists.size())), new FlavourListPanel());
+			}
+			else
+			{
+				flavourListPanel = new FlavourListPanel();
+			}
+			return flavourListPanel;
+		}
+		
+		private FieldPanel<Token> getTokenPanel()
+		{
+			FieldPanel<Token> tokenPanel;
+			Scenario currentScenario = Main.getMainScenario();
+			if (currentScenario.getTokens().size() != 0)
+			{
+				ArrayList<Token> tokens = currentScenario.getTokens();
+				tokenPanel = new OldOrNewPanel<Token>(tokens.get(Main.getRandomNumberInRange(tokens.size())), new NewTokenPanel());
+			}
+			else
+			{
+				tokenPanel = new NewTokenPanel();
+			}
+			return tokenPanel;
+		}
+		
+		private FieldPanel<Token> getObstaclePanel()
+		{
+			FieldPanel<Token> obstaclePanel;
+			Scenario currentScenario = Main.getMainScenario();
+			if (currentScenario.getTokens().size() != 0)
+			{
+				ArrayList<Token> tokens = currentScenario.getTokens();
+				obstaclePanel = new OldOrNewPanel<Token>(tokens.get(Main.getRandomNumberInRange(tokens.size())), new NewObstaclePanel());
+			}
+			else
+			{
+				obstaclePanel = new NewObstaclePanel();
+			}
+			return obstaclePanel;
+		}
+		
+		private FieldPanel<? extends ExitPoint> getGoodExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
+		{
+			FieldPanel<? extends ExitPoint> goodExitPointPanel;
+			if (isLastBranch)
+			{
+				goodExitPointPanel = new NewEndingPanel();
+			}
+			else if (exitPointsAtLevel == null)
+			{
+				goodExitPointPanel = new NewGoodBranchPanel();
+			}
+			else
+			{
+				goodExitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewGoodBranchPanel());
+			}
+			return goodExitPointPanel;
+		}
+		
+		private FieldPanel<? extends ExitPoint> getBadExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
+		{
+			FieldPanel<? extends ExitPoint> badExitPointPanel;
+			if (isLastBranch)
+			{
+				badExitPointPanel = new NewEndingPanel();
+			}
+			else if (exitPointsAtLevel == null)
+			{
+				badExitPointPanel = new NewBadBranchPanel();
+			}
+			else
+			{
+				badExitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBadBranchPanel());
+			}
+			return badExitPointPanel;
+		}
+		
 		private Option tryNewOption(EditorDialog editorDialog)
 		{
 			this.lastNumber = Branch.this.size();
 			Scenario currentScenario = Main.getMainScenario();
 			
 			boolean becomesExitPoint = currentScenario.getOptionBecomesNewExitPoint().check();
-			boolean hasFlavour = currentScenario.getOptionHasFlavour().check();
 			boolean isLastBranch = currentScenario.checkLastBranch();
-			boolean hasToken = currentScenario.getOptionHasToken().check();
 			boolean hasObstacle = currentScenario.getOptionHasObstacle().check();
 
 			ArrayList<ExitPoint> exitPointsAtLevel = currentScenario.getBranchLevel(currentScenario.getNextBranch());
@@ -190,96 +292,26 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			NewOptionPanel newOptionPanel = new NewOptionPanel();
 			fieldPanels.add(newOptionPanel);
 			
-			FieldPanel<? extends ExitPoint> exitPointPanel = null;
 			if (becomesExitPoint && !hasObstacle)
 			{
-				if (isLastBranch)
-				{
-					exitPointPanel = new NewEndingPanel();
-				}
-				else if (exitPointsAtLevel == null)
-				{
-					exitPointPanel = new NewBranchPanel(Main.getMainSpice().getSuggestion());
-				}
-				else
-				{
-					exitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBranchPanel(Main.getMainSpice().getSuggestion()));
-				}
-				fieldPanels.add(exitPointPanel);
-			}
+				fieldPanels.add(this.getExitPointPanel(isLastBranch, exitPointsAtLevel));
+			}	
 			
-			FieldPanel<FlavourList> flavourListPanel = null;
-			if (hasFlavour)
+			if (currentScenario.getOptionHasFlavour().check())
 			{
-				if (flavourLists.size() != 0)
-				{
-					flavourListPanel = new OldOrNewPanel<FlavourList>(flavourLists.get(Main.getRandomNumberInRange(flavourLists.size())), new FlavourListPanel());
-				}
-				else
-				{
-					flavourListPanel = new FlavourListPanel();
-				}
-				fieldPanels.add(flavourListPanel);
-			}
+				fieldPanels.add(this.getFlavourListPanel(flavourLists));
+			}	
 			
-			FieldPanel<Token> tokenPanel = null;
-			if (hasToken)
+			if (currentScenario.getOptionHasToken().check())
 			{
-				if (currentScenario.getTokens().size() != 0)
-				{
-					ArrayList<Token> tokens = currentScenario.getTokens();
-					tokenPanel = new OldOrNewPanel<Token>(tokens.get(Main.getRandomNumberInRange(tokens.size())), new NewTokenPanel());
-				}
-				else
-				{
-					tokenPanel = new NewTokenPanel();
-				}
-				fieldPanels.add(tokenPanel);
+				fieldPanels.add(this.getTokenPanel());
 			}
 		
-			FieldPanel<Token> obstaclePanel = null;
-			FieldPanel<? extends ExitPoint> goodExitPointPanel = null;
-			FieldPanel<? extends ExitPoint> badExitPointPanel = null;
 			if (becomesExitPoint && hasObstacle)
 			{
-				if (currentScenario.getTokens().size() != 0)
-				{
-					ArrayList<Token> tokens = currentScenario.getTokens();
-					obstaclePanel = new OldOrNewPanel<Token>(tokens.get(Main.getRandomNumberInRange(tokens.size())), new NewObstaclePanel());
-				}
-				else
-				{
-					obstaclePanel = new NewObstaclePanel();
-				}
-				fieldPanels.add(obstaclePanel);
-				
-				if (isLastBranch)
-				{
-					goodExitPointPanel = new NewEndingPanel();
-				}
-				else if (exitPointsAtLevel == null)
-				{
-					goodExitPointPanel = new NewBranchPanel(Main.getMainSpice().getGoodSuggestion());
-				}
-				else
-				{
-					goodExitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBranchPanel(Main.getMainSpice().getGoodSuggestion()));
-				}
-				fieldPanels.add(goodExitPointPanel);
-				
-				if (isLastBranch)
-				{
-					badExitPointPanel = new NewEndingPanel();
-				}
-				else if (exitPointsAtLevel == null)
-				{
-					badExitPointPanel = new NewBranchPanel(Main.getMainSpice().getBadSuggestion());
-				}
-				else
-				{
-					badExitPointPanel = new OldOrNewPanel<Branch>((Branch) exitPointsAtLevel.get(Main.getRandomNumberInRange(exitPointsAtLevel.size())), new NewBranchPanel(Main.getMainSpice().getBadSuggestion()));
-				}
-				fieldPanels.add(badExitPointPanel);
+				fieldPanels.add(this.getObstaclePanel());
+				fieldPanels.add(this.getGoodExitPointPanel(isLastBranch, exitPointsAtLevel));
+				fieldPanels.add(this.getBadExitPointPanel(isLastBranch, exitPointsAtLevel));
 			}
 			
 			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, fieldPanels.toArray(new FieldPanel[fieldPanels.size()]));
@@ -288,34 +320,13 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			
 			BranchOption branchOption = newOptionPanel.getResult();
 			
-			if (becomesExitPoint && !hasObstacle)
+			for (FieldPanel fieldPanel : fieldPanels)
 			{
-				int exitPointID = currentScenario.getExitPointID(exitPointPanel.getResult());
-				branchOption.setExitPoint(exitPointID);
-			}
-			
-			if (hasFlavour)
-			{
-				int flavourListID = currentScenario.getFlavourListID(flavourListPanel.getResult());
-				branchOption.setFlavourList(flavourListID);
-			}
-			
-			if (hasToken)
-			{
-				int tokenID = currentScenario.getTokenID(tokenPanel.getResult());
-				branchOption.setToken(tokenID);
-			}
-
-			if (becomesExitPoint && hasObstacle)
-			{
-				int tokenID = currentScenario.getTokenID(obstaclePanel.getResult());
-				branchOption.setObstacle(tokenID);
-				
-				int goodExitPointID = currentScenario.getExitPointID(goodExitPointPanel.getResult());
-				branchOption.setGoodExitPointID(goodExitPointID);
-				
-				int badExitPointID = currentScenario.getExitPointID(badExitPointPanel.getResult());
-				branchOption.setBadExitPointID(badExitPointID);
+				if (fieldPanel == newOptionPanel)
+					continue;
+				OptionContentType optionContentType = ((OptionContentPanel)fieldPanel).getOptionContentType();
+				Integer contentID = Main.getMainScenario().getStoryElementID(fieldPanel.getResult());
+				branchOption.setContentInteger(optionContentType, contentID);
 			}
 			
 			Branch.this.add(branchOption);

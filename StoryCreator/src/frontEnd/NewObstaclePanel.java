@@ -3,8 +3,9 @@ package frontEnd;
 import javax.swing.JTextField;
 
 import storyElements.Token;
+import storyElements.options.OptionContentType;
 
-public class NewObstaclePanel extends NewStoryElementPanel<Token>
+public class NewObstaclePanel extends NewStoryElementPanel<Token> implements OptionContentPanel
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -20,5 +21,11 @@ public class NewObstaclePanel extends NewStoryElementPanel<Token>
 	public Token getResult()
 	{
 		return new Token(this.descriptionField.getText());
+	}
+
+	@Override
+	public OptionContentType getOptionContentType()
+	{
+		return OptionContentType.OBSTACLE;
 	}
 }

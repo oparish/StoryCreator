@@ -1,5 +1,7 @@
 package storyElements.options;
 
+import java.util.HashMap;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -11,106 +13,52 @@ import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Subplot;
 
 public class BranchOption extends Option
-{
-	private Integer exitPointID;
-	private Integer flavourListID;
-	private Integer subPlot;
-	private Integer token;
-	private Integer obstacle;
-	private Integer goodExitPointID;
-	private Integer badExitPointID;
-	
+{	
 	public Subplot getSubPlot()
 	{
-		return Main.getMainScenario().getSubplot(this.subPlot);
+		return Main.getMainScenario().getSubplot(this.contentIntegerMap.get(OptionContentType.SUBPLOT));
 	}
 
 	public void setSubPlot(Integer subPlot) {
-		this.subPlot = subPlot;
-	}
-
-	public BranchOption(String description)
-	{
-		super(description);
+		this.contentIntegerMap.put(OptionContentType.SUBPLOT, subPlot);
 	}
 	
 	public BranchOption(JsonObject jsonObject)
 	{
 		super(jsonObject);	
-		this.exitPointID = Main.processJsonInt(jsonObject, Main.EXITPOINT);
-		this.flavourListID = Main.processJsonInt(jsonObject, Main.FLAVOURLIST);
-		this.subPlot = Main.processJsonInt(jsonObject, Main.SUBPLOT);
-		this.token = Main.processJsonInt(jsonObject, Main.TOKEN);
-		this.obstacle = Main.processJsonInt(jsonObject, Main.OBSTACLE);
-		this.goodExitPointID = Main.processJsonInt(jsonObject, Main.GOOD_EXITPOINT);
-		this.badExitPointID = Main.processJsonInt(jsonObject, Main.BAD_EXITPOINT);
+	}
+	
+	public BranchOption(String description)
+	{
+		super(description);
+	}
+	
+	public BranchOption(HashMap<OptionContentType, String> contentStringMap, HashMap<OptionContentType, Integer> contentIntegerMap)
+	{
+		super(contentStringMap, contentIntegerMap);
 	}
 	
 	public Integer getObstacle() {
-		return obstacle;
-	}
-
-	public void setObstacle(Integer obstacle) {
-		this.obstacle = obstacle;
+		return this.contentIntegerMap.get(OptionContentType.OBSTACLE);
 	}
 	
 	public Integer getToken() {
-		return token;
-	}
-
-	public void setToken(Integer token) {
-		this.token = token;
+		return this.contentIntegerMap.get(OptionContentType.TOKEN);
 	}
 	
 	public FlavourList getFlavourList() {
-		return Main.getMainScenario().getFlavourList(this.flavourListID);
-	}
-
-	public void setFlavourList(Integer flavourList) {
-		this.flavourListID = flavourList;
+		return Main.getMainScenario().getFlavourList(this.contentIntegerMap.get(OptionContentType.FLAVOURLIST));
 	}
 	
 	public ExitPoint getExitPoint() {
-		return Main.getMainScenario().getExitPoint(this.exitPointID);
+		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.EXITPOINT));
 	}
-
-	public void setExitPoint(Integer exitPoint) {
-		this.exitPointID = exitPoint;
-	}	
 	
 	public ExitPoint getGoodExitPointID() {
-		return Main.getMainScenario().getExitPoint(this.goodExitPointID);
-	}
-
-	public void setGoodExitPointID(Integer goodExitPointID) {
-		this.goodExitPointID = goodExitPointID;
+		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.GOODEXITPOINT));
 	}
 
 	public ExitPoint getBadExitPointID() {
-		return Main.getMainScenario().getExitPoint(this.badExitPointID);
-	}
-
-	public void setBadExitPointID(Integer badExitPointID) {
-		this.badExitPointID = badExitPointID;
-	}
-	
-	public JsonObjectBuilder getJsonObjectBuilder()
-	{
-		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
-		if (this.exitPointID != null)
-			jsonObjectBuilder.add(Main.EXITPOINT, this.exitPointID);
-		if (this.subPlot != null)
-			jsonObjectBuilder.add(Main.SUBPLOT, this.subPlot);
-		if (this.flavourListID != null)
-			jsonObjectBuilder.add(Main.FLAVOURLIST, this.flavourListID);
-		if (this.token != null)
-			jsonObjectBuilder.add(Main.TOKEN, this.token);
-		if (this.obstacle != null)
-			jsonObjectBuilder.add(Main.OBSTACLE, this.obstacle);
-		if (this.goodExitPointID != null)
-			jsonObjectBuilder.add(Main.GOOD_EXITPOINT, this.goodExitPointID);
-		if (this.badExitPointID != null)
-			jsonObjectBuilder.add(Main.BAD_EXITPOINT, this.badExitPointID);
-		return jsonObjectBuilder;
+		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.BADEXITPOINT));
 	}
 }

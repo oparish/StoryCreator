@@ -10,8 +10,9 @@ import storyElements.Scenario;
 import storyElements.optionLists.FlavourList;
 import storyElements.options.BranchOption;
 import storyElements.options.FlavourOption;
+import storyElements.options.OptionContentType;
 
-public class FlavourListPanel extends NewOptionListPanel<FlavourList>
+public class FlavourListPanel extends NewOptionListPanel<FlavourList> implements OptionContentPanel
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -35,6 +36,12 @@ public class FlavourListPanel extends NewOptionListPanel<FlavourList>
 			initialOptions.add(new FlavourOption(textField.getText()));
 		}	
 		return new FlavourList(initialOptions, this.descriptionField.getText());
+	}
+
+	@Override
+	public OptionContentType getOptionContentType()
+	{
+		return OptionContentType.FLAVOURLIST;
 	}
 
 }

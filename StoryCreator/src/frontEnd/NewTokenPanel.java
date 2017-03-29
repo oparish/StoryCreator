@@ -6,8 +6,9 @@ import javax.swing.JTextField;
 
 import storyElements.Token;
 import storyElements.options.BranchOption;
+import storyElements.options.OptionContentType;
 
-public class NewTokenPanel extends NewStoryElementPanel<Token>
+public class NewTokenPanel extends NewStoryElementPanel<Token> implements OptionContentPanel
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -23,5 +24,11 @@ public class NewTokenPanel extends NewStoryElementPanel<Token>
 	public Token getResult()
 	{
 		return new Token(this.descriptionField.getText());
+	}
+
+	@Override
+	public OptionContentType getOptionContentType()
+	{
+		return OptionContentType.TOKEN;
 	}
 }

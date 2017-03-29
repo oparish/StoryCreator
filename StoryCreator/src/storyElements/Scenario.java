@@ -316,6 +316,16 @@ public class Scenario implements JsonStructure, StoryElement
 		return newBranch;
 	}
 	
+	public Integer getStoryElementID(StoryElement storyElement)
+	{
+		if (storyElement instanceof ExitPoint)
+			return this.getExitPointID((ExitPoint) storyElement);
+		else if (storyElement instanceof Token)
+			return this.getTokenID((Token) storyElement);
+		else
+			return this.getFlavourListID((FlavourList) storyElement);
+	}
+	
 	public Integer getExitPointID(ExitPoint exitPoint)
 	{
 		if (this.exitPoints.containsValue(exitPoint))
@@ -361,73 +371,73 @@ public class Scenario implements JsonStructure, StoryElement
 	
 	public static void main(String[] args)
 	{
-		ArrayList<BranchOption> branchOptions1 = new ArrayList<BranchOption>();
-		branchOptions1.add(new BranchOption("One"));
-		branchOptions1.add(new BranchOption("Two"));
-		branchOptions1.add(new BranchOption("Three"));
-		
-		ArrayList<BranchOption> branchOptions2 = new ArrayList<BranchOption>();
-		branchOptions2.add(new BranchOption("Four"));
-		branchOptions2.add(new BranchOption("Five"));
-		branchOptions2.add(new BranchOption("Six"));
-		
-		ArrayList<FlavourOption> flavourOptions = new ArrayList<FlavourOption>();
-		flavourOptions.add(new FlavourOption("Seven"));
-		flavourOptions.add(new FlavourOption("Eight"));
-		flavourOptions.add(new FlavourOption("Nine"));
-		
-		ArrayList<FlavourOption> flavourOptions2 = new ArrayList<FlavourOption>();
-		flavourOptions2.add(new FlavourOption("Strawberry"));
-		flavourOptions2.add(new FlavourOption("Vanilla"));
-		flavourOptions2.add(new FlavourOption("Chocolate"));
-		
-		ArrayList<SubplotOption> subplotOptions = new ArrayList<SubplotOption>();
-		subplotOptions.add(new SubplotOption("A"));
-		subplotOptions.add(new SubplotOption("B"));
-		subplotOptions.add(new SubplotOption("C"));
-		
-		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 2);
-		testScenario.setOptionHasFlavour(new Chance(50));
-		testScenario.setOptionBecomesSubplot(new Chance(50));
-		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
-		testScenario.setOptionHasObstacle(new Chance(50));
-		testScenario.setOptionHasToken(new Chance(50));
-		
-		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
-		Integer newBranchId = testScenario.getExitPointID(newBranch);;
-		testScenario.getCurrentBranch().setDefaultExitPoint(newBranchId);
-		
-		FlavourList flavourList = new FlavourList(flavourOptions, "Flavour 1");
-		Integer flavourListId = testScenario.getFlavourListID(flavourList);
-		
-		FlavourList flavourList2 = new FlavourList(flavourOptions2, "Flavour 2");
-		int flavourListId2 = testScenario.getFlavourListID(flavourList2);
-		
-		((FlavourOption) flavourList.get(0)).setSubFlavourList(flavourListId2);
-		
-		BranchOption newOption = new BranchOption("Ten");
-		newOption.setFlavourList(flavourListId);
-		newBranch.add(newOption);
-		
-		EndingOption ending1 = new EndingOption("END", 2);
-		Integer endingPointId = testScenario.getExitPointID(ending1);
-		newOption.setExitPoint(endingPointId);
-		
-		BranchOption newOption2 = new BranchOption("Eleven");
-		newBranch.add(newOption2);
-		
-		Subplot subplot = new Subplot(subplotOptions, "subplotDescrip");
-		Integer subplotID = testScenario.addSubPlot(subplot);
-		newOption2.setSubPlot(subplotID);
-		
-		Token token = new Token("TestToken");
-		testScenario.getTokenID(token);
-		
-		Main.setMainScenario(testScenario);
-		System.out.println(testScenario.getJsonObject());
-		
-		Scenario newScenario = new Scenario(testScenario.getJsonObject());
-		Main.setMainScenario(newScenario);
-		System.out.println(newScenario.getJsonObject());
+//		ArrayList<BranchOption> branchOptions1 = new ArrayList<BranchOption>();
+//		branchOptions1.add(new BranchOption("One"));
+//		branchOptions1.add(new BranchOption("Two"));
+//		branchOptions1.add(new BranchOption("Three"));
+//		
+//		ArrayList<BranchOption> branchOptions2 = new ArrayList<BranchOption>();
+//		branchOptions2.add(new BranchOption("Four"));
+//		branchOptions2.add(new BranchOption("Five"));
+//		branchOptions2.add(new BranchOption("Six"));
+//		
+//		ArrayList<FlavourOption> flavourOptions = new ArrayList<FlavourOption>();
+//		flavourOptions.add(new FlavourOption("Seven"));
+//		flavourOptions.add(new FlavourOption("Eight"));
+//		flavourOptions.add(new FlavourOption("Nine"));
+//		
+//		ArrayList<FlavourOption> flavourOptions2 = new ArrayList<FlavourOption>();
+//		flavourOptions2.add(new FlavourOption("Strawberry"));
+//		flavourOptions2.add(new FlavourOption("Vanilla"));
+//		flavourOptions2.add(new FlavourOption("Chocolate"));
+//		
+//		ArrayList<SubplotOption> subplotOptions = new ArrayList<SubplotOption>();
+//		subplotOptions.add(new SubplotOption("A"));
+//		subplotOptions.add(new SubplotOption("B"));
+//		subplotOptions.add(new SubplotOption("C"));
+//		
+//		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 2);
+//		testScenario.setOptionHasFlavour(new Chance(50));
+//		testScenario.setOptionBecomesSubplot(new Chance(50));
+//		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
+//		testScenario.setOptionHasObstacle(new Chance(50));
+//		testScenario.setOptionHasToken(new Chance(50));
+//		
+//		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
+//		Integer newBranchId = testScenario.getExitPointID(newBranch);;
+//		testScenario.getCurrentBranch().setDefaultExitPoint(newBranchId);
+//		
+//		FlavourList flavourList = new FlavourList(flavourOptions, "Flavour 1");
+//		Integer flavourListId = testScenario.getFlavourListID(flavourList);
+//		
+//		FlavourList flavourList2 = new FlavourList(flavourOptions2, "Flavour 2");
+//		int flavourListId2 = testScenario.getFlavourListID(flavourList2);
+//		
+//		((FlavourOption) flavourList.get(0)).setSubFlavourList(flavourListId2);
+//		
+//		BranchOption newOption = new BranchOption("Ten");
+//		newOption.setFlavourList(flavourListId);
+//		newBranch.add(newOption);
+//		
+//		EndingOption ending1 = new EndingOption("END", 2);
+//		Integer endingPointId = testScenario.getExitPointID(ending1);
+//		newOption.setExitPoint(endingPointId);
+//		
+//		BranchOption newOption2 = new BranchOption("Eleven");
+//		newBranch.add(newOption2);
+//		
+//		Subplot subplot = new Subplot(subplotOptions, "subplotDescrip");
+//		Integer subplotID = testScenario.addSubPlot(subplot);
+//		newOption2.setSubPlot(subplotID);
+//		
+//		Token token = new Token("TestToken");
+//		testScenario.getTokenID(token);
+//		
+//		Main.setMainScenario(testScenario);
+//		System.out.println(testScenario.getJsonObject());
+//		
+//		Scenario newScenario = new Scenario(testScenario.getJsonObject());
+//		Main.setMainScenario(newScenario);
+//		System.out.println(newScenario.getJsonObject());
 	}
 }

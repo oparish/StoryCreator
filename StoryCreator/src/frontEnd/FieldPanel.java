@@ -3,12 +3,14 @@ package frontEnd;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 
 public abstract class FieldPanel<T extends StoryElement> extends JPanel

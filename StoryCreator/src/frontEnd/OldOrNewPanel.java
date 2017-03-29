@@ -1,6 +1,7 @@
 package frontEnd;
 
 import java.awt.GridLayout;
+import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -8,10 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import storyElements.options.BranchOption;
+import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import main.Main;
 
-public class OldOrNewPanel<T extends StoryElement> extends FieldPanel
+public class OldOrNewPanel<T extends StoryElement> extends FieldPanel implements OptionContentPanel
 {
 	T existingObject;
 	FieldPanel<T> fieldPanel;
@@ -53,4 +55,9 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel
 		System.out.println(oldOrNewPanel.getResult().getDescription());
 	}
 
+	@Override
+	public OptionContentType getOptionContentType()
+	{
+		return ((OptionContentPanel) this.fieldPanel).getOptionContentType();
+	}
 }

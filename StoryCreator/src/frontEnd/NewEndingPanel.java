@@ -7,24 +7,18 @@ import javax.swing.JTextField;
 import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
+import storyElements.options.OptionContentType;
 
-public class NewEndingPanel extends FieldPanel<EndingOption>
-{	
-	private static final String ENDING = "Ending";
-	
-	private JTextField endingField;
-	
+public class NewEndingPanel extends AbstractEndingPanel
+{		
 	public NewEndingPanel()
 	{
-		super("New Ending");	
-		this.endingField = new JTextField();
-		this.addTextField(this.endingField, ENDING);	
-	}
-		
-	public EndingOption getResult()
-	{
-		return new EndingOption(this.endingField.getText(), Main.getMainScenario().getNextBranch());
+		super("New Ending", Main.getMainSpice().getSuggestion());	
 	}
 
-	
+	@Override
+	public OptionContentType getOptionContentType()
+	{
+		return OptionContentType.EXITPOINT;
+	}
 }
