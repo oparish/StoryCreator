@@ -8,6 +8,7 @@ import java.io.File;
 
 import javax.json.JsonObject;
 
+import frontEnd.fieldPanel.FieldPanel;
 import storyElements.Spice;
 import main.Main;
 

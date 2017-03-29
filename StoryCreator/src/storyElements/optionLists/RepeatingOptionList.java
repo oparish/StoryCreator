@@ -7,13 +7,13 @@ import java.util.HashMap;
 
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
-import frontEnd.FieldPanel;
-import frontEnd.FlavourListPanel;
-import frontEnd.NewBranchPanel;
-import frontEnd.NewEndingPanel;
-import frontEnd.NewOptionPanel;
 import frontEnd.NewScenarioPanel;
 import frontEnd.OldOrNewPanel;
+import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.FlavourListPanel;
+import frontEnd.fieldPanel.NewBranchPanel;
+import frontEnd.fieldPanel.NewEndingPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;

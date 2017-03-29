@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import frontEnd.fieldPanel.FieldPanel;
 import storyElements.Scenario;
 import main.Main;
 

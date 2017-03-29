@@ -10,9 +10,9 @@ import storyElements.options.Option;
 import storyElements.options.TwistOption;
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
-import frontEnd.FieldPanel;
-import frontEnd.NewOptionPanel;
 import frontEnd.NewTwistOptionPanel;
+import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
 import main.Main;
 
 public class TwistList extends NonRepeatingOptionList

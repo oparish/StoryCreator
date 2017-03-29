@@ -1,9 +1,10 @@
-package frontEnd;
+package frontEnd.fieldPanel;
 
 import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
+import frontEnd.NewOptionListPanel;
 import main.Main;
 import storyElements.Chance;
 import storyElements.Scenario;

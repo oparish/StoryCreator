@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
+import frontEnd.fieldPanel.OptionContentPanel;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;

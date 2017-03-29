@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.NewBranchPanel;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
 import storyElements.Token;

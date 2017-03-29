@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
+import frontEnd.fieldPanel.FieldPanel;
 import storyElements.options.StoryElement;
 
 public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPanel<T>

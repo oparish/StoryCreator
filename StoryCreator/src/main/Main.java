@@ -28,7 +28,7 @@ import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.InitialScenarioDialog;
 import frontEnd.InitialSpiceDialog;
-import frontEnd.NewOptionPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
 import storyElements.ExitPoint;
 import storyElements.JsonStructure;
 import storyElements.Scenario;

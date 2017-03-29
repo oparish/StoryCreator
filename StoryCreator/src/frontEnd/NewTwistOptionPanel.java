@@ -2,6 +2,7 @@ package frontEnd;
 
 import javax.swing.JTextField;
 
+import frontEnd.fieldPanel.NewStoryElementPanel;
 import storyElements.options.BranchOption;
 import storyElements.options.TwistOption;
 

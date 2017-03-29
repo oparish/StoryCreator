@@ -1,4 +1,4 @@
-package frontEnd;
+package frontEnd.fieldPanel;
 
 import javax.swing.JTextField;
 

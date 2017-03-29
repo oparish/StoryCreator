@@ -9,8 +9,8 @@ import javax.json.JsonObject;
 import main.Main;
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
-import frontEnd.FieldPanel;
-import frontEnd.NewOptionPanel;
+import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
 import storyElements.options.BranchOption;
 import storyElements.options.Option;
 

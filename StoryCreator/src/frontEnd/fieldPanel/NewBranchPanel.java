@@ -1,4 +1,4 @@
-package frontEnd;
+package frontEnd.fieldPanel;
 
 import java.awt.Frame;
 import java.awt.GridBagLayout;

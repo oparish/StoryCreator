@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import frontEnd.fieldPanel.FieldPanel;
 import main.Main;
 import storyElements.optionLists.Branch;
 
