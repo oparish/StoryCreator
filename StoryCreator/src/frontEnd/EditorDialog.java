@@ -71,7 +71,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private ArrayList<Token> heldTokens;
 	private ArrayList<Token> unheldTokens;
 
-	public EditorDialog()
+	public EditorDialog(int startingLevel)
 	{
 		super();
 	
@@ -98,7 +98,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		
 		if (scenario.getCurrentBranch() == null)
 		{
-			Branch currentBranch = this.setupStartingBranch();
+			Branch currentBranch = this.setupStartingBranch(startingLevel);
 			scenario.setCurrentBranch(currentBranch);
 			scenario.getExitPointID(currentBranch);
 		}
@@ -362,13 +362,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		return this.mainGenerator;
 	}
 	
-	private Branch setupStartingBranch()
+	private Branch setupStartingBranch(int startingLevel)
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<Branch> fieldPanel;
 		NewBranchPanel newBranchPanel = new NewBranchPanel();
 		
-		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(0);
+		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(startingLevel);
 		
 		if (exitPoints == null)	
 			fieldPanel = newBranchPanel;
@@ -442,15 +442,15 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public static void main(String[] args)
 	{
-		EditorDialog editorDialog = new EditorDialog();
-		editorDialog.addWindowListener(new WindowAdapter() {  
-            public void windowClosing(WindowEvent e) {  
-                System.exit(0);  
-            }  
-        });
-		Dimension screenCentre = main.Main.getScreenCentre();
-		editorDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
-		editorDialog.setVisible(true);
+//		EditorDialog editorDialog = new EditorDialog();
+//		editorDialog.addWindowListener(new WindowAdapter() {  
+//            public void windowClosing(WindowEvent e) {  
+//                System.exit(0);  
+//            }  
+//        });
+//		Dimension screenCentre = main.Main.getScreenCentre();
+//		editorDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
+//		editorDialog.setVisible(true);
 	}
 
 	@Override

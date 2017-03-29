@@ -29,9 +29,9 @@ public class InitialScenarioDialog extends InitialDialog
 	private static final String NEW_SCENARIO = "New Scenario";
 	private static final String LOAD_SCENARIO = "Load Scenario";
 	
-	public InitialScenarioDialog(Frame owner, boolean modal)
+	public InitialScenarioDialog()
 	{
-		super(owner, modal);
+		super();
 		this.add(this.makeButton(NEW_SCENARIO, ButtonID.NEW_SCENARIO), this.setupGridBagConstraints(0, 0, 1, 1));
 		this.add(this.makeButton(LOAD_SCENARIO, ButtonID.LOAD_SCENARIO), this.setupGridBagConstraints(1, 0, 1, 1));
 	}

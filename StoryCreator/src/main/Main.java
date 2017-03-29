@@ -26,6 +26,7 @@ import javax.swing.JFileChooser;
 
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
+import frontEnd.InitialConfigDialog;
 import frontEnd.InitialScenarioDialog;
 import frontEnd.InitialSpiceDialog;
 import frontEnd.fieldPanel.NewOptionPanel;
@@ -222,11 +223,13 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		InitialScenarioDialog initialDialog = new InitialScenarioDialog(null, true);
+		InitialScenarioDialog initialDialog = new InitialScenarioDialog();
 		Main.showWindowInCentre(initialDialog);
-		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog(null, true);
+		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog();
         Main.showWindowInCentre(initialSpiceDialog);
-		EditorDialog editorDialog = new EditorDialog();
+		InitialConfigDialog initialConfigDialog = new InitialConfigDialog();
+        Main.showWindowInCentre(initialConfigDialog);
+		EditorDialog editorDialog = new EditorDialog(initialConfigDialog.getBranchLevel());
         Main.showWindowInCentre(editorDialog); 
 	}
 }

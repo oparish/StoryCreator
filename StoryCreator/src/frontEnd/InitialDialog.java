@@ -25,9 +25,9 @@ public abstract class InitialDialog extends JDialog implements ActionListener
 	protected static final int WIDTH = 400;
 	protected static final int HEIGHT = 150;
 	
-	public InitialDialog(Frame owner, boolean modal)
+	public InitialDialog()
 	{
-		super(owner, modal);
+		super((JFrame) null, true);
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new GridBagLayout());
 	}

@@ -17,9 +17,9 @@ public class InitialSpiceDialog extends InitialDialog
 	private static final String NEW_SPICE = "New Spice";
 	private static final String LOAD_SPICE = "Load Spice";
 	
-	public InitialSpiceDialog(Frame owner, boolean modal)
+	public InitialSpiceDialog()
 	{
-		super(owner, modal);
+		super();
 		this.add(this.makeButton(NEW_SPICE, ButtonID.NEW_SPICE), this.setupGridBagConstraints(0, 0, 1, 1));
 		this.add(this.makeButton(LOAD_SPICE, ButtonID.LOAD_SPICE), this.setupGridBagConstraints(1, 0, 1, 1));
 	}
