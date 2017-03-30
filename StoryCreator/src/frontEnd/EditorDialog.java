@@ -34,6 +34,7 @@ import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.Option;
+import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import main.Main;
@@ -368,12 +369,12 @@ public class EditorDialog extends JFrame implements ActionListener
 		FieldPanel<Branch> fieldPanel;
 		NewBranchPanel newBranchPanel = new NewBranchPanel();
 		
-		ArrayList<ExitPoint> exitPoints = currentScenario.getBranchLevel(startingLevel);
+		ArrayList<ExitPoint> exitPoints = currentScenario.getExitPointsAtBranchLevel(startingLevel);
 		
 		if (exitPoints == null)	
 			fieldPanel = newBranchPanel;
 		else
-			fieldPanel = new OldOrNewPanel<Branch>((Branch) exitPoints.get(Main.getRandomNumberInRange(exitPoints.size())), newBranchPanel);
+			fieldPanel = new OldOrNewPanel<Branch>(OptionContentType.EXITPOINT, startingLevel);
 		
 		FieldDialog newBranchDialog = new FieldDialog(this, true, new FieldPanel[]{fieldPanel});
 		Main.showWindowInCentre(newBranchDialog);

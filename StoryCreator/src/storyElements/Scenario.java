@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -23,6 +24,7 @@ import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.Option;
+import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import storyElements.options.SubplotOption;
 
@@ -45,6 +47,7 @@ public class Scenario implements JsonStructure, StoryElement
 	int branchLength;
 	int subplotLength;
 	int scenarioLength;
+
 	String description;
 
 	public Scenario(String description, ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLength, int subplotLength, int scenarioLength)
@@ -112,6 +115,29 @@ public class Scenario implements JsonStructure, StoryElement
 		}
 	}
 	
+	public int getScenarioLength() {
+		return scenarioLength;
+	}
+
+	
+	public Collection<? extends StoryElement> getStoryElementList(OptionContentType optionContentType, int branchLevel)
+	{
+		switch(optionContentType)
+		{
+			case BADEXITPOINT:
+			case GOODEXITPOINT:
+			case EXITPOINT:
+				return this.getExitPointsAtBranchLevel(branchLevel);
+			case TOKEN:
+			case OBSTACLE:
+				return this.tokens.values();
+			case FLAVOURLIST:
+				return this.flavourLists.values();
+			default:
+				return null;
+		}
+	}
+	
 	public ArrayList<Token> getTokens()
 	{
 		ArrayList<Token> tokens = new ArrayList<Token>();
@@ -149,7 +175,7 @@ public class Scenario implements JsonStructure, StoryElement
 	}
 
 	
-	public ArrayList<ExitPoint> getBranchLevel(int branchLevel)
+	public ArrayList<ExitPoint> getExitPointsAtBranchLevel(int branchLevel)
 	{
 		if (this.branchLevels.containsKey(branchLevel))
 			return this.branchLevels.get(branchLevel);

@@ -1,5 +1,8 @@
 package storyElements.options;
 
+import java.util.Map.Entry;
+
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -15,9 +18,15 @@ public class EndingOption extends Option implements ExitPoint
 		super(jsonObject);
 	}
 	
-	public EndingOption(String description, Integer branchLevel)
+	public EndingOption(String description)
 	{
 		super(description);
-		this.contentIntegerMap.put(OptionContentType.BRANCH_LEVEL, branchLevel);
+	}
+	
+	public JsonObjectBuilder getJsonObjectBuilder()
+	{
+		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
+		jsonObjectBuilder.add(Main.BRANCH_LEVEL, Main.getMainScenario().getScenarioLength());
+		return jsonObjectBuilder;
 	}
 }

@@ -20,6 +20,6 @@ public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOpt
 		
 	public EndingOption getResult()
 	{
-		return new EndingOption(this.endingField.getText(), Main.getMainScenario().getNextBranch());
+		return new EndingOption(this.endingField.getText());
 	}
 }

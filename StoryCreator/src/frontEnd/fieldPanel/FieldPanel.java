@@ -3,6 +3,7 @@ package frontEnd.fieldPanel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.swing.JLabel;
@@ -10,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import frontEnd.StoryElementList;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 
@@ -47,6 +49,12 @@ public abstract class FieldPanel<T extends StoryElement> extends JPanel
 	protected void addPanel(JPanel panel)
 	{		
 		this.add(panel, this.setupGridBagConstraints(0, this.yPos, 1, 1));
+		this.yPos++;
+	}
+	
+	protected void addStoryElementList(StoryElementList storyElementList)
+	{		
+		this.add(storyElementList, this.setupGridBagConstraints(0, this.yPos, 1, 1));
 		this.yPos++;
 	}
 	

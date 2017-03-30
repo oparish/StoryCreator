@@ -1,6 +1,9 @@
 package frontEnd;
 
 import java.awt.GridLayout;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
@@ -16,24 +19,34 @@ import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import main.Main;
 
-public class OldOrNewPanel<T extends StoryElement> extends FieldPanel implements OptionContentPanel
+public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements OptionContentPanel
 {
-	T existingObject;
 	FieldPanel<T> fieldPanel;
 	JRadioButton oldButton = new JRadioButton("Old", true);
 	JRadioButton newButton = new JRadioButton("New");
+	StoryElementList<T> storyElementList;
+	int branchLevel;
 	
-	public OldOrNewPanel(T existingObject, FieldPanel<T> fieldPanel)
+	public OldOrNewPanel(OptionContentType optionContentType, int branchLevel)
 	{
 		super("Old or New?");
-		this.existingObject = existingObject;
-		this.fieldPanel = fieldPanel;
-		this.addJLabel("Old: " + existingObject.getDescription());
+		this.branchLevel = branchLevel;
+		try {
+			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor().newInstance();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(this.oldButton);
 		buttonsPanel.add(this.newButton);
 		this.addPanel(buttonsPanel);
 
+		Collection storyElements = Main.getMainScenario().getStoryElementList(optionContentType, branchLevel);
+		this.storyElementList = StoryElementList.create(storyElements);
+		this.addStoryElementList(this.storyElementList);
+		
 		this.addPanel(fieldPanel);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
@@ -44,18 +57,24 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel implements
 	public T getResult()
 	{
 		if (this.oldButton.isSelected())
-			return this.existingObject;
+		{
+			T storyElement = this.storyElementList.getSelectedElement();
+			if (storyElement == null)
+				return this.storyElementList.getModel().getElementAt(0);
+			else
+				return storyElement;
+		}
 		else
 			return this.fieldPanel.getResult();
 	}
 	
 	public static void main(String[] args)
 	{
-		BranchOption branchOption = new BranchOption("Test");
-		OldOrNewPanel<BranchOption> oldOrNewPanel = new OldOrNewPanel<BranchOption>(branchOption, new NewOptionPanel());
-		FieldDialog fieldDialog = new FieldDialog(null, true, new FieldPanel[]{oldOrNewPanel});
-		Main.showWindowInCentre(fieldDialog);
-		System.out.println(oldOrNewPanel.getResult().getDescription());
+//		BranchOption branchOption = new BranchOption("Test");
+//		OldOrNewPanel<BranchOption> oldOrNewPanel = new OldOrNewPanel<BranchOption>(branchOption, new NewOptionPanel());
+//		FieldDialog fieldDialog = new FieldDialog(null, true, new FieldPanel[]{oldOrNewPanel});
+//		Main.showWindowInCentre(fieldDialog);
+//		System.out.println(oldOrNewPanel.getResult().getDescription());
 	}
 
 	@Override
