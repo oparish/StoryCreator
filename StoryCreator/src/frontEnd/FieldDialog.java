@@ -34,7 +34,7 @@ public class FieldDialog extends JDialog
 		super(owner, modal);	
 		this.setSize(WIDTH, HEIGHT);
 		this.innerPanel = new JPanel();
-		this.innerPanel.setLayout(new GridLayout(panels.length * 2, 1));
+		this.innerPanel.setLayout(new GridBagLayout());
 		for (FieldPanel panel : panels)
 		{
 			this.addLabel(panel.getHeading());
@@ -43,15 +43,29 @@ public class FieldDialog extends JDialog
 		this.add(new JScrollPane(this.innerPanel));
 	}
 	
+	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight, int weighty)
+	{
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = gridx;
+		gridBagConstraints.gridy = gridy;
+		gridBagConstraints.gridwidth = gridWidth;
+		gridBagConstraints.gridheight = gridHeight;
+		gridBagConstraints.weightx = 1;
+		gridBagConstraints.weighty = weighty;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
+		return gridBagConstraints;
+	}
+	
 	public void addPanel(JPanel jPanel)
 	{
-		this.innerPanel.add(jPanel);
+		this.innerPanel.add(jPanel, this.setupGridBagConstraints(0, this.yPos, 1, 1, 1));
 		yPos++;
 	}
 	
 	public void addLabel(String labelText)
 	{
-		this.innerPanel.add(new JLabel(labelText));
+		this.innerPanel.add(new JLabel(labelText), this.setupGridBagConstraints(0, this.yPos, 1, 1, 0));
 		yPos++;
 	}
 	
