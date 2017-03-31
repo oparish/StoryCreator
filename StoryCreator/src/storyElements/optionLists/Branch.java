@@ -16,9 +16,11 @@ import frontEnd.OldOrNewPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.FlavourListPanel;
 import frontEnd.fieldPanel.NewBadBranchPanel;
+import frontEnd.fieldPanel.NewBadEndingPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
 import frontEnd.fieldPanel.NewEndingPanel;
 import frontEnd.fieldPanel.NewGoodBranchPanel;
+import frontEnd.fieldPanel.NewGoodEndingPanel;
 import frontEnd.fieldPanel.NewObstaclePanel;
 import frontEnd.fieldPanel.NewOptionPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
@@ -245,7 +247,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			FieldPanel<? extends ExitPoint> goodExitPointPanel;
 			if (isLastBranch)
 			{
-				goodExitPointPanel = new NewEndingPanel();
+				goodExitPointPanel = new NewGoodEndingPanel();
 			}
 			else if (exitPointsAtLevel == null)
 			{
@@ -263,7 +265,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			FieldPanel<? extends ExitPoint> badExitPointPanel;
 			if (isLastBranch)
 			{
-				badExitPointPanel = new NewEndingPanel();
+				badExitPointPanel = new NewBadEndingPanel();
 			}
 			else if (exitPointsAtLevel == null)
 			{
