@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -30,6 +31,7 @@ import storyElements.Token;
 import storyElements.optionLists.Branch;
 import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Branch.Generator;
+import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
 import storyElements.options.FlavourOption;
@@ -58,7 +60,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
 	
-	private TwistOption twistOption;
+	private ArrayList<TwistOption> twistOptions;
 	private Option currentOption;
 	private FlavourOption flavour;
 	private StringBuilder storyBuilder;
@@ -123,13 +125,12 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void twistGenerate()
 	{
-		this.twistOption = (TwistOption) Main.getMainSpice().getTwistList().generateOption(this);
-	}
-	
-	public void setTwistOption(TwistOption twistOption)
-	{
-		this.twistOption = twistOption;
-		this.techBuilder.append("\r\n" + twistOption.getDescription());
+		this.twistOptions = new ArrayList<TwistOption>();
+		HashMap<Integer, TwistList> twistLists = Main.getMainSpice().getTwistLists();
+		for (TwistList twistList : twistLists.values())
+		{
+			this.twistOptions.add((TwistOption) twistList.generateOption(this));
+		}
 	}
 	
 	private GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight)
@@ -329,7 +330,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		StringBuilder infoBuilder = new StringBuilder();
 		Scenario currentScenario = Main.getMainScenario();
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
-		infoBuilder.append("Twist: " + this.twistOption.getDescription() + "\r\n");
+		
+		infoBuilder.append("Twists: \r\n");
+		for (TwistOption twistOption : this.twistOptions)
+		{
+			infoBuilder.append(twistOption.getDescription() + "\r\n");
+		}
+		
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
 		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription() + "\r\n");	
 		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");

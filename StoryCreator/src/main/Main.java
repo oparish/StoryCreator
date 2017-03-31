@@ -44,6 +44,7 @@ public class Main
 	public static final int INITIALOPTIONS_FOR_SPICE = 3;
 	public static final int INITIALOPTIONS_FOR_FLAVOURLIST = 3;
 	public static final int INITIALOPTIONS_FOR_BRANCH = 3;
+	public static final int INITIALTWISTS_FOR_SPICE = 3;
 	public static final int SUGGESTION_NUMBER = 4;
 	public static final int DEFAULTBRANCHLENGTH = 3;
 	public static final int DEFAULTSUBPLOTLENGTH = 2;
@@ -70,7 +71,7 @@ public class Main
 	public static final String SUBPLOT = "subplot";
 	public static final String FLAVOURLIST = "flavourlist";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
-	public static final String TWISTLIST = "twistlist";
+	public static final String TWISTLISTS = "twistlists";
 	public static final String SUGGESTIONS = "suggestions";
 	public static final String GOOD_SUGGESTIONS = "goodSuggestions";
 	public static final String BAD_SUGGESTIONS = "badSuggestions";
