@@ -50,7 +50,7 @@ public class StoryElementList<T extends StoryElement> extends JList<T>
 		}
 	}
 	
-	public static StoryElementList create(Collection<StoryElement> storyElements)
+	public static StoryElementList create(Collection<? extends StoryElement> storyElements)
 	{
 		DefaultListModel<StoryElement> model = new DefaultListModel<StoryElement>();
 		for(StoryElement storyElement : storyElements)

@@ -38,7 +38,7 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		}
 		else
 		{
-			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			NewOptionPanel newOptionPanel = new NewOptionPanel(this);
 			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newOptionPanel});
 			newOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newOptionDialog);

@@ -289,7 +289,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			HashMap<Integer, FlavourList> flavourLists = currentScenario.getFlavourLists();
 			
 			ArrayList<FieldPanel> fieldPanels = new ArrayList<FieldPanel>();
-			NewOptionPanel newOptionPanel = new NewOptionPanel();
+			NewOptionPanel newOptionPanel = new NewOptionPanel(Branch.this);
 			fieldPanels.add(newOptionPanel);
 			
 			if (becomesExitPoint && !hasObstacle)
