@@ -11,9 +11,9 @@ public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOpt
 	
 	private JTextField endingField;
 	
-	public AbstractEndingPanel(String header, String suggestion)
+	public AbstractEndingPanel(String suggestion)
 	{
-		super(header, suggestion);	
+		super(suggestion);	
 		this.endingField = new JTextField();
 		this.addTextField(this.endingField, ENDING);	
 	}

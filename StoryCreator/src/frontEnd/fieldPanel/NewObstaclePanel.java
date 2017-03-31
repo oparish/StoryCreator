@@ -13,7 +13,8 @@ public class NewObstaclePanel extends NewStoryElementPanel<Token> implements Opt
 
 	public NewObstaclePanel()
 	{
-		super("New Obstacle", null);
+		super(null);
+		this.heading = "New Obstacle";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 	}

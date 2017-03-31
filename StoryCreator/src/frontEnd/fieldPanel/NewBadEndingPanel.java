@@ -7,7 +7,8 @@ public class NewBadEndingPanel extends AbstractEndingPanel
 {
 	public NewBadEndingPanel()
 	{
-		super("New Bad Ending", Main.getMainSpice().getBadSuggestion());	
+		super(Main.getMainSpice().getBadSuggestion());
+		this.heading = "New Bad Ending";
 	}
 
 	@Override

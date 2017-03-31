@@ -28,7 +28,8 @@ public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
 
 	public NewOptionPanel()
 	{
-		super("New Option", Main.getMainSpice().getSuggestion());
+		super(Main.getMainSpice().getSuggestion());
+		this.heading = "New Option";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 	}

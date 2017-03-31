@@ -7,7 +7,8 @@ public class NewGoodEndingPanel extends AbstractEndingPanel
 {
 	public NewGoodEndingPanel()
 	{
-		super("New Good Ending", Main.getMainSpice().getGoodSuggestion());	
+		super(Main.getMainSpice().getGoodSuggestion());
+		this.heading = "New Good Ending";
 	}
 
 	@Override

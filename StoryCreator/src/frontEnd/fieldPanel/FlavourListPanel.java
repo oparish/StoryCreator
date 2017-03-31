@@ -22,7 +22,8 @@ public class FlavourListPanel extends NewOptionListPanel<FlavourList> implements
 	
 	public FlavourListPanel()
 	{
-		super("Flavour List");
+		super();
+		this.heading = "Flavour List";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_FLAVOURLIST);	

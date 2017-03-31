@@ -46,7 +46,10 @@ public class NewScenarioPanel extends NewOptionListPanel<Scenario>
 	
 	public NewScenarioPanel()
 	{
-		super("New Scenario");
+		super();
+		
+		this.heading = "New Scenario";
+		
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
 		

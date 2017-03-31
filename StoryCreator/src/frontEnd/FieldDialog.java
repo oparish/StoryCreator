@@ -34,9 +34,10 @@ public class FieldDialog extends JDialog
 		super(owner, modal);	
 		this.setSize(WIDTH, HEIGHT);
 		this.innerPanel = new JPanel();
-		this.innerPanel.setLayout(new GridLayout(panels.length, 1));
+		this.innerPanel.setLayout(new GridLayout(panels.length * 2, 1));
 		for (FieldPanel panel : panels)
 		{
+			this.addLabel(panel.getHeading());
 			this.addPanel(panel);
 		}
 		this.add(new JScrollPane(this.innerPanel));
@@ -45,6 +46,12 @@ public class FieldDialog extends JDialog
 	public void addPanel(JPanel jPanel)
 	{
 		this.innerPanel.add(jPanel);
+		yPos++;
+	}
+	
+	public void addLabel(String labelText)
+	{
+		this.innerPanel.add(new JLabel(labelText));
 		yPos++;
 	}
 	

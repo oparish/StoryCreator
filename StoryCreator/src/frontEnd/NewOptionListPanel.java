@@ -13,9 +13,9 @@ public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPa
 	protected static final String INITIAL_OPTION = "Initial Option";	
 	protected ArrayList<JTextField> initialOptionFields;
 	
-	public NewOptionListPanel(String header)
+	public NewOptionListPanel()
 	{
-		super(header);
+		super();
 	}
 	
 	protected void addInitialOptions(int initialOptionNumber)

@@ -29,10 +29,11 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 	
 	public OldOrNewPanel(OptionContentType optionContentType, int branchLevel)
 	{
-		super("Old or New?");
+		super();
 		this.branchLevel = branchLevel;
 		try {
 			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor().newInstance();
+			this.heading = this.fieldPanel.getHeading();
 		} catch (Exception e)
 		{
 			e.printStackTrace();

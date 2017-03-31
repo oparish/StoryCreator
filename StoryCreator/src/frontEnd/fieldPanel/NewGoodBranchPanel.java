@@ -7,7 +7,8 @@ public class NewGoodBranchPanel extends AbstractBranchPanel implements OptionCon
 {
 	public NewGoodBranchPanel()
 	{
-		super("New Good Branch", Main.getMainSpice().getGoodSuggestion());
+		super(Main.getMainSpice().getGoodSuggestion());
+		this.heading = "New Good Branch";
 	}
 	
 	@Override

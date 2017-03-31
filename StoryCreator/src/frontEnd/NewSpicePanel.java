@@ -21,7 +21,8 @@ public class NewSpicePanel extends NewOptionListPanel<Spice>
 	
 	public NewSpicePanel()
 	{
-		super("New Spice");
+		super();
+		this.heading = "New Spice";
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SPICE);
 		
 		this.suggestionFields = this.addSuggestionFields("Suggestion ");

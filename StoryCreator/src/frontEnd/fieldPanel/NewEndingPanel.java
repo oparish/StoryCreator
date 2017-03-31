@@ -13,7 +13,8 @@ public class NewEndingPanel extends AbstractEndingPanel
 {		
 	public NewEndingPanel()
 	{
-		super("New Ending", Main.getMainSpice().getSuggestion());	
+		super(Main.getMainSpice().getSuggestion());
+		this.heading = "New Ending";
 	}
 
 	@Override

@@ -7,7 +7,8 @@ public class NewBadBranchPanel extends AbstractBranchPanel implements OptionCont
 {
 	public NewBadBranchPanel()
 	{
-		super("New Bad Branch", Main.getMainSpice().getBadSuggestion());
+		super(Main.getMainSpice().getBadSuggestion());
+		this.heading = "New Bad Branch";
 	}
 	
 	@Override

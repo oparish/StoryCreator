@@ -18,12 +18,16 @@ import storyElements.options.StoryElement;
 public abstract class FieldPanel<T extends StoryElement> extends JPanel
 {
 	private int yPos = 0;
+	protected String heading;
 	
-	public FieldPanel(String heading)
+	public String getHeading() {
+		return heading;
+	}
+
+	public FieldPanel()
 	{
 		super();
 		this.setLayout(new GridBagLayout());
-		this.addJLabel(heading);
 	}
 	
 	protected void addJLabel(String labelText)

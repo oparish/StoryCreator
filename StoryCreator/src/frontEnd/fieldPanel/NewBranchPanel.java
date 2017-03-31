@@ -17,7 +17,8 @@ public class NewBranchPanel extends AbstractBranchPanel implements OptionContent
 {
 	public NewBranchPanel()
 	{
-		super("New Branch", Main.getMainSpice().getSuggestion());
+		super(Main.getMainSpice().getSuggestion());
+		this.heading = "New Branch";
 	}
 	
 	@Override

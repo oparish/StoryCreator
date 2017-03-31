@@ -16,7 +16,8 @@ public class NewTokenPanel extends NewStoryElementPanel<Token> implements Option
 
 	public NewTokenPanel()
 	{
-		super("New Token", null);
+		super(null);
+		this.heading = "New Token";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
 	}
