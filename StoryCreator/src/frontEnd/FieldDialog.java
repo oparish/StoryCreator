@@ -19,6 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import frontEnd.fieldPanel.FieldPanel;
+import frontEnd.fieldPanel.NewStoryElementPanel;
 import main.Main;
 import storyElements.optionLists.Branch;
 
@@ -44,8 +45,7 @@ public class FieldDialog extends JDialog
 		this(owner, modal);	
 		for (MyPanel panel : myPanels)
 		{
-			this.addLabel(panel.getHeading());
-			this.addPanel(panel);
+			this.addMyPanel(panel);
 		}
 	}
 	
@@ -54,9 +54,20 @@ public class FieldDialog extends JDialog
 		this(owner, modal);	
 		for (MyPanel panel : myPanels)
 		{
-			this.addLabel(panel.getHeading());
-			this.addPanel(panel);
+			this.addMyPanel(panel);
 		}
+	}
+	
+	private void addMyPanel(MyPanel panel)
+	{
+		this.addLabel(panel.getHeading());
+		if (panel instanceof NewStoryElementPanel)
+		{
+			String suggestionText = ((NewStoryElementPanel) panel).getSuggestion();
+			if (suggestionText != null)
+				this.addLabel(suggestionText);
+		}
+		this.addPanel(panel);
 	}
 	
 	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight, int weighty)

@@ -19,7 +19,8 @@ public abstract class AbstractBranchPanel extends NewStoryElementPanel<Branch>
 	
 	public AbstractBranchPanel(int branchLevel, String suggestion)
 	{
-		super(branchLevel, suggestion);
+		super(branchLevel);
+		this.suggestion = suggestion;
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		

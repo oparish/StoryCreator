@@ -15,13 +15,14 @@ import javax.swing.JRadioButton;
 
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewOptionPanel;
+import frontEnd.fieldPanel.NewStoryElementPanel;
 import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import main.Main;
 
-public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements ActionListener
+public class OldOrNewPanel<T extends StoryElement> extends NewStoryElementPanel<T> implements ActionListener
 {
 	FieldPanel<T> fieldPanel;
 	JRadioButton oldButton = new JRadioButton("Old", true);
@@ -34,6 +35,8 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 		try {
 			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor(int.class).newInstance(branchLevel);
 			this.heading = this.fieldPanel.getHeading();
+			if (this.fieldPanel instanceof NewStoryElementPanel)
+				this.suggestion = ((NewStoryElementPanel) this.fieldPanel).getSuggestion();
 		} catch (Exception e)
 		{
 			e.printStackTrace();

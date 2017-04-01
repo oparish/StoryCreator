@@ -5,7 +5,7 @@ import javax.swing.JTextField;
 import storyElements.Token;
 import storyElements.options.OptionContentType;
 
-public class NewObstaclePanel extends NewStoryElementPanel<Token>
+public class NewObstaclePanel extends FieldPanel<Token>
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -13,7 +13,7 @@ public class NewObstaclePanel extends NewStoryElementPanel<Token>
 
 	public NewObstaclePanel(int branchLevel)
 	{
-		super(branchLevel, null);
+		super(branchLevel);
 		this.heading = "New Obstacle";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);

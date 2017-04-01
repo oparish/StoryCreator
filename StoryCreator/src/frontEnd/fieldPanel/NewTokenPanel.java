@@ -8,7 +8,7 @@ import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 
-public class NewTokenPanel extends NewStoryElementPanel<Token>
+public class NewTokenPanel extends FieldPanel<Token>
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -16,7 +16,7 @@ public class NewTokenPanel extends NewStoryElementPanel<Token>
 
 	public NewTokenPanel(int branchLevel)
 	{
-		super(branchLevel, null);
+		super(branchLevel);
 		this.heading = "New Token";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);
