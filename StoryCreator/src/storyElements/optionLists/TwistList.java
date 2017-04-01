@@ -46,7 +46,7 @@ public class TwistList extends NonRepeatingOptionList implements StoryElement
 		}
 		else
 		{
-			NewTwistOptionPanel newTwistOptionPanel = new NewTwistOptionPanel();
+			NewTwistOptionPanel newTwistOptionPanel = new NewTwistOptionPanel(this);
 			FieldDialog newTwistOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{newTwistOptionPanel});
 			newTwistOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newTwistOptionDialog);
