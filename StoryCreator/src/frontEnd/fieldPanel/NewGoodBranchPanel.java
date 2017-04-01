@@ -5,9 +5,9 @@ import storyElements.options.OptionContentType;
 
 public class NewGoodBranchPanel extends AbstractBranchPanel implements OptionContentPanel
 {
-	public NewGoodBranchPanel()
+	public NewGoodBranchPanel(int branchLevel)
 	{
-		super(Main.getMainSpice().getGoodSuggestion());
+		super(branchLevel, Main.getMainSpice().getGoodSuggestion());
 		this.heading = "New Good Branch";
 	}
 	

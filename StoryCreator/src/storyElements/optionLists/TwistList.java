@@ -14,6 +14,7 @@ import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
+import frontEnd.MyPanel;
 import frontEnd.NewTwistOptionPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewOptionPanel;
@@ -46,7 +47,7 @@ public class TwistList extends NonRepeatingOptionList implements StoryElement
 		else
 		{
 			NewTwistOptionPanel newTwistOptionPanel = new NewTwistOptionPanel();
-			FieldDialog newTwistOptionDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newTwistOptionPanel});
+			FieldDialog newTwistOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{newTwistOptionPanel});
 			newTwistOptionDialog.setTitle("New " + this.type);
 			Main.showWindowInCentre(newTwistOptionDialog);
         	TwistOption twistOption = newTwistOptionPanel.getResult();

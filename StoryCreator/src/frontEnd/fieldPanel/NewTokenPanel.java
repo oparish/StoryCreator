@@ -14,9 +14,9 @@ public class NewTokenPanel extends NewStoryElementPanel<Token> implements Option
 	
 	private JTextField descriptionField;
 
-	public NewTokenPanel()
+	public NewTokenPanel(int branchLevel)
 	{
-		super(null);
+		super(branchLevel, null);
 		this.heading = "New Token";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);

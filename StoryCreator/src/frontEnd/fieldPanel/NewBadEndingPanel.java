@@ -5,9 +5,9 @@ import storyElements.options.OptionContentType;
 
 public class NewBadEndingPanel extends AbstractEndingPanel
 {
-	public NewBadEndingPanel()
+	public NewBadEndingPanel(int branchLevel)
 	{
-		super(Main.getMainSpice().getBadSuggestion());
+		super(branchLevel, Main.getMainSpice().getBadSuggestion());
 		this.heading = "New Bad Ending";
 	}
 

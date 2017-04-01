@@ -33,9 +33,9 @@ public class BranchOption extends Option
 		super(description);
 	}
 	
-	public BranchOption(HashMap<OptionContentType, String> contentStringMap, HashMap<OptionContentType, Integer> contentIntegerMap)
+	public BranchOption(String description, HashMap<OptionContentType, Integer> contentIntegerMap)
 	{
-		super(contentStringMap, contentIntegerMap);
+		super(description, contentIntegerMap);
 	}
 	
 	public Integer getObstacle() {

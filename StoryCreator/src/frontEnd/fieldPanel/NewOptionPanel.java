@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import frontEnd.MyPanel;
 import frontEnd.StoryElementList;
 import main.Main;
 import storyElements.optionLists.OptionList;
@@ -23,7 +24,7 @@ import storyElements.options.Option;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 
-public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
+public class NewOptionPanel extends MyPanel
 {	
 	private static final String DESCRIPTION = "Description";
 	
@@ -32,8 +33,9 @@ public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
 
 	public NewOptionPanel(ArrayList<? extends Option> existingOptions)
 	{
-		super(Main.getMainSpice().getSuggestion());
+		super();
 		this.heading = "New Option";
+		this.addJLabel(Main.getMainSpice().getSuggestion());
 		this.storyElementList = StoryElementList.create(existingOptions);
 		this.addStoryElementList(this.storyElementList);
 		this.descriptionField = new JTextField();
@@ -47,14 +49,14 @@ public class NewOptionPanel extends NewStoryElementPanel<BranchOption>
 
 	public static void main(String[] args)
 	{
-		ArrayList<BranchOption> existingOptions = new ArrayList<BranchOption>();
-		existingOptions.add(new BranchOption("One"));
-		existingOptions.add(new BranchOption("Two"));
-		
-		NewOptionPanel newOptionDialog = new NewOptionPanel(existingOptions);
-		Dimension screenCentre = main.Main.getScreenCentre();
-		newOptionDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
-		newOptionDialog.setVisible(true);
+//		ArrayList<BranchOption> existingOptions = new ArrayList<BranchOption>();
+//		existingOptions.add(new BranchOption("One"));
+//		existingOptions.add(new BranchOption("Two"));
+//		
+//		NewOptionPanel newOptionDialog = new NewOptionPanel(0, existingOptions);
+//		Dimension screenCentre = main.Main.getScreenCentre();
+//		newOptionDialog.setLocation(screenCentre.width - WIDTH/2, screenCentre.height - HEIGHT/2);
+//		newOptionDialog.setVisible(true);
 	}
 
 }

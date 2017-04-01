@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -29,18 +30,33 @@ public class FieldDialog extends JDialog
 	protected int yPos = 0;
 	JPanel innerPanel;
 	
-	public FieldDialog(Frame owner, boolean modal, FieldPanel[] panels)
+	private FieldDialog(Frame owner, boolean modal)
 	{
-		super(owner, modal);	
+		super(owner, modal);
 		this.setSize(WIDTH, HEIGHT);
 		this.innerPanel = new JPanel();
 		this.innerPanel.setLayout(new GridBagLayout());
-		for (FieldPanel panel : panels)
+		this.add(new JScrollPane(this.innerPanel));
+	}
+	
+	public FieldDialog(Frame owner, boolean modal, ArrayList<MyPanel> myPanels)
+	{
+		this(owner, modal);	
+		for (MyPanel panel : myPanels)
 		{
 			this.addLabel(panel.getHeading());
 			this.addPanel(panel);
 		}
-		this.add(new JScrollPane(this.innerPanel));
+	}
+	
+	public FieldDialog(Frame owner, boolean modal, MyPanel[] myPanels)
+	{
+		this(owner, modal);	
+		for (MyPanel panel : myPanels)
+		{
+			this.addLabel(panel.getHeading());
+			this.addPanel(panel);
+		}
 	}
 	
 	protected GridBagConstraints setupGridBagConstraints(int gridx, int gridy, int gridWidth, int gridHeight, int weighty)
@@ -71,8 +87,8 @@ public class FieldDialog extends JDialog
 	
 	public static void main(String[] args)
 	{
-		FieldDialog fieldDialog = new FieldDialog(null, true, new FieldPanel[0]);
-		Main.showWindowInCentre(fieldDialog);
-		System.out.println("END");
+//		FieldDialog fieldDialog = new FieldDialog(null, true, new FieldPanel[0]);
+//		Main.showWindowInCentre(fieldDialog);
+//		System.out.println("END");
 	}
 }

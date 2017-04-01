@@ -20,7 +20,7 @@ import storyElements.Scenario;
 import storyElements.options.BranchOption;
 
 @SuppressWarnings("serial")
-public class NewScenarioPanel extends NewOptionListPanel<Scenario>
+public class NewScenarioPanel extends MyOptionListPanel
 {	
 	private static final String SCENARIO_DESCRIPTION = "Scenario Description";
 	private static final String INITIAL_BRANCH_DESCRIPTION = "Initial Branch Description";

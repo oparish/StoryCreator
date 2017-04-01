@@ -374,7 +374,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel();
+		NewBranchPanel newBranchPanel = new NewBranchPanel(startingLevel);
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getExitPointsAtBranchLevel(startingLevel);
 		

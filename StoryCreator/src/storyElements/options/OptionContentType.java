@@ -15,7 +15,6 @@ import main.Main;
 
 public enum OptionContentType
 {
-	DESCRIPTION(Main.DESCRIPTION, String.class, NewOptionPanel.class), 
 	FLAVOURLIST(Main.FLAVOURLIST, Integer.class, FlavourListPanel.class),
 	TOKEN(Main.TOKEN, Integer.class, NewTokenPanel.class), OBSTACLE(Main.OBSTACLE, Integer.class, NewObstaclePanel.class),
 	EXITPOINT(Main.EXITPOINT, Integer.class, NewBranchPanel.class), 

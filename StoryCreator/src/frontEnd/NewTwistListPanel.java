@@ -10,7 +10,7 @@ import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import frontEnd.fieldPanel.FieldPanel;
 
-public class NewTwistListPanel extends NewOptionListPanel<TwistList>
+public class NewTwistListPanel extends MyOptionListPanel
 {
 	private static final String TWIST_LIST_DESCRIPTION = "Twist List Description";
 	private JTextField descriptionField;
@@ -23,7 +23,6 @@ public class NewTwistListPanel extends NewOptionListPanel<TwistList>
 		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SPICE);
 	}	
 	
-	@Override
 	public TwistList getResult()
 	{
 		ArrayList<TwistOption> twistOptions = new ArrayList<TwistOption>();

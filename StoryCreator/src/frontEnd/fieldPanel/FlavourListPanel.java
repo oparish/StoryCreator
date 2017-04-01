@@ -20,9 +20,9 @@ public class FlavourListPanel extends NewOptionListPanel<FlavourList> implements
 	JTextField descriptionField;
 	
 	
-	public FlavourListPanel()
+	public FlavourListPanel(int branchLevel)
 	{
-		super();
+		super(branchLevel);
 		this.heading = "Flavour List";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);

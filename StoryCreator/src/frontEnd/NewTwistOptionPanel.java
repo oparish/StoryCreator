@@ -6,7 +6,7 @@ import frontEnd.fieldPanel.NewStoryElementPanel;
 import storyElements.options.BranchOption;
 import storyElements.options.TwistOption;
 
-public class NewTwistOptionPanel extends NewStoryElementPanel<TwistOption>
+public class NewTwistOptionPanel extends MyPanel
 {
 	private static final String DESCRIPTION = "Description";
 	
@@ -14,7 +14,7 @@ public class NewTwistOptionPanel extends NewStoryElementPanel<TwistOption>
 
 	public NewTwistOptionPanel()
 	{
-		super(null);
+		super();
 		this.heading = "Twist Option";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);	

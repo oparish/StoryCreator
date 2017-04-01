@@ -11,46 +11,39 @@ import main.Main;
 
 public abstract class Option implements StoryElement
 {	
-	protected HashMap<OptionContentType, String> contentStringMap;
+	protected String description;
 	protected HashMap<OptionContentType, Integer> contentIntegerMap;
 	
 	public String getDescription() {
-		return contentStringMap.get(OptionContentType.DESCRIPTION);
+		return this.description;
 	}
 
-	public Option(HashMap<OptionContentType, String> contentStringMap, HashMap<OptionContentType, Integer> contentIntegerMap)
+	public Option(String description, HashMap<OptionContentType, Integer> contentIntegerMap)
 	{
-		if (contentStringMap != null)
-			this.contentStringMap = contentStringMap;
-		else
-			this.contentStringMap = new HashMap<OptionContentType, String>();
 		if (contentIntegerMap != null)
 			this.contentIntegerMap = contentIntegerMap;
 		else
 			this.contentIntegerMap = new HashMap<OptionContentType, Integer>();
+		this.description = description;
 	}
 	
 	public Option(String description)
 	{
 		this.contentIntegerMap = new HashMap<OptionContentType, Integer>();
-		this.contentStringMap = new HashMap<OptionContentType, String>();
-		this.contentStringMap.put(OptionContentType.DESCRIPTION, description);
+		this.description = description;
 	}
 	
 	public Option(JsonObject jsonObject)
 	{
-		this.contentStringMap = new HashMap<OptionContentType, String>();
 		this.contentIntegerMap = new HashMap<OptionContentType, Integer>();
 		for (OptionContentType optionContentType : OptionContentType.values())
 		{
 			if (jsonObject.containsKey(optionContentType.identifier))
 			{
-				if (optionContentType.objectClass == String.class)
-					this.contentStringMap.put(optionContentType, jsonObject.getString(optionContentType.identifier));
-				else
-					this.contentIntegerMap.put(optionContentType, Main.processJsonInt(jsonObject, optionContentType.identifier));
+				this.contentIntegerMap.put(optionContentType, Main.processJsonInt(jsonObject, optionContentType.identifier));
 			}
 		}
+		this.description = jsonObject.getString(Main.DESCRIPTION);
 	}
 	
 	public void setContentInteger(OptionContentType optionContentType, Integer content)
@@ -62,10 +55,7 @@ public abstract class Option implements StoryElement
 	{
 		JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 		
-		for(Entry<OptionContentType, String> contentString : this.contentStringMap.entrySet())
-		{
-			jsonObjectBuilder.add(contentString.getKey().identifier, contentString.getValue());
-		}
+		jsonObjectBuilder.add(Main.DESCRIPTION, this.description);
 		for(Entry<OptionContentType, Integer> contentInteger : this.contentIntegerMap.entrySet())
 		{
 			jsonObjectBuilder.add(contentInteger.getKey().identifier, contentInteger.getValue());

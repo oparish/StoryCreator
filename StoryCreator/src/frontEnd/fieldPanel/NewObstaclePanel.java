@@ -11,9 +11,9 @@ public class NewObstaclePanel extends NewStoryElementPanel<Token> implements Opt
 	
 	private JTextField descriptionField;
 
-	public NewObstaclePanel()
+	public NewObstaclePanel(int branchLevel)
 	{
-		super(null);
+		super(branchLevel, null);
 		this.heading = "New Obstacle";
 		this.descriptionField = new JTextField();
 		this.addTextField(this.descriptionField, DESCRIPTION);

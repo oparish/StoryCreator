@@ -25,14 +25,12 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 	JRadioButton oldButton = new JRadioButton("Old", true);
 	JRadioButton newButton = new JRadioButton("New");
 	StoryElementList<T> storyElementList;
-	int branchLevel;
 	
 	public OldOrNewPanel(OptionContentType optionContentType, int branchLevel)
 	{
-		super();
-		this.branchLevel = branchLevel;
+		super(branchLevel);
 		try {
-			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor().newInstance();
+			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor(int.class).newInstance(branchLevel);
 			this.heading = this.fieldPanel.getHeading();
 		} catch (Exception e)
 		{

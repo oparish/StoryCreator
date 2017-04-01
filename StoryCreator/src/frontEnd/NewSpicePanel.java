@@ -15,7 +15,7 @@ import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import main.Main;
 
-public class NewSpicePanel extends FieldPanel<Spice>
+public class NewSpicePanel extends MyPanel
 {
 	ArrayList<NewTwistListPanel> newTwistListPanels;
 	ArrayList<JTextField> suggestionFields;

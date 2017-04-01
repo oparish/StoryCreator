@@ -11,9 +11,9 @@ import storyElements.options.OptionContentType;
 
 public class NewEndingPanel extends AbstractEndingPanel
 {		
-	public NewEndingPanel()
+	public NewEndingPanel(int branchLevel)
 	{
-		super(Main.getMainSpice().getSuggestion());
+		super(branchLevel, Main.getMainSpice().getSuggestion());
 		this.heading = "New Ending";
 	}
 
