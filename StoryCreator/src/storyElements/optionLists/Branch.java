@@ -161,6 +161,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			if (Branch.this.useOpening && this.openingUnused)
 			{
 				this.openingUnused = false;
+				counter++;
 				return this.tryNewOption(editorDialog);
 			}
 			
