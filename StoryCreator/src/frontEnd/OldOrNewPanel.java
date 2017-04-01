@@ -1,6 +1,8 @@
 package frontEnd;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,12 +16,13 @@ import javax.swing.JRadioButton;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewOptionPanel;
 import frontEnd.fieldPanel.OptionContentPanel;
+import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import main.Main;
 
-public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements OptionContentPanel
+public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements OptionContentPanel, ActionListener
 {
 	FieldPanel<T> fieldPanel;
 	JRadioButton oldButton = new JRadioButton("Old", true);
@@ -39,7 +42,9 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(this.oldButton);
+		this.oldButton.addActionListener(this);
 		buttonsPanel.add(this.newButton);
+		this.newButton.addActionListener(this);
 		this.addPanel(buttonsPanel);
 
 		Collection storyElements = Main.getMainScenario().getStoryElementList(optionContentType, branchLevel);
@@ -47,6 +52,7 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 		this.addStoryElementList(this.storyElementList);
 		
 		this.addPanel(fieldPanel);
+		this.fieldPanel.setVisible(false);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(this.oldButton);
@@ -70,7 +76,7 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 	public static void main(String[] args)
 	{
 //		BranchOption branchOption = new BranchOption("Test");
-//		OldOrNewPanel<BranchOption> oldOrNewPanel = new OldOrNewPanel<BranchOption>(branchOption, new NewOptionPanel());
+//		OldOrNewPanel<Token> oldOrNewPanel = new OldOrNewPanel<Token>(OptionContentType.TOKEN, 0);
 //		FieldDialog fieldDialog = new FieldDialog(null, true, new FieldPanel[]{oldOrNewPanel});
 //		Main.showWindowInCentre(fieldDialog);
 //		System.out.println(oldOrNewPanel.getResult().getDescription());
@@ -80,5 +86,18 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 	public OptionContentType getOptionContentType()
 	{
 		return ((OptionContentPanel) this.fieldPanel).getOptionContentType();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.oldButton)
+		{
+			this.fieldPanel.setVisible(false);
+		}
+		else
+		{
+			this.fieldPanel.setVisible(true);
+		}
 	}
 }
