@@ -15,14 +15,13 @@ import javax.swing.JRadioButton;
 
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewOptionPanel;
-import frontEnd.fieldPanel.OptionContentPanel;
 import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 import main.Main;
 
-public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements OptionContentPanel, ActionListener
+public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> implements ActionListener
 {
 	FieldPanel<T> fieldPanel;
 	JRadioButton oldButton = new JRadioButton("Old", true);
@@ -85,7 +84,7 @@ public class OldOrNewPanel<T extends StoryElement> extends FieldPanel<T> impleme
 	@Override
 	public OptionContentType getOptionContentType()
 	{
-		return ((OptionContentPanel) this.fieldPanel).getOptionContentType();
+		return (this.fieldPanel.getOptionContentType());
 	}
 
 	@Override

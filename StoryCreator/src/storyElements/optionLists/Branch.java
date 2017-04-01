@@ -25,7 +25,6 @@ import frontEnd.fieldPanel.NewGoodEndingPanel;
 import frontEnd.fieldPanel.NewObstaclePanel;
 import frontEnd.fieldPanel.NewOptionPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
-import frontEnd.fieldPanel.OptionContentPanel;
 import main.Main;
 import storyElements.ExitPoint;
 import storyElements.Scenario;
@@ -333,7 +332,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			
 			for (FieldPanel fieldPanel : fieldPanels)
 			{
-				OptionContentType optionContentType = ((OptionContentPanel)fieldPanel).getOptionContentType();
+				OptionContentType optionContentType = fieldPanel.getOptionContentType();
 				Integer contentID = Main.getMainScenario().getStoryElementID(fieldPanel.getResult());
 				branchOption.setContentInteger(optionContentType, contentID);
 			}

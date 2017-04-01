@@ -13,7 +13,7 @@ import storyElements.options.BranchOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.OptionContentType;
 
-public class FlavourListPanel extends NewOptionListPanel<FlavourList> implements OptionContentPanel
+public class FlavourListPanel extends NewOptionListPanel<FlavourList>
 {
 	private static final String DESCRIPTION = "Description";
 	

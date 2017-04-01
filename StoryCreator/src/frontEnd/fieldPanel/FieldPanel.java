@@ -27,4 +27,6 @@ public abstract class FieldPanel<T extends StoryElement> extends MyPanel
 	}
 	
 	public abstract T getResult();
+	
+	public abstract OptionContentType getOptionContentType();
 }

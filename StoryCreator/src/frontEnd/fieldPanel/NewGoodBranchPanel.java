@@ -3,7 +3,7 @@ package frontEnd.fieldPanel;
 import main.Main;
 import storyElements.options.OptionContentType;
 
-public class NewGoodBranchPanel extends AbstractBranchPanel implements OptionContentPanel
+public class NewGoodBranchPanel extends AbstractBranchPanel
 {
 	public NewGoodBranchPanel(int branchLevel)
 	{

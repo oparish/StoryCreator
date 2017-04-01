@@ -8,7 +8,7 @@ import storyElements.Token;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 
-public class NewTokenPanel extends NewStoryElementPanel<Token> implements OptionContentPanel
+public class NewTokenPanel extends NewStoryElementPanel<Token>
 {
 	private static final String DESCRIPTION = "Description";
 	

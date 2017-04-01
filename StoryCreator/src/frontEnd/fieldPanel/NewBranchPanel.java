@@ -13,7 +13,7 @@ import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 
-public class NewBranchPanel extends AbstractBranchPanel implements OptionContentPanel
+public class NewBranchPanel extends AbstractBranchPanel
 {
 	public NewBranchPanel(int branchLevel)
 	{

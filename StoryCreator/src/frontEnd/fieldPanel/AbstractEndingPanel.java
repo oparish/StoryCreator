@@ -5,7 +5,7 @@ import javax.swing.JTextField;
 import main.Main;
 import storyElements.options.EndingOption;
 
-public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOption> implements OptionContentPanel
+public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOption>
 {
 	private static final String ENDING = "Ending";
 	

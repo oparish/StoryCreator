@@ -5,7 +5,7 @@ import javax.swing.JTextField;
 import storyElements.Token;
 import storyElements.options.OptionContentType;
 
-public class NewObstaclePanel extends NewStoryElementPanel<Token> implements OptionContentPanel
+public class NewObstaclePanel extends NewStoryElementPanel<Token>
 {
 	private static final String DESCRIPTION = "Description";
 	
