@@ -77,8 +77,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	public EditorDialog(int startingLevel)
 	{
 		super();
-	
+		
 		Scenario scenario = Main.getMainScenario();
+		scenario.incrementBranchCounter();
 		
 		this.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  

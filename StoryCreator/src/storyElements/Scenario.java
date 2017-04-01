@@ -36,7 +36,7 @@ public class Scenario implements JsonStructure, StoryElement
 	HashMap<Integer, ArrayList<ExitPoint>> branchLevels = new HashMap<Integer, ArrayList<ExitPoint>>();
 	HashMap<Integer, Token> tokens = new HashMap<Integer, Token>();
 	Branch currentBranch;
-	int nextBranch = 1;
+	int nextBranch = 0;
 
 	Chance optionBecomesSubplot = null;
 	Chance optionBecomesNewExitPoint = null;
