@@ -29,11 +29,4 @@ public class Subplot extends StorySection<SubplotOption>
 		}
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 	}
-
-	@Override
-	protected StoryElement getDefaultExitPoint(EditorDialog editorDialog)
-	{
-		return new BranchOption("");
-	}
-
 }

@@ -27,6 +27,7 @@ import frontEnd.fieldPanel.ExitPointPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
 import storyElements.ExitPoint;
+import storyElements.Exitable;
 import storyElements.Scenario;
 import storyElements.Token;
 import storyElements.optionLists.Branch;
@@ -281,9 +282,10 @@ public class EditorDialog extends JFrame implements ActionListener
 		Scenario scenario = Main.getMainScenario();
 		if (option instanceof BranchOption)
 		{
-			if (((BranchOption) option).getToken() != null)
+			BranchOption branchOption = (BranchOption) option;
+			if (branchOption.getToken() != null)
 			{
-				Token token = scenario.getTokenByID(((BranchOption) option).getToken());
+				Token token = scenario.getTokenByID(branchOption.getToken());
 				if (!this.heldTokens.contains(token))
 				{
 					this.heldTokens.add(token);
@@ -291,7 +293,7 @@ public class EditorDialog extends JFrame implements ActionListener
 				}
 			}
 			
-			FlavourList flavourList = ((BranchOption) option).getFlavourList();
+			FlavourList flavourList = branchOption.getFlavourList();
 			if (flavourList != null)
 			{
 				this.flavour = flavourList.getFlavour();
@@ -301,30 +303,34 @@ public class EditorDialog extends JFrame implements ActionListener
 				this.flavour = null;
 			}
 			
-			if (((BranchOption) option).getObstacle() != null)
+			ExitPoint newExitPoint = this.exitPointFromExitable(branchOption);
+			if (newExitPoint != null)
 			{
 				this.mainGenerator = null;
-				Token obstacle = scenario.getTokenByID(((BranchOption) option).getObstacle());
-				this.currentObstacle = obstacle;
-				if (this.heldTokens.contains(obstacle))
-					this.nextExitPoint = ((BranchOption) option).getGoodExitPointID();
-				else
-					this.nextExitPoint = ((BranchOption) option).getBadExitPointID();
-			}
-			else
-			{
-				ExitPoint exitPoint = ((BranchOption) option).getExitPoint();
-				if (exitPoint != null)
-				{
-					this.mainGenerator = null;
-					this.nextExitPoint = exitPoint;
-				}	
+				this.nextExitPoint = newExitPoint;
 			}
 		}
 
 		this.currentOption = option;
 		this.techBuilder.append("\r\n" + option.getDescription());
 		this.updateDisplay();
+	}
+	
+	public ExitPoint exitPointFromExitable(Exitable exitable)
+	{
+		if (exitable.getObstacle() != null)
+		{
+			Token obstacle = Main.getMainScenario().getTokenByID(exitable.getObstacle());
+			this.currentObstacle = obstacle;
+			if (this.heldTokens.contains(obstacle))
+				return exitable.getGoodExitPoint();
+			else
+				return exitable.getBadExitPoint();
+		}
+		else
+		{
+			return exitable.getExitPoint();	
+		}
 	}
 	
 	private void updateDisplay()

@@ -31,6 +31,7 @@ import frontEnd.fieldPanel.NewOptionPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
 import main.Main;
 import storyElements.ExitPoint;
+import storyElements.Exitable;
 import storyElements.Scenario;
 import storyElements.Token;
 import storyElements.options.BranchOption;
@@ -40,12 +41,13 @@ import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 
 @SuppressWarnings("serial")
-public class Branch extends StorySection<BranchOption> implements ExitPoint
+public class Branch extends StorySection<BranchOption> implements ExitPoint, Exitable
 {	
 	private boolean useOpening;
 	private Integer defaultExitPoint = null;
 	private Integer goodExitPoint = null;
 	private Integer badExitPoint = null;
+	private Integer obstacle = null;
 	private Integer branchLevel;
 
 	public Integer getBranchLevel() {
@@ -75,30 +77,35 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			this.add(new BranchOption((JsonObject) optionJson));
 		}
 		this.defaultExitPoint = Main.processJsonInt(jsonObject, Main.EXITPOINT);
+		this.goodExitPoint = Main.processJsonInt(jsonObject, Main.GOOD_EXITPOINT);
+		this.badExitPoint = Main.processJsonInt(jsonObject, Main.BAD_EXITPOINT);
+		this.obstacle = Main.processJsonInt(jsonObject, Main.OBSTACLE);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
 		this.useOpening = true;
 	}
 	
-	protected ExitPoint getDefaultExitPoint(EditorDialog editorDialog)
+	public ExitPoint getExitPoint() {
+		return Main.getMainScenario().getExitPoint(this.defaultExitPoint);
+	}
+	
+	public ExitPoint getGoodExitPoint() {
+		return Main.getMainScenario().getExitPoint(this.goodExitPoint);
+	}
+
+	public ExitPoint getBadExitPoint() {
+		return Main.getMainScenario().getExitPoint(this.badExitPoint);
+	}
+	
+	private ExitPoint createNewBranchConclusion(EditorDialog editorDialog)
 	{
-		if (this.defaultExitPoint == null)
-		{
-			return this.createDefaultExitPoint(editorDialog);
-		}
+		if (Main.getMainScenario().getOptionHasObstacle().check())
+			return this.createObstacleBranchConclusion(editorDialog);
 		else
-		{
-			return Main.getMainScenario().getExitPoint(this.defaultExitPoint);
-		}
+			return this.createDefaultBranchConclusion(editorDialog);
 	}
 	
-	private ExitPoint createDefaultExitPoint(EditorDialog editorDialog)
-	{
-		Scenario scenario = Main.getMainScenario();
-		return this.createBranch(editorDialog);
-	}
-	
-	private ExitPoint createBranch(EditorDialog editorDialog)
+	private ExitPoint createDefaultBranchConclusion(EditorDialog editorDialog)
 	{
 		Scenario currentScenario = Main.getMainScenario();
 		FieldPanel<ExitPoint> fieldPanel;
@@ -118,12 +125,68 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		return newBranch; 
 	}
 	
+	private ExitPoint createObstacleBranchConclusion(EditorDialog editorDialog)
+	{
+		Scenario currentScenario = Main.getMainScenario();
+		ArrayList<MyPanel> fieldPanels = new ArrayList<MyPanel>();
+		int nextBranch = currentScenario.getNextBranch();
+		
+		ArrayList<Token> tokens = currentScenario.getTokens();
+		FieldPanel<Token> obstaclePanel;
+		if (tokens.size() == 0)	
+		{
+			obstaclePanel = new NewObstaclePanel(nextBranch);
+		}
+		else
+		{
+			obstaclePanel = new OldOrNewPanel<Token>(OptionContentType.OBSTACLE, nextBranch);
+		}
+		
+		fieldPanels.add(obstaclePanel);
+		
+		ArrayList<ExitPoint> exitPoints = currentScenario.getExitPointsAtBranchLevel(nextBranch);	
+		FieldPanel<ExitPoint> goodExitPointPanel;
+		FieldPanel<ExitPoint> badExitPointPanel;
+		
+		if (exitPoints == null)	
+		{
+			goodExitPointPanel = new GoodExitPointPanel(nextBranch);
+			badExitPointPanel = new BadExitPointPanel(nextBranch);
+		}
+		else
+		{
+			goodExitPointPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.GOODEXITPOINT, nextBranch);
+			badExitPointPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.BADEXITPOINT, nextBranch);
+		}
+
+		fieldPanels.add(goodExitPointPanel);
+		fieldPanels.add(badExitPointPanel);
+		
+		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, fieldPanels);
+		Main.showWindowInCentre(newBranchDialog);
+		
+		this.obstacle = currentScenario.getTokenID(obstaclePanel.getResult());
+		this.goodExitPoint = currentScenario.getExitPointID(goodExitPointPanel.getResult());
+		this.badExitPoint = currentScenario.getExitPointID(badExitPointPanel.getResult());
+		
+		if (editorDialog.getHeldTokens().contains(this.obstacle))
+			return this.getGoodExitPoint();
+		else
+			return this.getBadExitPoint();
+	}
+	
 	public JsonObjectBuilder getJsonObjectBuilder()
 	{
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
 		jsonObjectBuilder.add(Main.BRANCH_LEVEL, this.branchLevel);
 		if (this.defaultExitPoint != null)
 			jsonObjectBuilder.add(Main.EXITPOINT, this.defaultExitPoint);
+		if (this.goodExitPoint != null)
+			jsonObjectBuilder.add(Main.GOOD_EXITPOINT, this.goodExitPoint);
+		if (this.badExitPoint != null)
+			jsonObjectBuilder.add(Main.BAD_EXITPOINT, this.badExitPoint);
+		if (this.obstacle != null)
+			jsonObjectBuilder.add(Main.OBSTACLE, this.obstacle);
 		return jsonObjectBuilder;
 	}
 	
@@ -155,7 +218,10 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 			
 			if (this.counter == Main.getMainScenario().getBranchLength())
 			{
-				return Branch.this.getDefaultExitPoint(editorDialog);
+				ExitPoint newExitPoint = editorDialog.exitPointFromExitable(Branch.this);
+				if (newExitPoint == null)
+					newExitPoint = Branch.this.createNewBranchConclusion(editorDialog);
+				return newExitPoint;
 			}
 			
 			counter++;
@@ -304,5 +370,11 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		public void setCurrentSubplot(Subplot currentSubplot) {
 			this.currentSubplot = currentSubplot;
 		}
+	}
+
+	@Override
+	public Integer getObstacle()
+	{
+		return this.obstacle;
 	}
 }

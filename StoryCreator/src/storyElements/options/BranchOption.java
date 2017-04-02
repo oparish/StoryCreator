@@ -8,11 +8,12 @@ import javax.json.JsonObjectBuilder;
 
 import main.Main;
 import storyElements.ExitPoint;
+import storyElements.Exitable;
 import storyElements.Scenario;
 import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Subplot;
 
-public class BranchOption extends Option
+public class BranchOption extends Option implements Exitable
 {	
 	public Subplot getSubPlot()
 	{
@@ -54,11 +55,11 @@ public class BranchOption extends Option
 		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.EXITPOINT));
 	}
 	
-	public ExitPoint getGoodExitPointID() {
+	public ExitPoint getGoodExitPoint() {
 		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.GOODEXITPOINT));
 	}
 
-	public ExitPoint getBadExitPointID() {
+	public ExitPoint getBadExitPoint() {
 		return Main.getMainScenario().getExitPoint(this.contentIntegerMap.get(OptionContentType.BADEXITPOINT));
 	}
 }

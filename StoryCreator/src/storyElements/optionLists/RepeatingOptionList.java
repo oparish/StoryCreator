@@ -34,7 +34,4 @@ public abstract class RepeatingOptionList<T extends Option> extends OptionList<T
 	{
 		super(initialOptions);
 	}
-	
-	protected abstract StoryElement getDefaultExitPoint(EditorDialog editorDialog);
-	
 }
