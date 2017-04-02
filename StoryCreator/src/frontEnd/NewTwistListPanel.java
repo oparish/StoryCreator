@@ -10,7 +10,7 @@ import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import frontEnd.fieldPanel.FieldPanel;
 
-public class NewTwistListPanel extends MyOptionListPanel
+public class NewTwistListPanel extends MyOptionListPanel<TwistList>
 {
 	private static final String TWIST_LIST_DESCRIPTION = "Twist List Description";
 	private JTextField descriptionField;

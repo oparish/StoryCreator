@@ -2,8 +2,11 @@ package storyElements.options;
 
 import com.sun.media.jfxmedia.events.NewFrameEvent;
 
+import frontEnd.fieldPanel.BadExitPointPanel;
+import frontEnd.fieldPanel.ExitPointPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.FlavourListPanel;
+import frontEnd.fieldPanel.GoodExitPointPanel;
 import frontEnd.fieldPanel.NewBadBranchPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
 import frontEnd.fieldPanel.NewEndingPanel;
@@ -17,9 +20,9 @@ public enum OptionContentType
 {
 	FLAVOURLIST(Main.FLAVOURLIST, Integer.class, FlavourListPanel.class),
 	TOKEN(Main.TOKEN, Integer.class, NewTokenPanel.class), OBSTACLE(Main.OBSTACLE, Integer.class, NewObstaclePanel.class),
-	EXITPOINT(Main.EXITPOINT, Integer.class, NewBranchPanel.class), 
-	GOODEXITPOINT(Main.EXITPOINT, Integer.class, NewGoodBranchPanel.class),
-	BADEXITPOINT(Main.EXITPOINT, Integer.class, NewBadBranchPanel.class),
+	EXITPOINT(Main.EXITPOINT, Integer.class, ExitPointPanel.class), 
+	GOODEXITPOINT(Main.EXITPOINT, Integer.class, GoodExitPointPanel.class),
+	BADEXITPOINT(Main.EXITPOINT, Integer.class, BadExitPointPanel.class),
 	SUBPLOT(Main.SUBPLOT, Integer.class, null); 
 	
 	String identifier;

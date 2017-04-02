@@ -10,10 +10,4 @@ public class NewBadEndingPanel extends AbstractEndingPanel
 		super(branchLevel, Main.getMainSpice().getBadSuggestion());
 		this.heading = "New Bad Ending";
 	}
-
-	@Override
-	public OptionContentType getOptionContentType()
-	{
-		return OptionContentType.BADEXITPOINT;
-	}
 }

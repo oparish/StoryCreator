@@ -10,10 +10,4 @@ public class NewBadBranchPanel extends AbstractBranchPanel
 		super(branchLevel, Main.getMainSpice().getBadSuggestion());
 		this.heading = "New Bad Branch";
 	}
-	
-	@Override
-	public OptionContentType getOptionContentType()
-	{
-		return OptionContentType.BADEXITPOINT;
-	}
 }

@@ -24,7 +24,7 @@ import storyElements.options.Option;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 
-public class NewOptionPanel extends MyPanel
+public class NewOptionPanel extends MyPanel<BranchOption>
 {	
 	private static final String DESCRIPTION = "Description";
 	

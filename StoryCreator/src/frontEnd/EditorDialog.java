@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import frontEnd.fieldPanel.ExitPointPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
 import storyElements.ExitPoint;
@@ -102,7 +103,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		
 		if (scenario.getCurrentBranch() == null)
 		{
-			Branch currentBranch = this.setupStartingBranch(startingLevel);
+			Branch currentBranch = (Branch) this.setupStartingBranch(startingLevel);
 			scenario.setCurrentBranch(currentBranch);
 			scenario.getExitPointID(currentBranch);
 		}
@@ -371,23 +372,23 @@ public class EditorDialog extends JFrame implements ActionListener
 		return this.mainGenerator;
 	}
 	
-	private Branch setupStartingBranch(int startingLevel)
+	private ExitPoint setupStartingBranch(int startingLevel)
 	{
 		Scenario currentScenario = Main.getMainScenario();
-		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel(startingLevel);
+		FieldPanel<ExitPoint> fieldPanel;
+		ExitPointPanel exitPointPanel = new ExitPointPanel(startingLevel);
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getExitPointsAtBranchLevel(startingLevel);
 		
 		if (exitPoints == null)	
-			fieldPanel = newBranchPanel;
+			fieldPanel = exitPointPanel;
 		else
-			fieldPanel = new OldOrNewPanel<Branch>(OptionContentType.EXITPOINT, startingLevel);
+			fieldPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.EXITPOINT, startingLevel);
 		
 		FieldDialog newBranchDialog = new FieldDialog(this, true, new FieldPanel[]{fieldPanel});
 		Main.showWindowInCentre(newBranchDialog);
-		Branch newBranch = fieldPanel.getResult();
-		return newBranch; 
+		ExitPoint exitPoint = fieldPanel.getResult();
+		return exitPoint; 
 	}
 	
 	private void saveStoryToFile()

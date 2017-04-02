@@ -2,10 +2,11 @@ package frontEnd.fieldPanel;
 
 import javax.swing.JTextField;
 
+import frontEnd.MyPanel;
 import main.Main;
 import storyElements.options.EndingOption;
 
-public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOption>
+public abstract class AbstractEndingPanel extends MyPanel<EndingOption>
 {
 	private static final String ENDING = "Ending";
 	
@@ -13,8 +14,7 @@ public abstract class AbstractEndingPanel extends NewStoryElementPanel<EndingOpt
 	
 	public AbstractEndingPanel(int branchLevel, String suggestion)
 	{
-		super(branchLevel);
-		this.suggestion = suggestion;
+		super();
 		this.endingField = new JTextField();
 		this.addTextField(this.endingField, ENDING);	
 	}

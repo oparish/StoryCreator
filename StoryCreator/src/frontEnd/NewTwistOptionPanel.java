@@ -9,7 +9,7 @@ import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
 import storyElements.options.TwistOption;
 
-public class NewTwistOptionPanel extends MyPanel
+public class NewTwistOptionPanel extends MyPanel<TwistOption>
 {
 	private static final String DESCRIPTION = "Description";
 	

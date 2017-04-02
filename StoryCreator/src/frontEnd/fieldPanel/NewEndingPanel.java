@@ -17,9 +17,4 @@ public class NewEndingPanel extends AbstractEndingPanel
 		this.heading = "New Ending";
 	}
 
-	@Override
-	public OptionContentType getOptionContentType()
-	{
-		return OptionContentType.EXITPOINT;
-	}
 }

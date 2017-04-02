@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-public abstract class MyPanel extends JPanel
+public abstract class MyPanel<T> extends JPanel
 {
 	private int yPos = 0;
 	protected String heading;
@@ -70,4 +70,6 @@ public abstract class MyPanel extends JPanel
 		gridBagConstraints.insets = new Insets(3, 3, 3, 3);
 		return gridBagConstraints;
 	}
+	
+	public abstract T getResult();
 }

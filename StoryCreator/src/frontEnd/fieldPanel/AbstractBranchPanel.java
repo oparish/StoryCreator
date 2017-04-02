@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
+import frontEnd.MyPanel;
 import main.Main;
 import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
 
-public abstract class AbstractBranchPanel extends NewStoryElementPanel<Branch>
+public abstract class AbstractBranchPanel extends MyPanel<Branch>
 {
 	private static final String BRANCH_DESCRIPTION = "Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
@@ -19,8 +20,7 @@ public abstract class AbstractBranchPanel extends NewStoryElementPanel<Branch>
 	
 	public AbstractBranchPanel(int branchLevel, String suggestion)
 	{
-		super(branchLevel);
-		this.suggestion = suggestion;
+		super();
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		

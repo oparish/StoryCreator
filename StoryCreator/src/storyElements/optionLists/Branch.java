@@ -14,8 +14,11 @@ import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.MyPanel;
 import frontEnd.OldOrNewPanel;
+import frontEnd.fieldPanel.BadExitPointPanel;
+import frontEnd.fieldPanel.ExitPointPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.FlavourListPanel;
+import frontEnd.fieldPanel.GoodExitPointPanel;
 import frontEnd.fieldPanel.NewBadBranchPanel;
 import frontEnd.fieldPanel.NewBadEndingPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
@@ -91,40 +94,25 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 	private ExitPoint createDefaultExitPoint(EditorDialog editorDialog)
 	{
 		Scenario scenario = Main.getMainScenario();
-		if (scenario.checkLastBranch())
-			return this.createDefaultEndingOption(editorDialog);
-		else
-			return this.createBranch(editorDialog);
-	}
-	
-	private ExitPoint createDefaultEndingOption(EditorDialog editorDialog)
-	{
-		NewEndingPanel newEndingPanel = new NewEndingPanel(Main.getMainScenario().getNextBranch());
-		FieldDialog newEndingDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{newEndingPanel});
-		newEndingDialog.setTitle("New Ending");
-		Main.showWindowInCentre(newEndingDialog);
-		Scenario currentScenario = Main.getMainScenario();
-		EndingOption endingOption = newEndingPanel.getResult();
-		this.defaultExitPoint = currentScenario.getExitPointID(endingOption);
-		return endingOption;
+		return this.createBranch(editorDialog);
 	}
 	
 	private ExitPoint createBranch(EditorDialog editorDialog)
 	{
 		Scenario currentScenario = Main.getMainScenario();
-		FieldPanel<Branch> fieldPanel;
-		NewBranchPanel newBranchPanel = new NewBranchPanel(currentScenario.getNextBranch());
+		FieldPanel<ExitPoint> fieldPanel;
+		ExitPointPanel newExitPointPanel = new ExitPointPanel(currentScenario.getNextBranch());
 		
 		ArrayList<ExitPoint> exitPoints = currentScenario.getExitPointsAtBranchLevel(currentScenario.getNextBranch());
 		
 		if (exitPoints == null)	
-			fieldPanel = newBranchPanel;
+			fieldPanel = newExitPointPanel;
 		else
-			fieldPanel = new OldOrNewPanel<Branch>(OptionContentType.EXITPOINT, currentScenario.getNextBranch());
+			fieldPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.EXITPOINT, currentScenario.getNextBranch());
 		
 		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{fieldPanel});
 		Main.showWindowInCentre(newBranchDialog);
-		Branch newBranch = fieldPanel.getResult();
+		ExitPoint newBranch = fieldPanel.getResult();
 		this.defaultExitPoint = currentScenario.getExitPointID(newBranch);
 		return newBranch; 
 	}
@@ -186,13 +174,9 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		private FieldPanel<? extends ExitPoint> getExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
 		{
 			FieldPanel<? extends ExitPoint> exitPointPanel;
-			if (isLastBranch)
+			if (exitPointsAtLevel == null)
 			{
-				exitPointPanel = new NewEndingPanel(Main.getMainScenario().getNextBranch());
-			}
-			else if (exitPointsAtLevel == null)
-			{
-				exitPointPanel = new NewBranchPanel(Main.getMainScenario().getNextBranch());
+				exitPointPanel = new ExitPointPanel(Main.getMainScenario().getNextBranch());
 			}
 			else
 			{
@@ -250,13 +234,9 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		private FieldPanel<? extends ExitPoint> getGoodExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
 		{
 			FieldPanel<? extends ExitPoint> goodExitPointPanel;
-			if (isLastBranch)
+			if (exitPointsAtLevel == null)
 			{
-				goodExitPointPanel = new NewGoodEndingPanel(Main.getMainScenario().getNextBranch());
-			}
-			else if (exitPointsAtLevel == null)
-			{
-				goodExitPointPanel = new NewGoodBranchPanel(Main.getMainScenario().getNextBranch());
+				goodExitPointPanel = new GoodExitPointPanel(Main.getMainScenario().getNextBranch());
 			}
 			else
 			{
@@ -268,13 +248,9 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint
 		private FieldPanel<? extends ExitPoint> getBadExitPointPanel(boolean isLastBranch, ArrayList<ExitPoint> exitPointsAtLevel)
 		{
 			FieldPanel<? extends ExitPoint> badExitPointPanel;
-			if (isLastBranch)
+			if (exitPointsAtLevel == null)
 			{
-				badExitPointPanel = new NewBadEndingPanel(Main.getMainScenario().getNextBranch());
-			}
-			else if (exitPointsAtLevel == null)
-			{
-				badExitPointPanel = new NewBadBranchPanel(Main.getMainScenario().getNextBranch());
+				badExitPointPanel = new BadExitPointPanel(Main.getMainScenario().getNextBranch());
 			}
 			else
 			{

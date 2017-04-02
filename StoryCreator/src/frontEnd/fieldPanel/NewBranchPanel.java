@@ -20,10 +20,4 @@ public class NewBranchPanel extends AbstractBranchPanel
 		super(branchLevel, Main.getMainSpice().getSuggestion());
 		this.heading = "New Branch";
 	}
-	
-	@Override
-	public OptionContentType getOptionContentType()
-	{
-		return OptionContentType.EXITPOINT;
-	}
 }

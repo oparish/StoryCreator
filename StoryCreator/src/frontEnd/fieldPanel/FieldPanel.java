@@ -16,7 +16,7 @@ import frontEnd.StoryElementList;
 import storyElements.options.OptionContentType;
 import storyElements.options.StoryElement;
 
-public abstract class FieldPanel<T extends StoryElement> extends MyPanel
+public abstract class FieldPanel<T extends StoryElement> extends MyPanel<T>
 {
 	protected int branchLevel;
 

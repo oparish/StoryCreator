@@ -10,10 +10,5 @@ public class NewGoodBranchPanel extends AbstractBranchPanel
 		super(branchLevel, Main.getMainSpice().getGoodSuggestion());
 		this.heading = "New Good Branch";
 	}
-	
-	@Override
-	public OptionContentType getOptionContentType()
-	{
-		return OptionContentType.GOODEXITPOINT;
-	}
+
 }
