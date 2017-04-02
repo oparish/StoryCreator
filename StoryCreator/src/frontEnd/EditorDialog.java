@@ -81,7 +81,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		super();
 		
 		Scenario scenario = Main.getMainScenario();
-		scenario.incrementBranchCounter();
 		
 		this.addWindowListener(new WindowAdapter() {  
             public void windowClosing(WindowEvent e) {  
@@ -108,7 +107,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			scenario.setCurrentBranch(currentBranch);
 			scenario.getExitPointID(currentBranch);
 		}
-		
+		scenario.incrementBranchCounter();
 		this.updateDisplay();
 	}
 	
