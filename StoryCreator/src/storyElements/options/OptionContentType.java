@@ -40,7 +40,7 @@ public enum OptionContentType
 	public Class<? extends FieldPanel> getFieldPanelClass() {
 		return fieldPanelClass;
 	}
-
+	
 	private OptionContentType(String identifier, Class objectClass, Class<? extends FieldPanel> fieldPanelClass)
 	{
 		this.identifier = identifier;
