@@ -169,7 +169,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.goodExitPoint = currentScenario.getExitPointID(goodExitPointPanel.getResult());
 		this.badExitPoint = currentScenario.getExitPointID(badExitPointPanel.getResult());
 		
-		if (editorDialog.getHeldTokens().contains(this.obstacle))
+		if (editorDialog.getHeldTokens().contains(obstaclePanel.getResult()))
 			return this.getGoodExitPoint();
 		else
 			return this.getBadExitPoint();
