@@ -174,6 +174,14 @@ public class Scenario implements JsonStructure, StoryElement
 		this.optionHasObstacle = optionHasObstacle;
 	}
 
+	public boolean pastScenarioMidPoint()
+	{
+		double midPoint = (double)this.scenarioLength/(double)2;
+		if ((double)this.currentBranch.getBranchLevel()< midPoint)
+			return false;
+		else
+			return true;
+	}
 	
 	public ArrayList<ExitPoint> getExitPointsAtBranchLevel(int branchLevel)
 	{
@@ -397,6 +405,7 @@ public class Scenario implements JsonStructure, StoryElement
 	
 	public static void main(String[] args)
 	{
+		
 //		ArrayList<BranchOption> branchOptions1 = new ArrayList<BranchOption>();
 //		branchOptions1.add(new BranchOption("One"));
 //		branchOptions1.add(new BranchOption("Two"));
