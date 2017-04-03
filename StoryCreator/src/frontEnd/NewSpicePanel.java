@@ -22,13 +22,13 @@ public class NewSpicePanel extends MyPanel<Spice>
 	ArrayList<JTextField> goodSuggestionFields;
 	ArrayList<JTextField> badSuggestionFields;
 	
-	public NewSpicePanel()
+	public NewSpicePanel(int initialTwists)
 	{
 		super();
 		this.heading = "New Spice";
 
 		this.newTwistListPanels = new ArrayList<NewTwistListPanel>();
-		for (int i = 0; i < Main.INITIALTWISTS_FOR_SPICE; i++)
+		for (int i = 0; i < initialTwists; i++)
 		{
 			NewTwistListPanel twistListPanel = new NewTwistListPanel();
 			newTwistListPanels.add(twistListPanel);
