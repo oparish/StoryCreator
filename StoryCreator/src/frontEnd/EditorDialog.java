@@ -249,8 +249,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	}
 	
 	public void reachEnding(EndingOption ending)
-	{
-		this.updateTechInfo("\r\nEnding: " + ending.getDescription());
+	{	
 		this.progressButton.setEnabled(false);
 		this.currentOption = ending;
 		this.updateDisplay();
@@ -267,9 +266,17 @@ public class EditorDialog extends JFrame implements ActionListener
 		if (this.nextExitPoint != null)
 		{
 			if (this.nextExitPoint instanceof EndingOption)
-				this.reachEnding((EndingOption) this.nextExitPoint);
+			{
+				EndingOption ending = (EndingOption) this.nextExitPoint;
+				this.reachEnding(ending);
+				this.updateTechInfo("\r\nEnding: " + ending.getDescription());
+			}
 			else
+			{
+				Branch branch = (Branch) this.nextExitPoint;
 				this.startNewBranch((Branch) this.nextExitPoint);
+				this.updateTechInfo("\r\nNew Branch: " + branch.getDescription());
+			}
 			this.nextExitPoint = null;
 		}
 		else
@@ -278,11 +285,23 @@ public class EditorDialog extends JFrame implements ActionListener
 			StoryElement storyElement = generator.generateStoryElement(this);
 			
 			if (storyElement instanceof EndingOption)
-				this.reachEnding((EndingOption) storyElement);
+			{
+				EndingOption ending = (EndingOption) storyElement;
+				this.reachEnding(ending);
+				this.updateTechInfo("\r\nEnding: " + ending.getDescription());
+			}
 			else if (storyElement instanceof Option)
-				this.setOption((Option) storyElement);
+			{
+				Option option = (Option) storyElement;
+				this.setOption(option);
+				this.updateTechInfo("\r\n" + option.getDescription());
+			}
 			else
-				this.startNewBranch((Branch) storyElement);
+			{
+				Branch branch = (Branch) storyElement;
+				this.startNewBranch(branch);
+				this.updateTechInfo("\r\nNew Branch: " + branch.getDescription());
+			}
 		}
 	}
 	
@@ -321,7 +340,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		}
 
 		this.currentOption = option;
-		this.updateTechInfo("\r\n" + option.getDescription());
 		this.updateDisplay();
 	}
 	
@@ -371,7 +389,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		Scenario scenario = Main.getMainScenario();
 		scenario.incrementBranchCounter();
 		scenario.setCurrentBranch(branch);
-		this.updateTechInfo("\r\nNew Branch: " + branch.getDescription());
 		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
