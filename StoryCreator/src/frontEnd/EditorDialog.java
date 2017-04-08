@@ -61,6 +61,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JEditorPane editorPanel;
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
+	private JTextArea infoPanel2;
 	
 	private ArrayList<TwistOption> twistOptions;
 	private Option currentOption;
@@ -192,9 +193,12 @@ public class EditorDialog extends JFrame implements ActionListener
 	{		
 		this.infoPanel = new JTextArea();
 		this.infoPanel.setEditable(false);
+		this.infoPanel2 = new JTextArea();
+		this.infoPanel2.setEditable(false);
 		JPanel rightPanel = new JPanel();
-		rightPanel.setLayout(new GridLayout(2, 1));
+		rightPanel.setLayout(new GridLayout(3, 1));
 		rightPanel.add(new JScrollPane(this.infoPanel));
+		rightPanel.add(new JScrollPane(this.infoPanel2));
 		rightPanel.add(this.setupButtonPanel());
 		return rightPanel;
 	}
@@ -246,10 +250,16 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	public void reachEnding(EndingOption ending)
 	{
-		this.techBuilder.append("\r\nEnding: " + ending.getDescription());
+		this.updateTechInfo("\r\nEnding: " + ending.getDescription());
 		this.progressButton.setEnabled(false);
 		this.currentOption = ending;
 		this.updateDisplay();
+	}
+	
+	private void updateTechInfo(String info)
+	{
+		this.techBuilder.append(info);
+		this.infoPanel2.setText(this.techBuilder.toString());
 	}
 	
 	private void generate()
@@ -311,7 +321,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		}
 
 		this.currentOption = option;
-		this.techBuilder.append("\r\n" + option.getDescription());
+		this.updateTechInfo("\r\n" + option.getDescription());
 		this.updateDisplay();
 	}
 	
@@ -361,7 +371,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		Scenario scenario = Main.getMainScenario();
 		scenario.incrementBranchCounter();
 		scenario.setCurrentBranch(branch);
-		this.techBuilder.append("\r\nNew Branch: " + branch.getDescription());
+		this.updateTechInfo("\r\nNew Branch: " + branch.getDescription());
 		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
