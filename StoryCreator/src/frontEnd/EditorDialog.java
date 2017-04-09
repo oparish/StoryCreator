@@ -56,8 +56,6 @@ public class EditorDialog extends JFrame implements ActionListener
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
 	
-	private static final int INITIALOPTIONNUMBER = 3;
-	
 	private JEditorPane editorPanel;
 	private JTextArea displayPanel;
 	private JTextArea infoPanel;
@@ -303,6 +301,7 @@ public class EditorDialog extends JFrame implements ActionListener
 				this.updateTechInfo("\r\nNew Branch: " + branch.getDescription());
 			}
 		}
+		this.updateTechInfo("\r\n");
 	}
 	
 	private void setOption(Option option)
@@ -316,6 +315,7 @@ public class EditorDialog extends JFrame implements ActionListener
 				Token token = scenario.getTokenByID(branchOption.getToken());
 				if (!this.heldTokens.contains(token))
 				{
+					this.updateTechInfo("\r\nReceived token:" + token.getDescription());
 					this.heldTokens.add(token);
 					this.unheldTokens.remove(token);
 				}
@@ -325,6 +325,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			if (flavourList != null)
 			{
 				this.flavour = flavourList.getFlavour();
+				this.updateTechInfo("\r\nFlavour:" + this.flavour.getDescription());
 			}
 			else
 			{
@@ -349,10 +350,17 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			Token obstacle = Main.getMainScenario().getTokenByID(exitable.getObstacle());
 			this.currentObstacle = obstacle;
+			this.updateTechInfo("\r\nObstacle: " + obstacle.getDescription());
 			if (this.heldTokens.contains(obstacle))
+			{
+				this.updateTechInfo("\r\nPassed obstacle.");
 				return exitable.getGoodExitPoint();
+			}
 			else
+			{
+				this.updateTechInfo("\r\nFailed obstacle.");
 				return exitable.getBadExitPoint();
+			}
 		}
 		else
 		{
