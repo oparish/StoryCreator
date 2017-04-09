@@ -317,23 +317,14 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			Scenario currentScenario = Main.getMainScenario();
 			
 			boolean becomesExitPoint = currentScenario.getOptionBecomesNewExitPoint().check();
-			boolean isLastBranch = currentScenario.checkLastBranch();
-			boolean hasObstacle = currentScenario.getOptionHasObstacle().check();
-			boolean hasToken = currentScenario.getOptionHasToken().check();
+			boolean hasObstacle = currentScenario.pastScenarioMidPoint() && currentScenario.getOptionHasObstacle().check();
+			boolean hasToken = !currentScenario.pastScenarioMidPoint() && currentScenario.getOptionHasToken().check();
 
 			ArrayList<ExitPoint> exitPointsAtLevel = currentScenario.getExitPointsAtBranchLevel(currentScenario.getNextBranch());
 			HashMap<Integer, FlavourList> flavourLists = currentScenario.getFlavourLists();
 			
 			ArrayList<FieldPanel> fieldPanels = new ArrayList<FieldPanel>();
 			NewOptionPanel newOptionPanel = new NewOptionPanel(Branch.this);
-			
-			if (hasToken && hasObstacle)
-			{
-				if (currentScenario.pastScenarioMidPoint())
-					hasToken = false;
-				else
-					hasObstacle = false;
-			}
 			
 			if (becomesExitPoint && !hasObstacle)
 			{
