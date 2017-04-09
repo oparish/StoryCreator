@@ -253,7 +253,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.updateDisplay();
 	}
 	
-	private void updateTechInfo(String info)
+	public void updateTechInfo(String info)
 	{
 		this.techBuilder.append(info);
 		this.infoPanel2.setText(this.techBuilder.toString());
