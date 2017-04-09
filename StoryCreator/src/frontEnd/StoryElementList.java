@@ -10,22 +10,32 @@ import java.util.Map.Entry;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 
 import storyElements.options.StoryElement;
 
-public class StoryElementList<T extends StoryElement> extends JList<T>
+public class StoryElementList<T extends StoryElement> extends JScrollPane
 {
-	public StoryElementList(DefaultListModel<T> model)
+	private JList<T> innerList;
+	
+	public StoryElementList(JList<T> innerList)
 	{
-		super(model);
-		this.setCellRenderer(new StoryElementListCellRenderer());
+		super(innerList);
+		this.innerList = innerList;
+		this.innerList.setCellRenderer(new StoryElementListCellRenderer());
+		this.getViewport().setView(this.innerList);
+	}
+	
+	public ListModel<T> getModel()
+	{
+		return this.innerList.getModel();
 	}
 	
 	public T getSelectedElement()
 	{
-		return this.getSelectedValue();
+		return this.innerList.getSelectedValue();
 	}
 	
 	private class StoryElementListCellRenderer implements ListCellRenderer<StoryElement>
@@ -57,6 +67,6 @@ public class StoryElementList<T extends StoryElement> extends JList<T>
 		{
 			model.addElement(storyElement);
 		}
-		return new StoryElementList(model);
+		return new StoryElementList(new JList<StoryElement>(model));
 	}
 }
