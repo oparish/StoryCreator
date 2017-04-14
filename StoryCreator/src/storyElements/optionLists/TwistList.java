@@ -15,7 +15,7 @@ import storyElements.options.TwistOption;
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.MyPanel;
-import frontEnd.NewTwistOptionPanel;
+import frontEnd.TwistOptionPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewOptionPanel;
 import main.Main;
@@ -27,33 +27,14 @@ public class TwistList extends NonRepeatingOptionList implements StoryElement
 	
 	public TwistList(ArrayList<TwistOption> initialOptions, String description)
 	{
-		super(initialOptions);
+		super(initialOptions, TwistOptionPanel.class);
 		this.description = description;
 	}
 	
 	public TwistList(String description)
 	{
-		super();
+		super(TwistOptionPanel.class);
 		this.description = description;
-	}
-	
-	public Option generateOption(EditorDialog editorDialog)
-	{
-		int rnd = Main.getRandomNumberInRange(this.size() + 1);
-		if (rnd < this.size())
-		{
-			return (Option) this.get(rnd);
-		}
-		else
-		{
-			NewTwistOptionPanel newTwistOptionPanel = new NewTwistOptionPanel(this);
-			FieldDialog newTwistOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{newTwistOptionPanel});
-			newTwistOptionDialog.setTitle("New " + this.type);
-			Main.showWindowInCentre(newTwistOptionDialog);
-        	TwistOption twistOption = newTwistOptionPanel.getResult();
-        	TwistList.this.add(twistOption);
-            return twistOption;
-        }  
 	}
 
 	@Override

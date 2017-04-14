@@ -2,6 +2,7 @@ package storyElements.optionLists;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.json.JsonObject;
@@ -19,33 +20,45 @@ import storyElements.options.Option;
 public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 
 	protected String type = "Option";
+	private Class panelClass;
 	
-	public NonRepeatingOptionList(ArrayList<T> initialOptions)
+	public NonRepeatingOptionList(ArrayList<T> initialOptions, Class panelClass)
 	{
 		super(initialOptions);
+		this.panelClass = panelClass;
 	}
 	
-	public NonRepeatingOptionList()
+	public NonRepeatingOptionList(Class panelClass)
 	{
 		super();
+		this.panelClass = panelClass;
 	}
 		
-	public Option generateOption(EditorDialog editorDialog)
+	public T generateOption(EditorDialog editorDialog)
 	{
 		int rnd = Main.getRandomNumberInRange(this.size() + 1);
 		if (rnd < this.size())
 		{
-			return this.get(rnd);
+			return (T) this.get(rnd);
 		}
 		else
 		{
-			NewOptionPanel newOptionPanel = new NewOptionPanel(this);
-			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{newOptionPanel});
-			newOptionDialog.setTitle("New " + this.type);
-			Main.showWindowInCentre(newOptionDialog);
-        	BranchOption branchOption = newOptionPanel.getResult();
-            NonRepeatingOptionList.this.add(branchOption);
-            return branchOption;
+			MyPanel<T> panel;
+			try {
+				panel = (MyPanel<T>) this.panelClass.getConstructor(this.getClass()).newInstance(this);
+				FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, 
+						new MyPanel[]{panel});
+				newOptionDialog.setTitle("New " + this.type);
+				Main.showWindowInCentre(newOptionDialog);
+	        	T option = panel.getResult();
+	            NonRepeatingOptionList.this.add(option);
+	            return option;
+			}catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
 		}	
 	}
 	

@@ -324,7 +324,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			FlavourList flavourList = branchOption.getFlavourList();
 			if (flavourList != null)
 			{
-				this.flavour = flavourList.getFlavour();
+				this.flavour = flavourList.generateOption(this);
 				this.updateTechInfo("\r\nFlavour:" + this.flavour.getDescription());
 			}
 			else

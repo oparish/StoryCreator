@@ -8,6 +8,11 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import frontEnd.EditorDialog;
+import frontEnd.FieldDialog;
+import frontEnd.FlavourOptionPanel;
+import frontEnd.MyPanel;
+import frontEnd.fieldPanel.NewOptionPanel;
 import main.Main;
 import storyElements.options.BranchOption;
 import storyElements.options.FlavourOption;
@@ -22,13 +27,13 @@ public class FlavourList extends NonRepeatingOptionList<FlavourOption> implement
 	
 	public FlavourList(ArrayList<FlavourOption> initialOptions, String description)
 	{
-		super(initialOptions);
+		super(initialOptions, FlavourOptionPanel.class);
 		this.description = description;
 	}
 	
 	public FlavourList(JsonObject jsonObject)
 	{
-		super();
+		super(FlavourOptionPanel.class);
 		for (JsonValue optionJson : jsonObject.getJsonArray(Main.OPTIONS))
 		{
 			this.add(new FlavourOption((JsonObject) optionJson));
@@ -48,10 +53,4 @@ public class FlavourList extends NonRepeatingOptionList<FlavourOption> implement
 	{
 		return this.description;
 	}
-	
-	public FlavourOption getFlavour()
-	{
-		return (FlavourOption) this.get(Main.getRandomNumberInRange(this.size()));
-	}
-	
 }

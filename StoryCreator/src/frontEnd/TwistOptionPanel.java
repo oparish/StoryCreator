@@ -9,19 +9,19 @@ import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
 import storyElements.options.TwistOption;
 
-public class NewTwistOptionPanel extends MyPanel<TwistOption>
+public class TwistOptionPanel extends MyPanel<TwistOption>
 {
 	private static final String DESCRIPTION = "Description";
 	
 	private JTextField descriptionField;
 
-	public NewTwistOptionPanel(TwistList twistOptions)
+	public TwistOptionPanel(TwistList twistList)
 	{
 		super();
 		this.heading = "Twist Option";
-		this.addJLabel(twistOptions.getDescription());
+		this.addJLabel(twistList.getDescription());
 		this.descriptionField = new JTextField();
-		this.addStoryElementList(StoryElementList.create(twistOptions));
+		this.addStoryElementList(StoryElementList.create(twistList));
 		this.addTextField(this.descriptionField, DESCRIPTION);	
 	}
 	
