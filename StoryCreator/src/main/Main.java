@@ -47,6 +47,9 @@ public class Main
 	public static final int DEFAULTBRANCHLENGTH = 3;
 	public static final int DEFAULTSUBPLOTLENGTH = 2;
 	public static final int DEFAULTSCENARIOLENGTH = 3;
+	public static final int DEFAULTSUDDENENDING_CHANCE = 10;
+	public static final int DEFAULTOPENINGCHANCE = 50;
+	public static final int DEFAULT_MINIMUM_SCENARIO_LENGTH = 2;
 	
 	public static final String BRANCH = "branch";
 	public static final String ENDINGOPTION = "endingoption";
@@ -78,6 +81,8 @@ public class Main
 	public static final String TOKEN = "token";
 	public static final String OBSTACLE = "obstacle";
 	public static final String OPENINGCHANCE = "openingchance";
+	public static final String SUDDENENDING_CHANCE = "suddenendingchance";
+	public static final String MINIMUM_SCENARIO_LENGTH = "minimumscenariolength";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;

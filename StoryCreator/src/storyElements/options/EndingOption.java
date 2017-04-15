@@ -26,7 +26,7 @@ public class EndingOption extends Option implements ExitPoint
 	public JsonObjectBuilder getJsonObjectBuilder()
 	{
 		JsonObjectBuilder jsonObjectBuilder = super.getJsonObjectBuilder();
-		jsonObjectBuilder.add(Main.BRANCH_LEVEL, Main.getMainScenario().getScenarioLength());
+		jsonObjectBuilder.add(Main.BRANCH_LEVEL, Main.getMainScenario().getMaximumScenarioLength());
 		return jsonObjectBuilder;
 	}
 }

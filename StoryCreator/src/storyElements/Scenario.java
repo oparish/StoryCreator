@@ -44,10 +44,12 @@ public class Scenario implements JsonStructure, StoryElement
 	Chance optionHasObstacle = null;
 	Chance optionHasToken = null;
 	Chance branchHasOpening = null;
+	Chance suddenEnding = null;
 
 	int branchLength;
 	int subplotLength;
-	int scenarioLength;
+	int maximumScenarioLength;
+	int minimumScenarioLength;
 
 	String description;
 
@@ -58,7 +60,7 @@ public class Scenario implements JsonStructure, StoryElement
 		exitPoints.put(0, this.currentBranch);
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
-		this.scenarioLength = scenarioLength;
+		this.maximumScenarioLength = scenarioLength;
 	}
 	
 	public Scenario(JsonObject jsonObject)
@@ -66,13 +68,16 @@ public class Scenario implements JsonStructure, StoryElement
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLength = Main.processJsonInt(jsonObject, Main.BRANCH_LENGTH);
 		this.subplotLength = Main.processJsonInt(jsonObject, Main.SUBPLOT_LENGTH);
-		this.scenarioLength = Main.processJsonInt(jsonObject, Main.SCENARIO_LENGTH);
+		this.maximumScenarioLength = Main.processJsonInt(jsonObject, Main.SCENARIO_LENGTH);
 		Integer optionBecomesSubplotProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_SUBPLOT);
 		Integer optionBecomesNewExitPointProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_EXITPOINT);
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
 		Integer optionHasObstacle = Main.processJsonInt(jsonObject, Main.OPTION_HAS_OBSTACLE);
 		Integer optionHasToken = Main.processJsonInt(jsonObject, Main.OPTION_HAS_TOKEN);
 		Integer openingChance = Main.processJsonInt(jsonObject, Main.OPENINGCHANCE);
+		Integer suddenEndingChance = Main.processJsonInt(jsonObject, Main.SUDDENENDING_CHANCE);
+		Integer minimumScenarioLength = Main.processJsonInt(jsonObject, Main.MINIMUM_SCENARIO_LENGTH);
+		
 		if (optionBecomesSubplotProb != null)
 			this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
 		if (optionBecomesNewExitPointProb != null)
@@ -85,12 +90,16 @@ public class Scenario implements JsonStructure, StoryElement
 			this.optionHasToken = new Chance(optionHasToken);
 		if (openingChance != null)
 			this.branchHasOpening = new Chance(openingChance);
+		if (openingChance != null)
+			this.suddenEnding = new Chance(suddenEndingChance);
+		
+		this.minimumScenarioLength = minimumScenarioLength;
 		
 		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
 		{
 			JsonObject exitPointObject = (JsonObject) entry.getValue();
-			ExitPoint exitPoint = Main.getFromJson(exitPointObject, this.scenarioLength);
+			ExitPoint exitPoint = Main.getFromJson(exitPointObject, this.maximumScenarioLength);
 			this.exitPoints.put(Integer.valueOf(entry.getKey()), exitPoint);
 			int branchLevel = exitPointObject.getInt(Main.BRANCH_LEVEL);
 			
@@ -119,8 +128,34 @@ public class Scenario implements JsonStructure, StoryElement
 		}
 	}
 	
-	public int getScenarioLength() {
-		return scenarioLength;
+	public boolean canEnd()
+	{
+		return this.minimumScenarioLength <= this.nextBranch;
+	}
+	
+	public int getMaximumScenarioLength() {
+		return maximumScenarioLength;
+	}
+	
+	public void setToLastBranch()
+	{
+		this.nextBranch = this.maximumScenarioLength;
+	}
+	
+	public int getMinimumScenarioLength() {
+		return minimumScenarioLength;
+	}
+
+	public void setMinimumScenarioLength(int minimumScenarioLength) {
+		this.minimumScenarioLength = minimumScenarioLength;
+	}
+	
+	public Chance getSuddenEnding() {
+		return suddenEnding;
+	}
+
+	public void setSuddenEnding(Chance suddenEnding) {
+		this.suddenEnding = suddenEnding;
 	}
 
 	
@@ -188,7 +223,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	public boolean pastScenarioMidPoint()
 	{
-		double midPoint = (double)this.scenarioLength/(double)2;
+		double midPoint = (double)this.maximumScenarioLength/(double)2;
 		if ((double)this.currentBranch.getBranchLevel()< midPoint)
 			return false;
 		else
@@ -214,7 +249,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	public boolean checkLastBranch()
 	{
-		return this.nextBranch >= this.scenarioLength;
+		return this.nextBranch >= this.maximumScenarioLength;
 	}
 	
 	public JsonObject getJsonObject()
@@ -223,7 +258,8 @@ public class Scenario implements JsonStructure, StoryElement
 				.add(Main.DESCRIPTION, this.description)
 				.add(Main.BRANCH_LENGTH, this.branchLength)
 				.add(Main.SUBPLOT_LENGTH, this.subplotLength)
-				.add(Main.SCENARIO_LENGTH, this.scenarioLength);
+				.add(Main.MINIMUM_SCENARIO_LENGTH, this.minimumScenarioLength)
+				.add(Main.SCENARIO_LENGTH, this.maximumScenarioLength);
 		if (this.optionBecomesSubplot != null)
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_SUBPLOT, this.optionBecomesSubplot.getProb());
 		if (this.optionBecomesNewExitPoint != null)

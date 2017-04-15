@@ -33,6 +33,8 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private static final String SUBPLOT_LENGTH = "Subplot Length";
 	private static final String SCENARIO_LENGTH = "Scenario Length";
 	private static final String NEW_OPENING_CHANCE = "New Opening Chance";
+	private static final String SUDDEN_ENDING_CHANCE = "Sudden Ending Chance";
+	private static final String MINIMUM_SCENARIO_LENGTH = "Minimum Scenario Length";
 
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
@@ -45,6 +47,8 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private NumberSpinner subplotLengthSpinner;
 	private NumberSpinner scenarioLengthSpinner;
 	private NumberSpinner openingChanceSpinner;
+	private NumberSpinner suddenEndingSpinner;
+	private NumberSpinner minimumScenarioLengthSpinner;
 	
 	public NewScenarioPanel()
 	{
@@ -88,8 +92,16 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		this.addSpinner(this.scenarioLengthSpinner, SCENARIO_LENGTH);
 		
 		this.openingChanceSpinner = new NumberSpinner();
-		this.openingChanceSpinner.setValue(Main.OPENINGCHANCE);
+		this.openingChanceSpinner.setValue(Main.DEFAULTOPENINGCHANCE);
 		this.addSpinner(this.openingChanceSpinner, NEW_OPENING_CHANCE);
+		
+		this.suddenEndingSpinner = new NumberSpinner();
+		this.suddenEndingSpinner.setValue(Main.DEFAULTSUDDENENDING_CHANCE);
+		this.addSpinner(this.suddenEndingSpinner, SUDDEN_ENDING_CHANCE);
+		
+		this.minimumScenarioLengthSpinner = new NumberSpinner();
+		this.minimumScenarioLengthSpinner.setValue(Main.DEFAULT_MINIMUM_SCENARIO_LENGTH);
+		this.addSpinner(this.minimumScenarioLengthSpinner, MINIMUM_SCENARIO_LENGTH);
 	}
 	
 	public Scenario getResult()
@@ -105,6 +117,8 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));
 		newScenario.setOptionHasToken(new Chance(this.optionHasTokenSpinner.getInt()));
 		newScenario.setBranchHasOpening(new Chance(this.openingChanceSpinner.getInt()));
+		newScenario.setSuddenEnding(new Chance(this.suddenEndingSpinner.getInt()));
+		newScenario.setMinimumScenarioLength(this.minimumScenarioLengthSpinner.getInt());
 		return newScenario;
 	}
 	
