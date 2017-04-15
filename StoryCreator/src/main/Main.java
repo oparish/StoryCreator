@@ -77,6 +77,7 @@ public class Main
 	public static final String TOKENS = "tokens";
 	public static final String TOKEN = "token";
 	public static final String OBSTACLE = "obstacle";
+	public static final String OPENINGCHANCE = "openingchance";
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;

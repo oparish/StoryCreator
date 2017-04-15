@@ -32,6 +32,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private static final String BRANCH_LENGTH = "Branch Length";
 	private static final String SUBPLOT_LENGTH = "Subplot Length";
 	private static final String SCENARIO_LENGTH = "Scenario Length";
+	private static final String NEW_OPENING_CHANCE = "New Opening Chance";
 
 	private JTextField scenarioDescriptionField;
 	private JTextField initialBranchDescriptionField;
@@ -43,6 +44,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private NumberSpinner branchLengthSpinner;
 	private NumberSpinner subplotLengthSpinner;
 	private NumberSpinner scenarioLengthSpinner;
+	private NumberSpinner openingChanceSpinner;
 	
 	public NewScenarioPanel()
 	{
@@ -84,6 +86,10 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		this.scenarioLengthSpinner = new NumberSpinner();
 		this.scenarioLengthSpinner.setValue(Main.DEFAULTSCENARIOLENGTH);
 		this.addSpinner(this.scenarioLengthSpinner, SCENARIO_LENGTH);
+		
+		this.openingChanceSpinner = new NumberSpinner();
+		this.openingChanceSpinner.setValue(Main.OPENINGCHANCE);
+		this.addSpinner(this.openingChanceSpinner, NEW_OPENING_CHANCE);
 	}
 	
 	public Scenario getResult()
@@ -98,6 +104,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
 		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));
 		newScenario.setOptionHasToken(new Chance(this.optionHasTokenSpinner.getInt()));
+		newScenario.setBranchHasOpening(new Chance(this.openingChanceSpinner.getInt()));
 		return newScenario;
 	}
 	

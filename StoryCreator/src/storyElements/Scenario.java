@@ -43,6 +43,7 @@ public class Scenario implements JsonStructure, StoryElement
 	Chance optionHasFlavourList = null;
 	Chance optionHasObstacle = null;
 	Chance optionHasToken = null;
+	Chance branchHasOpening = null;
 
 	int branchLength;
 	int subplotLength;
@@ -71,6 +72,7 @@ public class Scenario implements JsonStructure, StoryElement
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
 		Integer optionHasObstacle = Main.processJsonInt(jsonObject, Main.OPTION_HAS_OBSTACLE);
 		Integer optionHasToken = Main.processJsonInt(jsonObject, Main.OPTION_HAS_TOKEN);
+		Integer openingChance = Main.processJsonInt(jsonObject, Main.OPENINGCHANCE);
 		if (optionBecomesSubplotProb != null)
 			this.optionBecomesSubplot = new Chance(optionBecomesSubplotProb);
 		if (optionBecomesNewExitPointProb != null)
@@ -81,6 +83,8 @@ public class Scenario implements JsonStructure, StoryElement
 			this.optionHasObstacle= new Chance(optionHasObstacle);
 		if (optionHasToken != null)
 			this.optionHasToken = new Chance(optionHasToken);
+		if (openingChance != null)
+			this.branchHasOpening = new Chance(openingChance);
 		
 		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
@@ -158,6 +162,14 @@ public class Scenario implements JsonStructure, StoryElement
 		return flavourLists;
 	}
 	
+	public Chance getBranchHasOpening() {
+		return branchHasOpening;
+	}
+
+	public void setBranchHasOpening(Chance branchHasOpening) {
+		this.branchHasOpening = branchHasOpening;
+	}
+	
 	public Chance getOptionHasToken() {
 		return optionHasToken;
 	}
@@ -222,6 +234,8 @@ public class Scenario implements JsonStructure, StoryElement
 			jsonObjectBuilder.add(Main.OPTION_HAS_OBSTACLE, this.optionHasObstacle.getProb());
 		if (this.optionHasToken != null)
 			jsonObjectBuilder.add(Main.OPTION_HAS_TOKEN, this.optionHasToken.getProb());
+		if (this.branchHasOpening != null)
+			jsonObjectBuilder.add(Main.OPENINGCHANCE, this.branchHasOpening.getProb());
 		
 		JsonObjectBuilder exitPointBuilder = Json.createObjectBuilder();		
 		for (Entry<Integer, ExitPoint> entry : exitPoints.entrySet())

@@ -218,8 +218,12 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			if (Branch.this.useOpening && this.openingUnused)
 			{
 				this.openingUnused = false;
-				counter++;
-				return this.tryNewOption(editorDialog);
+				
+				if (Main.getMainScenario().getBranchHasOpening().check())
+				{
+					counter++;
+					return this.tryNewOption(editorDialog);
+				}
 			}
 			
 			if (this.counter == Main.getMainScenario().getBranchLength())
