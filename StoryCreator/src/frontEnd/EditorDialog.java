@@ -396,9 +396,14 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Scenario: " + currentScenario.getDescription() + "\r\n");
 		
 		infoBuilder.append("Twists: \r\n");
+		
+		HashMap<Integer, TwistList> twistLists = Main.getMainSpice().getTwistLists();
+		int i = 0;
+		
 		for (TwistOption twistOption : this.twistOptions)
 		{
-			infoBuilder.append(twistOption.getDescription() + "\r\n");
+			infoBuilder.append(twistLists.get(i).getDescription() + ": " + twistOption.getDescription() + "\r\n");
+			i++;
 		}
 		
 		infoBuilder.append("Branch: " + currentScenario.getCurrentBranch().getDescription() + "\r\n");
