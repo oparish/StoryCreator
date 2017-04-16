@@ -172,6 +172,8 @@ public class Scenario implements JsonStructure, StoryElement
 				return this.tokens.values();
 			case FLAVOURLIST:
 				return this.flavourLists.values();
+			case SUBPLOT:
+				return this.subplots.values();
 			default:
 				return null;
 		}
@@ -406,6 +408,8 @@ public class Scenario implements JsonStructure, StoryElement
 			return this.getExitPointID((ExitPoint) storyElement);
 		else if (storyElement instanceof Token)
 			return this.getTokenID((Token) storyElement);
+		else if (storyElement instanceof Subplot)
+			return this.getSubplotID((Subplot) storyElement);
 		else
 			return this.getFlavourListID((FlavourList) storyElement);
 	}
@@ -433,6 +437,20 @@ public class Scenario implements JsonStructure, StoryElement
 			return tokenID;
 		}
 	}
+	
+	public Integer getSubplotID(Subplot subplot)
+	{
+		if (this.subplots.containsValue(subplot))
+			return this.identifySubPlot(subplot);
+		else
+		{
+			Integer subplotID = this.subplots.size();
+			this.subplots.put(subplotID, subplot);
+			return subplotID;
+		}
+	}
+	
+	
 	
 	public Integer getFlavourListID(FlavourList flavourList)
 	{

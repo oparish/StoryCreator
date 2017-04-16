@@ -33,6 +33,7 @@ import storyElements.Token;
 import storyElements.optionLists.Branch;
 import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.Branch.Generator;
+import storyElements.optionLists.Subplot;
 import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
 import storyElements.options.EndingOption;
@@ -72,6 +73,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private Generator mainGenerator = null;
 	private ExitPoint nextExitPoint = null;
+	private Subplot nextSubplot = null;
+	private Subplot.Generator subplotGenerator = null;
+	private int subplotCounter = 0;
 	private ArrayList<Token> heldTokens;
 	private ArrayList<Token> unheldTokens;
 
@@ -277,6 +281,17 @@ public class EditorDialog extends JFrame implements ActionListener
 			}
 			this.nextExitPoint = null;
 		}
+		else if (this.nextSubplot != null)
+		{
+			this.setOption(this.subplotGenerator.generateStoryElement(this));
+			this.subplotCounter++;
+			if (this.subplotCounter >= Main.getMainScenario().getSubplotLength())
+			{
+				this.nextSubplot.setUseOpening(true);
+				this.nextSubplot = null;
+				this.subplotCounter = 0;
+			}
+		}
 		else
 		{
 			Generator generator = this.getGenerator();
@@ -319,6 +334,12 @@ public class EditorDialog extends JFrame implements ActionListener
 					this.heldTokens.add(token);
 					this.unheldTokens.remove(token);
 				}
+			}
+			
+			if (branchOption.getSubPlot() != null)
+			{
+				this.nextSubplot = branchOption.getSubPlot();
+				this.subplotGenerator = this.nextSubplot.getGenerator();
 			}
 			
 			FlavourList flavourList = branchOption.getFlavourList();

@@ -116,6 +116,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
 		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));
 		newScenario.setOptionHasToken(new Chance(this.optionHasTokenSpinner.getInt()));
+		newScenario.setOptionBecomesSubplot(new Chance(this.optionWithSubPlotSpinner.getInt()));
 		newScenario.setBranchHasOpening(new Chance(this.openingChanceSpinner.getInt()));
 		newScenario.setSuddenEnding(new Chance(this.suddenEndingSpinner.getInt()));
 		newScenario.setMinimumScenarioLength(this.minimumScenarioLengthSpinner.getInt());

@@ -28,6 +28,7 @@ import frontEnd.fieldPanel.NewGoodBranchPanel;
 import frontEnd.fieldPanel.NewGoodEndingPanel;
 import frontEnd.fieldPanel.NewObstaclePanel;
 import frontEnd.fieldPanel.NewOptionPanel;
+import frontEnd.fieldPanel.NewSubplotPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
 import main.Main;
 import storyElements.ExitPoint;
@@ -238,7 +239,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	
 	public class Generator
 	{
-		private Subplot currentSubplot = null;
 		private Integer lastNumber = null;
 		private int counter = 0;
 		private boolean openingUnused = true;
@@ -358,12 +358,16 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			boolean becomesExitPoint = currentScenario.getOptionBecomesNewExitPoint().check();
 			boolean hasObstacle = currentScenario.pastScenarioMidPoint() && currentScenario.getOptionHasObstacle().check();
 			boolean hasToken = !currentScenario.pastScenarioMidPoint() && currentScenario.getOptionHasToken().check();
+			boolean hasSubplot = currentScenario.getOptionBecomesSubplot().check();
 
 			ArrayList<ExitPoint> exitPointsAtLevel = currentScenario.getExitPointsAtBranchLevel(currentScenario.getNextBranch());
 			HashMap<Integer, FlavourList> flavourLists = currentScenario.getFlavourLists();
 			
 			ArrayList<FieldPanel> fieldPanels = new ArrayList<FieldPanel>();
 			NewOptionPanel newOptionPanel = new NewOptionPanel(Branch.this);
+			
+			if (becomesExitPoint && hasSubplot)
+				hasSubplot = false;
 			
 			if (becomesExitPoint && !hasObstacle)
 			{
@@ -387,6 +391,11 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 				fieldPanels.add(this.getExitPointPanel(OptionContentType.BADEXITPOINT, exitPointsAtLevel));
 			}
 			
+			if (hasSubplot)
+			{
+				fieldPanels.add(this.getSubplotPanel());
+			}
+			
 			ArrayList<MyPanel> myPanels = new ArrayList<MyPanel>();
 			myPanels.add(newOptionPanel);
 			myPanels.addAll(fieldPanels);
@@ -406,17 +415,25 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			
 			Branch.this.add(branchOption);
 			return branchOption;
-		}	
-
-		public Subplot getCurrentSubplot() {
-			return currentSubplot;
 		}
-
-		public void setCurrentSubplot(Subplot currentSubplot) {
-			this.currentSubplot = currentSubplot;
+		
+		private FieldPanel<Subplot> getSubplotPanel()
+		{
+			FieldPanel<Subplot> subplotPanel;
+			if (Main.getMainScenario().getStoryElementList(OptionContentType.SUBPLOT, Main.getMainScenario().getNextBranch()).size() != 0)
+			{
+				subplotPanel = new OldOrNewPanel<Subplot>(OptionContentType.SUBPLOT, Main.getMainScenario().getNextBranch());
+			}
+			else
+			{
+				subplotPanel = new NewSubplotPanel(Main.getMainScenario().getNextBranch());
+			}
+			return subplotPanel;
 		}
 	}
 
+
+	
 	@Override
 	public Integer getObstacle()
 	{

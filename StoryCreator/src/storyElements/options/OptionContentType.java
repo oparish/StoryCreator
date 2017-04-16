@@ -13,6 +13,7 @@ import frontEnd.fieldPanel.NewEndingPanel;
 import frontEnd.fieldPanel.NewGoodBranchPanel;
 import frontEnd.fieldPanel.NewObstaclePanel;
 import frontEnd.fieldPanel.NewOptionPanel;
+import frontEnd.fieldPanel.NewSubplotPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
 import main.Main;
 
@@ -23,7 +24,7 @@ public enum OptionContentType
 	EXITPOINT(Main.EXITPOINT, Integer.class, ExitPointPanel.class), 
 	GOODEXITPOINT(Main.EXITPOINT, Integer.class, GoodExitPointPanel.class),
 	BADEXITPOINT(Main.EXITPOINT, Integer.class, BadExitPointPanel.class),
-	SUBPLOT(Main.SUBPLOT, Integer.class, null); 
+	SUBPLOT(Main.SUBPLOT, Integer.class, NewSubplotPanel.class); 
 	
 	String identifier;
 	Class objectClass;
