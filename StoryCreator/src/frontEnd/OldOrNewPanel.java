@@ -32,15 +32,10 @@ public class OldOrNewPanel<T extends StoryElement> extends NewStoryElementPanel<
 	public OldOrNewPanel(OptionContentType optionContentType, int branchLevel)
 	{
 		super(branchLevel);
-		try {
-			this.fieldPanel = optionContentType.getFieldPanelClass().getConstructor(int.class).newInstance(branchLevel);
-			this.heading = this.fieldPanel.getHeading();
-			if (this.fieldPanel instanceof NewStoryElementPanel)
-				this.suggestion = ((NewStoryElementPanel) this.fieldPanel).getSuggestion();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		this.fieldPanel = (FieldPanel<T>) optionContentType.getInstance(branchLevel);
+		this.heading = this.fieldPanel.getHeading();
+		if (this.fieldPanel instanceof NewStoryElementPanel)
+			this.suggestion = ((NewStoryElementPanel) this.fieldPanel).getSuggestion();
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(this.oldButton);

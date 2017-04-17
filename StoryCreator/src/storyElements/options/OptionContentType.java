@@ -1,5 +1,7 @@
 package storyElements.options;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.sun.media.jfxmedia.events.NewFrameEvent;
 
 import frontEnd.fieldPanel.BadExitPointPanel;
@@ -40,6 +42,17 @@ public enum OptionContentType
 
 	public Class<? extends FieldPanel> getFieldPanelClass() {
 		return fieldPanelClass;
+	}
+	
+	public FieldPanel<?> getInstance(int nextBranchLevel)
+	{
+		try {
+			return this.getFieldPanelClass().getConstructor(int.class).newInstance(nextBranchLevel);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	private OptionContentType(String identifier, Class objectClass, Class<? extends FieldPanel> fieldPanelClass)

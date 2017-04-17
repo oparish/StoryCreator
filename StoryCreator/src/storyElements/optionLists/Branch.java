@@ -141,12 +141,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		}
 		
 		if (exitPoints == null)
-			try {
-				fieldPanel = optionContentType.getFieldPanelClass().getConstructor(int.class).newInstance(currentScenario.getNextBranch());
-			} catch (Exception e)
-			{
-				return null;
-			}
+			fieldPanel = (FieldPanel<ExitPoint>) optionContentType.getInstance(currentScenario.getNextBranch());
 		else
 			fieldPanel = new OldOrNewPanel<ExitPoint>(optionContentType, currentScenario.getNextBranch());
 		
@@ -205,7 +200,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.goodExitPoint = currentScenario.getExitPointID(goodExitPointPanel.getResult());
 		this.badExitPoint = currentScenario.getExitPointID(badExitPointPanel.getResult());
 		
-		if (editorDialog.getHeldTokens().contains(obstaclePanel.getResult()))
+		if (editorDialog.checkHeldTokens(obstaclePanel.getResult()))
 		{
 			editorDialog.updateTechInfo("\r\nPassed obstacle.");
 			return this.getGoodExitPoint();
@@ -289,13 +284,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			int nextBranchLevel = Main.getMainScenario().getNextBranch();
 			if (exitPointsAtLevel == null)
 			{
-				try {
-					exitPointPanel = optionContentType.getFieldPanelClass().getConstructor(int.class).newInstance(nextBranchLevel);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				}
+				exitPointPanel = (FieldPanel<? extends ExitPoint>) optionContentType.getInstance(nextBranchLevel);
 			}
 			else
 			{

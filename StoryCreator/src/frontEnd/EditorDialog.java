@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.swing.JEditorPane;
@@ -76,7 +77,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private Subplot nextSubplot = null;
 	private Subplot.Generator subplotGenerator = null;
 	private int subplotCounter = 0;
-	private ArrayList<Token> heldTokens;
+	private HashMap<Integer, ArrayList<Token>> heldTokens;
 	private ArrayList<Token> unheldTokens;
 
 	public EditorDialog(int startingLevel)
@@ -114,7 +115,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.updateDisplay();
 	}
 	
-	public ArrayList<Token> getHeldTokens() {
+	public HashMap<Integer, ArrayList<Token>> getHeldTokens() {
 		return heldTokens;
 	}
 
@@ -125,7 +126,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private void setupTokens()
 	{
 		 this.unheldTokens = Main.getMainScenario().getTokens();
-		 this.heldTokens = new ArrayList<Token>();
+		 this.heldTokens = new HashMap<Integer, ArrayList<Token>>();
 	}
 	
 	private void twistGenerate()
@@ -328,10 +329,10 @@ public class EditorDialog extends JFrame implements ActionListener
 			if (branchOption.getToken() != null)
 			{
 				Token token = scenario.getTokenByID(branchOption.getToken());
-				if (!this.heldTokens.contains(token))
+				if (!this.checkHeldTokens(token))
 				{
 					this.updateTechInfo("\r\nReceived token:" + token.getDescription());
-					this.heldTokens.add(token);
+					this.addToHeldTokens(token);
 					this.unheldTokens.remove(token);
 				}
 			}
@@ -372,7 +373,7 @@ public class EditorDialog extends JFrame implements ActionListener
 			Token obstacle = Main.getMainScenario().getTokenByID(exitable.getObstacle());
 			this.currentObstacle = obstacle;
 			this.updateTechInfo("\r\nObstacle: " + obstacle.getDescription());
-			if (this.heldTokens.contains(obstacle))
+			if (this.checkHeldTokens(obstacle))
 			{
 				this.updateTechInfo("\r\nPassed obstacle.");
 				return exitable.getGoodExitPoint();
@@ -387,6 +388,49 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			return exitable.getExitPoint();	
 		}
+	}
+	
+	public void addToHeldTokens(Token token)
+	{
+		int branchLevel = Main.getMainScenario().getCurrentBranch().getBranchLevel();
+		ArrayList<Token> tokenList = this.heldTokens.get(branchLevel);
+		if (tokenList != null)
+		{
+			tokenList.add(token);
+		}
+		else
+		{
+			tokenList = new ArrayList<Token>();
+			tokenList.add(token);
+			this.heldTokens.put(branchLevel, tokenList);
+		}
+	}
+	
+	public boolean checkHeldTokens(Token obstacle)
+	{
+		ArrayList<Token> tokenList = new ArrayList<Token>();
+		for (Collection<Token> tokens : this.heldTokens.values())
+		{
+			for (Token token : tokens)
+			{
+				if (token == obstacle)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<Token> getAllTokens()
+	{
+		ArrayList<Token> tokenList = new ArrayList<Token>();
+		for (Collection<Token> tokens : this.heldTokens.values())
+		{
+			for (Token token : tokens)
+			{
+				tokenList.add(token);
+			}
+		}
+		return tokenList;
 	}
 	
 	private void updateDisplay()
@@ -411,7 +455,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");
 		infoBuilder.append("Current Obstacle: " + this.getCurrentObstacleDescription() + "\r\n");
 		infoBuilder.append("Current Tokens:\r\n");
-		for (Token token : this.heldTokens)
+		for (Token token : this.getAllTokens())
 		{
 			infoBuilder.append(token.getDescription() + "\r\n");
 		}
