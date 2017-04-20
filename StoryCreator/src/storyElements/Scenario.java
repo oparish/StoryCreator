@@ -61,6 +61,7 @@ public class Scenario implements JsonStructure, StoryElement
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
 		this.maximumScenarioLength = scenarioLength;
+		this.nextBranch = 1;
 	}
 	
 	public Scenario(JsonObject jsonObject)
@@ -240,6 +241,20 @@ public class Scenario implements JsonStructure, StoryElement
 			return null;
 	}
 	
+	public void recordNewExitPoint(ExitPoint exitPoint, int branchLevel)
+	{
+		if (this.branchLevels.containsKey(branchLevel))
+		{
+			this.branchLevels.get(branchLevel).add(exitPoint);
+		}
+		else
+		{
+			ArrayList<ExitPoint> exitPoints = new ArrayList<ExitPoint>();
+			exitPoints.add(exitPoint);
+			this.branchLevels.put(branchLevel, exitPoints);
+		}
+	}
+	
 	public void incrementBranchCounter()
 	{
 		this.nextBranch++;
@@ -358,6 +373,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	public void setCurrentBranch(Branch currentBranch) {
 		this.currentBranch = currentBranch;
+		this.nextBranch = this.currentBranch.getBranchLevel() + 1;
 	}
 
 	public String getDescription() {
@@ -399,6 +415,7 @@ public class Scenario implements JsonStructure, StoryElement
 	private Branch setupNewBranch(ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLevel)
 	{
 		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription, branchLevel);
+		this.recordNewExitPoint(newBranch, branchLevel);
 		return newBranch;
 	}
 	

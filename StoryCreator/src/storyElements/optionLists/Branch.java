@@ -54,6 +54,10 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	public Integer getBranchLevel() {
 		return branchLevel;
 	}
+	
+	public void setUseOpening(boolean useOpening) {
+		this.useOpening = useOpening;
+	}
 
 	public ExitPoint getDefaultExitPoint() {
 		return Main.getMainScenario().getExitPoint(this.defaultExitPoint);
@@ -68,6 +72,8 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		super(initialOptions, description);
 		this.branchLevel = branchLevel;
 		this.useOpening = false;
+		if (Main.getMainScenario() != null)
+			Main.getMainScenario().recordNewExitPoint(this, branchLevel);
 	}
 	
 	public Branch(JsonObject jsonObject)

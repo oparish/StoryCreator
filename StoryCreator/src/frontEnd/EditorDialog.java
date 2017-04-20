@@ -49,13 +49,14 @@ import main.Main;
 public class EditorDialog extends JFrame implements ActionListener
 {
 	private static final String PROGRESS = "Progress";
+	private static final String BACKTRACK = "Backtrack";
 	private static final String SAVESTORYTOFILE = "Save Story To File";
 	private static final String SAVE_SCENARIO = "Save Scenario";
 	private static final String SAVE_SCENARIO_AS = "Save Scenario As";
 	private static final String SAVE_SPICE = "Save Spice";
 	private static final String SAVE_SPICE_AS = "Save Spice As";
 	
-	private static final int WIDTH = 1000;
+	private static final int WIDTH = 1200;
 	private static final int HEIGHT = 1000;
 	
 	private JEditorPane editorPanel;
@@ -74,6 +75,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private Generator mainGenerator = null;
 	private ExitPoint nextExitPoint = null;
+	private ArrayList<ExitPoint> pastExitPoints = new ArrayList<ExitPoint>();
 	private Subplot nextSubplot = null;
 	private Subplot.Generator subplotGenerator = null;
 	private int subplotCounter = 0;
@@ -108,10 +110,15 @@ public class EditorDialog extends JFrame implements ActionListener
 		if (scenario.getCurrentBranch() == null)
 		{
 			Branch currentBranch = (Branch) this.setupStartingBranch(startingLevel);
+			this.pastExitPoints.add(currentBranch);
 			scenario.setCurrentBranch(currentBranch);
 			scenario.getExitPointID(currentBranch);
 		}
-		scenario.incrementBranchCounter();
+		else
+		{
+			this.pastExitPoints.add(scenario.getCurrentBranch());
+		}
+		
 		this.updateDisplay();
 	}
 	
@@ -209,9 +216,10 @@ public class EditorDialog extends JFrame implements ActionListener
 	private JPanel setupButtonPanel()
 	{
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(2, 3));
+		buttonPanel.setLayout(new GridLayout(2, 4));
 		this.progressButton = this.makeButton(PROGRESS, ButtonID.PROGRESS);
 		buttonPanel.add(this.progressButton);
+		buttonPanel.add(this.makeButton(BACKTRACK, ButtonID.BACKTRACK));
 		buttonPanel.add(this.makeButton(SAVESTORYTOFILE, ButtonID.SAVESTORYTOFILE));
 		buttonPanel.add(this.makeButton(SAVE_SCENARIO, ButtonID.SAVE_SCENARIO));
 		buttonPanel.add(this.makeButton(SAVE_SCENARIO_AS, ButtonID.SAVE_SCENARIO_AS));
@@ -245,10 +253,51 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private void progress()
 	{
-		this.storyBuilder.append(this.editorPanel.getText() + "\r\n\r\n");
-		this.displayPanel.setText(this.storyBuilder.toString());
+		this.moveText(this.editorPanel.getText() + "\r\n\r\n");
 		this.editorPanel.setText("");
 		this.generate();
+	}
+	
+	private void moveText(String text)
+	{
+		this.storyBuilder.append(text);
+		this.displayPanel.setText(this.storyBuilder.toString());
+	}
+	
+	private void backtrack()
+	{
+		BacktrackPanel backtrackPanel = new BacktrackPanel(this.pastExitPoints);
+		Main.showWindowInCentre(new FieldDialog(this, true, new MyPanel[]{backtrackPanel}));
+		ExitPoint newExitPoint = backtrackPanel.getResult();
+		if (newExitPoint instanceof Branch)
+		{
+			Branch newBranch = (Branch) newExitPoint;
+			int newBranchLevel = newBranch.getBranchLevel();
+			int currentBranchLevel = Main.getMainScenario().getCurrentBranch().getBranchLevel();
+			
+			for (int i = currentBranchLevel; i >= newBranchLevel; i--)
+			{
+				this.pastExitPoints.remove(i);
+				if (this.heldTokens.get(i) != null)
+					for (Token token : this.heldTokens.get(i))
+					{
+						this.unheldTokens.add(token);
+					}
+				this.heldTokens.remove(i);
+			}
+				
+			Main.getMainScenario().setCurrentBranch(newBranch);
+			this.nextExitPoint = newBranch;
+			this.flavour = null;
+			newBranch.setUseOpening(true);
+			this.progressButton.setEnabled(true);
+			this.progress();
+			this.moveText("\r\n\r\nBACKTRACKING TO " + newBranch.getDescription() + "\r\n\r\n");
+		}
+		else
+		{
+			return;
+		}
 	}
 	
 	public void reachEnding(EndingOption ending)
@@ -465,7 +514,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private void startNewBranch(Branch branch)
 	{
 		Scenario scenario = Main.getMainScenario();
-		scenario.incrementBranchCounter();
+		this.pastExitPoints.add(branch);
 		scenario.setCurrentBranch(branch);
 		this.mainGenerator = null;
 		this.currentOption = null;
@@ -581,6 +630,9 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			case PROGRESS:
 				this.progress();
+			break;
+			case BACKTRACK:
+				this.backtrack();
 			break;
 			case SAVESTORYTOFILE:
 				this.saveStoryToFile();
