@@ -33,6 +33,18 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		super();
 		this.panelClass = panelClass;
 	}
+	
+	private MyPanel<T> getOptionPanel()
+	{
+		try {
+			return (MyPanel<T>) this.panelClass.getConstructor(this.getClass()).newInstance(this);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 		
 	public T generateOption(EditorDialog editorDialog)
 	{
@@ -43,22 +55,13 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		}
 		else
 		{
-			MyPanel<T> panel;
-			try {
-				panel = (MyPanel<T>) this.panelClass.getConstructor(this.getClass()).newInstance(this);
-				FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, 
-						new MyPanel[]{panel});
-				newOptionDialog.setTitle("New " + this.type);
-				Main.showWindowInCentre(newOptionDialog);
-	        	T option = panel.getResult();
-	            NonRepeatingOptionList.this.add(option);
-	            return option;
-			}catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			return null;
+			MyPanel<T> panel = this.getOptionPanel();
+			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{panel});
+			newOptionDialog.setTitle("New " + this.type);
+			Main.showWindowInCentre(newOptionDialog);
+        	T option = panel.getResult();
+            NonRepeatingOptionList.this.add(option);
+            return option;
 		}	
 	}
 	
