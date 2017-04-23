@@ -132,12 +132,13 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		
 		OptionContentType optionContentType;
 		
-		if (currentScenario.checkLastBranch())
+		if (!suddenEnding && currentScenario.checkLastBranch())
 		{
-			if (suddenEnding)
-				optionContentType = OptionContentType.BADEXITPOINT;
-			else
-				optionContentType = OptionContentType.GOODEXITPOINT;
+			optionContentType = OptionContentType.GOODEXITPOINT;
+		}
+		else if (suddenEnding)
+		{
+			optionContentType = OptionContentType.BADEXITPOINT;
 		}
 		else
 		{
