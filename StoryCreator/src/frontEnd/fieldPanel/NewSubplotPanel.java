@@ -21,6 +21,7 @@ public class NewSubplotPanel extends FieldPanel<Subplot>
 	public NewSubplotPanel(int branchLevel)
 	{
 		super(branchLevel);
+		this.heading = "Subplot Option";
 		this.subplotDescriptionField = new JTextField();
 		this.addTextField(this.subplotDescriptionField, SUBPLOT_DESCRIPTION);
 		
