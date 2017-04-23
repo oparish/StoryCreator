@@ -123,9 +123,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	private ExitPoint createDefaultBranchConclusion(EditorDialog editorDialog, boolean suddenEnding)
 	{
 		Scenario currentScenario = Main.getMainScenario();
-		
-		if (suddenEnding)
-			currentScenario.setToLastBranch();
+		int nextBranch = currentScenario.getNextBranch();
 		
 		FieldPanel<ExitPoint> fieldPanel;
 		ExitPointPanel newExitPointPanel = new ExitPointPanel(currentScenario.getNextBranch());
@@ -147,9 +145,11 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		}
 		
 		if (exitPoints == null)
-			fieldPanel = (FieldPanel<ExitPoint>) optionContentType.getInstance(currentScenario.getNextBranch());
+			fieldPanel = (FieldPanel<ExitPoint>) optionContentType.getInstance(suddenEnding ? 
+					currentScenario.getMaximumScenarioLength() : nextBranch);
 		else
-			fieldPanel = new OldOrNewPanel<ExitPoint>(optionContentType, currentScenario.getNextBranch());
+			fieldPanel = new OldOrNewPanel<ExitPoint>(optionContentType, suddenEnding ? 
+					currentScenario.getMaximumScenarioLength() : nextBranch);
 		
 		FieldDialog newBranchDialog = new FieldDialog(editorDialog, true, new FieldPanel[]{fieldPanel});
 		Main.showWindowInCentre(newBranchDialog);
@@ -161,9 +161,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	private ExitPoint createObstacleBranchConclusion(EditorDialog editorDialog, boolean suddenEnding)
 	{
 		Scenario currentScenario = Main.getMainScenario();
-		
-		if (suddenEnding)
-			currentScenario.setToLastBranch();
 		
 		ArrayList<MyPanel> fieldPanels = new ArrayList<MyPanel>();
 		int nextBranch = currentScenario.getNextBranch();
@@ -188,12 +185,14 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		if (exitPoints == null)	
 		{
 			goodExitPointPanel = new GoodExitPointPanel(nextBranch);
-			badExitPointPanel = new BadExitPointPanel(nextBranch);
+			badExitPointPanel = new BadExitPointPanel(suddenEnding ? 
+					currentScenario.getMaximumScenarioLength() : nextBranch);
 		}
 		else
 		{
 			goodExitPointPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.GOODEXITPOINT, nextBranch);
-			badExitPointPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.BADEXITPOINT, nextBranch);
+			badExitPointPanel = new OldOrNewPanel<ExitPoint>(OptionContentType.BADEXITPOINT, suddenEnding ? 
+					currentScenario.getMaximumScenarioLength() : nextBranch);
 		}
 
 		fieldPanels.add(goodExitPointPanel);
