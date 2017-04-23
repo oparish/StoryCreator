@@ -64,6 +64,7 @@ public class Subplot extends StorySection<SubplotOption> implements StoryElement
 				
 				if (Main.getMainScenario().getBranchHasOpening().check())
 				{
+					this.lastNumber = Subplot.this.size();
 					return this.tryNewOption(editorDialog);
 				}
 			}
