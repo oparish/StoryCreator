@@ -24,6 +24,7 @@ public class Spice implements JsonStructure, StoryElement
 	private ArrayList<String> goodSuggestions;
 	private ArrayList<String> badSuggestions;
 	private HashMap<Integer, TwistList> twistLists;
+	private ArrayList<String> scenarioFilePaths = new ArrayList<String>();
 
 	public Spice(JsonObject jsonObject)
 	{
@@ -45,6 +46,7 @@ public class Spice implements JsonStructure, StoryElement
 		this.suggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.SUGGESTIONS));
 		this.goodSuggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.GOOD_SUGGESTIONS));
 		this.badSuggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.BAD_SUGGESTIONS));
+		this.scenarioFilePaths = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.SCENARIOFILEPATHS));
 	}
 	
 	public Spice(HashMap<Integer, TwistList> initialTwistLists, ArrayList<String> suggestions, ArrayList<String> goodSuggestions, ArrayList<String> badSuggestions)
@@ -53,6 +55,16 @@ public class Spice implements JsonStructure, StoryElement
 		this.suggestions = suggestions;
 		this.goodSuggestions = goodSuggestions;
 		this.badSuggestions = badSuggestions;
+	}
+	
+	public ArrayList<String> getScenarioFilePaths()
+	{
+		return scenarioFilePaths;
+	}
+	
+	public void addScenarioFilePath(String filepath)
+	{
+		this.scenarioFilePaths.add(filepath);
 	}
 	
 	public HashMap<Integer, TwistList> getTwistLists() {
@@ -77,8 +89,20 @@ public class Spice implements JsonStructure, StoryElement
 		jsonObjectBuilder.add(Main.TWISTLISTS, twistListsBuilder.build());
 		jsonObjectBuilder.add(Main.SUGGESTIONS, suggestionsBuilder.build());
 		jsonObjectBuilder.add(Main.GOOD_SUGGESTIONS, goodSuggestionsBuilder.build());	
-		jsonObjectBuilder.add(Main.BAD_SUGGESTIONS, badSuggestionsBuilder.build());	
+		jsonObjectBuilder.add(Main.BAD_SUGGESTIONS, badSuggestionsBuilder.build());
+		jsonObjectBuilder.add(Main.SCENARIOFILEPATHS, this.getFilePathsJSON().build());
 		return jsonObjectBuilder.build();
+	}
+	
+	private JsonArrayBuilder getFilePathsJSON()
+	{
+		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+		for (String filePath : this.scenarioFilePaths)
+		{
+			jsonArrayBuilder.add(filePath);
+		}
+		return jsonArrayBuilder;
+		
 	}
 	
 	public String getSuggestion()

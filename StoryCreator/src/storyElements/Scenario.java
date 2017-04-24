@@ -3,6 +3,7 @@ package storyElements;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,6 +53,8 @@ public class Scenario implements JsonStructure, StoryElement
 	int minimumScenarioLength;
 
 	String description;
+	
+	File file;
 
 	public Scenario(String description, ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLength, int subplotLength, int scenarioLength)
 	{
@@ -127,6 +130,14 @@ public class Scenario implements JsonStructure, StoryElement
 		{
 			this.tokens.put(Integer.valueOf(entry.getKey()), new Token((JsonObject) entry.getValue()));
 		}
+	}
+	
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 	public boolean canEnd()

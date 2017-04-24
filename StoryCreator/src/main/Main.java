@@ -1,4 +1,5 @@
 package main;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -23,10 +24,12 @@ import javax.json.JsonWriter;
 import javax.json.stream.JsonParser;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
-import frontEnd.StartDialog;
+import frontEnd.InitialScenarioDialog;
+import frontEnd.InitialSpiceDialog;
 import frontEnd.fieldPanel.NewOptionPanel;
 import storyElements.ExitPoint;
 import storyElements.JsonStructure;
@@ -74,6 +77,7 @@ public class Main
 	public static final String FLAVOURLIST = "flavourlist";
 	public static final String SUBFLAVOURLIST = "subflavourlist";
 	public static final String TWISTLISTS = "twistlists";
+	public static final String SCENARIOFILEPATHS = "scenariofilepaths";
 	public static final String SUGGESTIONS = "suggestions";
 	public static final String GOOD_SUGGESTIONS = "goodSuggestions";
 	public static final String BAD_SUGGESTIONS = "badSuggestions";
@@ -87,7 +91,6 @@ public class Main
 	
 	private static Random random = new Random();
 	private static Scenario mainScenario;
-	private static File scenarioFile;
 	private static Spice mainSpice;
 	private static File spiceFile;
 	
@@ -140,16 +143,6 @@ public class Main
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	public static File getScenarioFile()
-	{
-		return Main.scenarioFile;
-	}
-	
-	public static void setScenarioFile(File file)
-	{
-		Main.scenarioFile = file;
 	}
 	
 	public static File getSpiceFile()
@@ -205,6 +198,60 @@ public class Main
 		window.setVisible(true);
 	}
 	
+	public static String saveScenario(Component parent)
+	{
+		String filePath;
+		if (Main.getMainScenario().getFile() != null)
+		{
+			Main.saveJsonStructureToFile(Main.getMainScenario().getFile(), Main.getMainScenario());
+			filePath = Main.getMainScenario().getFile().getAbsolutePath();
+		}
+		else
+		{
+			filePath = Main.saveScenarioAs(parent);
+		}
+		return filePath;
+	}
+	
+	public static void saveSpice(Component parent)
+	{
+		if (Main.getSpiceFile() != null)
+			Main.saveJsonStructureToFile(Main.getSpiceFile(), Main.getMainSpice());
+		else
+			Main.saveSpiceAs(parent);
+	}
+	
+	public static void saveSpiceAs(Component parent)
+	{
+		File spiceFile = Main.chooseFile(parent);
+		Main.setSpiceFile(spiceFile);
+		Main.saveJsonStructureToFile(spiceFile, Main.getMainSpice());
+	}
+	
+	public static File chooseFile(Component parent)
+	{
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
+		if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION)
+		{
+			File saveFile = chooser.getSelectedFile();
+			String filename = saveFile.getName();
+			if (!filename.endsWith(".txt"))
+				saveFile = new File(saveFile.getAbsolutePath() + ".txt");		
+			return saveFile;
+		}
+		return null;
+	}
+	
+	public static String saveScenarioAs(Component parent)
+	{
+		File scenarioFile = Main.chooseFile(parent);
+		Main.getMainScenario().setFile(scenarioFile);
+		Main.saveJsonStructureToFile(scenarioFile, Main.getMainScenario());
+		return scenarioFile.getAbsolutePath();
+	}
+	
+	
 	public static ArrayList<String> getStringsFromJsonArray(JsonArray jsonArray)
 	{
 		ArrayList<String> strings = new ArrayList<String>();
@@ -229,9 +276,12 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		StartDialog startDialog = new StartDialog();
-        Main.showWindowInCentre(startDialog); 
-        EditorDialog editorDialog = new EditorDialog(startDialog.getBranchLevel());
+		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog();
+        Main.showWindowInCentre(initialSpiceDialog); 
+		InitialScenarioDialog initialScenarioDialog = new InitialScenarioDialog();
+        Main.showWindowInCentre(initialScenarioDialog);
+        Main.setMainScenario(initialScenarioDialog.getResult());
+        EditorDialog editorDialog = new EditorDialog(initialScenarioDialog.getBranchLevel());
         Main.showWindowInCentre(editorDialog); 
 	}
 }

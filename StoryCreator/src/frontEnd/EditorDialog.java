@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JWindow;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import frontEnd.fieldPanel.ExitPointPanel;
@@ -51,8 +53,6 @@ public class EditorDialog extends JFrame implements ActionListener
 	private static final String PROGRESS = "Progress";
 	private static final String BACKTRACK = "Backtrack";
 	private static final String SAVESTORYTOFILE = "Save Story To File";
-	private static final String SAVE_SCENARIO = "Save Scenario";
-	private static final String SAVE_SCENARIO_AS = "Save Scenario As";
 	private static final String SAVE_SPICE = "Save Spice";
 	private static final String SAVE_SPICE_AS = "Save Spice As";
 	
@@ -221,8 +221,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		buttonPanel.add(this.progressButton);
 		buttonPanel.add(this.makeButton(BACKTRACK, ButtonID.BACKTRACK));
 		buttonPanel.add(this.makeButton(SAVESTORYTOFILE, ButtonID.SAVESTORYTOFILE));
-		buttonPanel.add(this.makeButton(SAVE_SCENARIO, ButtonID.SAVE_SCENARIO));
-		buttonPanel.add(this.makeButton(SAVE_SCENARIO_AS, ButtonID.SAVE_SCENARIO_AS));
 		buttonPanel.add(this.makeButton(SAVE_SPICE, ButtonID.SAVE_SPICE));
 		buttonPanel.add(this.makeButton(SAVE_SPICE_AS, ButtonID.SAVE_SPICE_AS));
 		return buttonPanel;
@@ -564,51 +562,6 @@ public class EditorDialog extends JFrame implements ActionListener
 		}	
 	}
 	
-	private void saveScenario()
-	{
-		if (Main.getScenarioFile() != null)
-			Main.saveJsonStructureToFile(Main.getScenarioFile(), Main.getMainScenario());
-		else
-			this.saveScenarioAs();
-	}
-	
-	private void saveSpice()
-	{
-		if (Main.getSpiceFile() != null)
-			Main.saveJsonStructureToFile(Main.getSpiceFile(), Main.getMainSpice());
-		else
-			this.saveSpiceAs();
-	}
-	
-	private void saveSpiceAs()
-	{
-		File spiceFile = this.chooseFile();
-		Main.setSpiceFile(spiceFile);
-		Main.saveJsonStructureToFile(spiceFile, Main.getMainSpice());
-	}
-	
-	private File chooseFile()
-	{
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileFilter(new FileNameExtensionFilter("Text", "txt"));
-		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
-		{
-			File saveFile = chooser.getSelectedFile();
-			String filename = saveFile.getName();
-			if (!filename.endsWith(".txt"))
-				saveFile = new File(saveFile.getAbsolutePath() + ".txt");		
-			return saveFile;
-		}
-		return null;
-	}
-	
-	private void saveScenarioAs()
-	{
-		File scenarioFile = this.chooseFile();
-		Main.setScenarioFile(scenarioFile);
-		Main.saveJsonStructureToFile(scenarioFile, Main.getMainScenario());
-	}
-	
 	public static void main(String[] args)
 	{
 //		EditorDialog editorDialog = new EditorDialog();
@@ -637,17 +590,13 @@ public class EditorDialog extends JFrame implements ActionListener
 			case SAVESTORYTOFILE:
 				this.saveStoryToFile();
 			break;
-			case SAVE_SCENARIO:
-				this.saveScenario();
-			break;
-			case SAVE_SCENARIO_AS:
-				this.saveScenarioAs();
-			break;
 			case SAVE_SPICE:
-				this.saveSpice();
+				Main.saveScenario(this);
+				Main.saveSpice(this);
 			break;
 			case SAVE_SPICE_AS:
-				this.saveSpiceAs();
+				Main.saveScenario(this);
+				Main.saveSpiceAs(this);
 			break;
 			default:
 				break;
