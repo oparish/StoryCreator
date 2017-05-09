@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-import frontEnd.NewOptionListPanel;
+import frontEnd.OptionListFieldPanel;
 import main.Main;
 import storyElements.Chance;
 import storyElements.Scenario;
@@ -13,7 +13,7 @@ import storyElements.options.BranchOption;
 import storyElements.options.FlavourOption;
 import storyElements.options.OptionContentType;
 
-public class FlavourListPanel extends NewOptionListPanel<FlavourList>
+public class FlavourListPanel extends OptionListFieldPanel<FlavourList>
 {
 	private static final String DESCRIPTION = "Description";
 	

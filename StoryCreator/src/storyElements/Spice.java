@@ -12,8 +12,10 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
+import frontEnd.AspectOptionPanel;
 import main.Main;
 import storyElements.optionLists.TwistList;
+import storyElements.options.AspectOption;
 import storyElements.options.BranchOption;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
@@ -24,6 +26,11 @@ public class Spice implements JsonStructure, StoryElement
 	private ArrayList<String> goodSuggestions;
 	private ArrayList<String> badSuggestions;
 	private HashMap<Integer, TwistList> twistLists;
+	private HashMap<Integer, AspectType> aspectTypes;
+	public HashMap<Integer, AspectType> getAspectTypes() {
+		return aspectTypes;
+	}
+
 	private ArrayList<String> scenarioFilePaths = new ArrayList<String>();
 
 	public Spice(JsonObject jsonObject)
@@ -43,6 +50,15 @@ public class Spice implements JsonStructure, StoryElement
 			this.twistLists.put(Integer.valueOf(entry.getKey()), twistList);
 		}
 		
+		this.aspectTypes = new HashMap<Integer, AspectType>();
+		JsonObject aspectTypesObject = jsonObject.getJsonObject(Main.ASPECTTYPES);
+		for (String key: aspectTypesObject.keySet())
+		{
+			JsonObject innerObject = aspectTypesObject.getJsonObject(key);
+			AspectType aspectType = new AspectType(innerObject);
+			this.aspectTypes.put(Integer.valueOf(key), aspectType);
+		}
+		
 		this.suggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.SUGGESTIONS));
 		this.goodSuggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.GOOD_SUGGESTIONS));
 		this.badSuggestions = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.BAD_SUGGESTIONS));
@@ -52,9 +68,15 @@ public class Spice implements JsonStructure, StoryElement
 	public Spice(HashMap<Integer, TwistList> initialTwistLists, ArrayList<String> suggestions, ArrayList<String> goodSuggestions, ArrayList<String> badSuggestions)
 	{
 		this.twistLists = initialTwistLists;
+		this.aspectTypes = new HashMap<Integer, AspectType>();
 		this.suggestions = suggestions;
 		this.goodSuggestions = goodSuggestions;
 		this.badSuggestions = badSuggestions;
+	}
+	
+	public Integer getRandomAspectTypeID()
+	{
+		return Main.getRandomNumberInRange(this.aspectTypes.size());
 	}
 	
 	public ArrayList<String> getScenarioFilePaths()
@@ -67,26 +89,40 @@ public class Spice implements JsonStructure, StoryElement
 		this.scenarioFilePaths.add(filepath);
 	}
 	
-	public HashMap<Integer, TwistList> getTwistLists() {
+	public HashMap<Integer, TwistList> getTwistLists()
+	{
 		return twistLists;
 	}
 
+	public void addAspectType(Integer key, AspectType aspectType)
+	{
+		this.aspectTypes.put(key, aspectType);
+	}
+	
 	@Override
 	public JsonObject getJsonObject()
 	{
 		JsonArrayBuilder suggestionsBuilder = Main.getJsonBuilderForStrings(this.suggestions);
 		JsonArrayBuilder goodSuggestionsBuilder = Main.getJsonBuilderForStrings(this.goodSuggestions);
 		JsonArrayBuilder badSuggestionsBuilder = Main.getJsonBuilderForStrings(this.badSuggestions);		
-		JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();		
-		JsonObjectBuilder twistListsBuilder = Json.createObjectBuilder();		
+		JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 		
+		JsonObjectBuilder twistListsBuilder = Json.createObjectBuilder();				
 		for (Entry<Integer, TwistList> entry : twistLists.entrySet())
 		{
 			JsonObjectBuilder innerJsonObjectBuilder = entry.getValue().getJsonObjectBuilder();
 			twistListsBuilder.add(String.valueOf(entry.getKey()), innerJsonObjectBuilder.build());
-		}		
-		
+		}
 		jsonObjectBuilder.add(Main.TWISTLISTS, twistListsBuilder.build());
+		
+		JsonObjectBuilder aspectTypesBuilder = Json.createObjectBuilder();	
+		for (Entry<Integer, AspectType> entry : aspectTypes.entrySet())
+		{
+			JsonObjectBuilder innerJsonObjectBuilder = entry.getValue().getJsonObjectBuilder();
+			aspectTypesBuilder.add(String.valueOf(entry.getKey()), innerJsonObjectBuilder.build());
+		}
+		jsonObjectBuilder.add(Main.ASPECTTYPES, aspectTypesBuilder.build());
+		
 		jsonObjectBuilder.add(Main.SUGGESTIONS, suggestionsBuilder.build());
 		jsonObjectBuilder.add(Main.GOOD_SUGGESTIONS, goodSuggestionsBuilder.build());	
 		jsonObjectBuilder.add(Main.BAD_SUGGESTIONS, badSuggestionsBuilder.build());
@@ -161,6 +197,23 @@ public class Spice implements JsonStructure, StoryElement
 		badSuggestions.add("Bad Suggestion 3");
 		
 		Spice spice = new Spice(twistLists, suggestions, goodSuggestions, badSuggestions);
+		
+		HashMap<Integer, AspectList> aspectLists = new HashMap<Integer, AspectList>();
+		HashMap<Integer, Aspect> aspects = new HashMap<Integer, Aspect>();
+		HashMap<Integer, Integer> aspectQualities = new HashMap<Integer, Integer>();
+		
+
+		ArrayList<AspectOption> aspectOptions = new ArrayList<AspectOption>();
+		aspectOptions.add(new AspectOption("One"));
+		aspectLists.put(0, new AspectList(aspectOptions, "List One"));
+		
+		AspectType aspectType = new AspectType("Test", aspectLists, aspects);
+		spice.addAspectType(0, aspectType);
+		
+		aspectQualities.put(0, 0);
+		Aspect aspect = new Aspect(aspectType, "Aspect Test", aspectQualities);
+		aspects.put(0, aspect);
+	
 		Spice newSpice = new Spice(spice.getJsonObject());
 		System.out.println(spice.getJsonObject());
 		System.out.println(newSpice.getJsonObject());

@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import frontEnd.fieldPanel.ExitPointPanel;
 import frontEnd.fieldPanel.FieldPanel;
 import frontEnd.fieldPanel.NewBranchPanel;
+import storyElements.Aspect;
 import storyElements.ExitPoint;
 import storyElements.Exitable;
 import storyElements.Scenario;
@@ -70,6 +71,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	private Token currentObstacle;
+	private Aspect currentAspect;
 	
 	MyButton progressButton;
 	
@@ -118,6 +120,8 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			this.pastExitPoints.add(scenario.getCurrentBranch());
 		}
+		
+		this.currentAspect = scenario.getCurrentBranch().generateAspect(this);
 		
 		this.updateDisplay();
 	}
@@ -501,6 +505,12 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription() + "\r\n");	
 		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");
 		infoBuilder.append("Current Obstacle: " + this.getCurrentObstacleDescription() + "\r\n");
+		if (this.currentAspect != null)
+		{
+			infoBuilder.append("Current Aspect: " + this.currentAspect.getDescription() + "\r\n");
+			infoBuilder.append(this.currentAspect.getQualitiesDescription() + "\r\n");
+		}
+
 		infoBuilder.append("Current Tokens:\r\n");
 		for (Token token : this.getAllTokens())
 		{
@@ -513,6 +523,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	{
 		Scenario scenario = Main.getMainScenario();
 		this.pastExitPoints.add(branch);
+		this.currentAspect = branch.generateAspect(this);
 		scenario.setCurrentBranch(branch);
 		this.mainGenerator = null;
 		this.currentOption = null;

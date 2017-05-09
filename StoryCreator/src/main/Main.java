@@ -88,7 +88,17 @@ public class Main
 	public static final String OPENINGCHANCE = "openingchance";
 	public static final String SUDDENENDING_CHANCE = "suddenendingchance";
 	public static final String MINIMUM_SCENARIO_LENGTH = "minimumscenariolength";
+	public static final String ASPECTLISTS = "aspectlists";
+	public static final String ASPECTS = "aspects";
+	public static final String ASPECTTYPES = "aspecttypes";
+	public static final String ASPECTTYPE = "aspecttype";
+	public static final String QUALITIES = "qualities";
 	
+	private static Window window;
+	public static Window getWindow() {
+		return window;
+	}
+
 	private static Random random = new Random();
 	private static Scenario mainScenario;
 	private static Spice mainSpice;
@@ -194,6 +204,7 @@ public class Main
 	public static void showWindowInCentre(Window window)
 	{
 		Dimension screenCentre = main.Main.getScreenCentre();
+		Main.window = window;
 		window.setLocation(screenCentre.width - window.getWidth()/2, screenCentre.height - window.getHeight()/2);
 		window.setVisible(true);
 	}
@@ -280,7 +291,8 @@ public class Main
         Main.showWindowInCentre(initialSpiceDialog); 
 		InitialScenarioDialog initialScenarioDialog = new InitialScenarioDialog();
         Main.showWindowInCentre(initialScenarioDialog);
-        Main.setMainScenario(initialScenarioDialog.getResult());
+		Main.setMainScenario(initialScenarioDialog.getResult());
+
         EditorDialog editorDialog = new EditorDialog(initialScenarioDialog.getBranchLevel());
         Main.showWindowInCentre(editorDialog); 
 	}

@@ -8,19 +8,23 @@ import java.util.HashMap;
 import javax.swing.JTextField;
 
 import frontEnd.fieldPanel.FieldPanel;
+import storyElements.AspectType;
 import storyElements.Spice;
 import storyElements.optionLists.TwistList;
 import storyElements.options.BranchOption;
+import storyElements.options.ExpandingContentType;
 import storyElements.options.StoryElement;
 import storyElements.options.TwistOption;
 import main.Main;
 
 public class NewSpicePanel extends MyPanel<Spice>
 {
+	ArrayList<NewAspectTypePanel> newAspectTypePanels;
 	ArrayList<NewTwistListPanel> newTwistListPanels;
 	ArrayList<JTextField> suggestionFields;
 	ArrayList<JTextField> goodSuggestionFields;
 	ArrayList<JTextField> badSuggestionFields;
+	ExpandingPanel<AspectTypePanel, AspectType> expandingPanel;
 	
 	public NewSpicePanel(int initialTwists)
 	{
@@ -38,6 +42,8 @@ public class NewSpicePanel extends MyPanel<Spice>
 		this.suggestionFields = this.addSuggestionFields("Suggestion ");
 		this.goodSuggestionFields = this.addSuggestionFields("Good Suggestion ");
 		this.badSuggestionFields = this.addSuggestionFields("Bad Suggestion ");
+		this.expandingPanel = new ExpandingPanel<AspectTypePanel, AspectType>(ExpandingContentType.ASPECTTYPE);
+		this.addPanel(this.expandingPanel);
 	}
 
 	private ArrayList<JTextField> addSuggestionFields(String prefix)
@@ -62,11 +68,20 @@ public class NewSpicePanel extends MyPanel<Spice>
 			i++;
 		}
 		
-		ArrayList<String> suggestions = NewOptionListPanel.getStringsFromFields(this.suggestionFields);
-		ArrayList<String> goodSuggestions = NewOptionListPanel.getStringsFromFields(this.goodSuggestionFields);
-		ArrayList<String> badSuggestions = NewOptionListPanel.getStringsFromFields(this.badSuggestionFields);
+		ArrayList<String> suggestions = OptionListFieldPanel.getStringsFromFields(this.suggestionFields);
+		ArrayList<String> goodSuggestions = OptionListFieldPanel.getStringsFromFields(this.goodSuggestionFields);
+		ArrayList<String> badSuggestions = OptionListFieldPanel.getStringsFromFields(this.badSuggestionFields);
 		
-		return new Spice(twistLists, suggestions, goodSuggestions, badSuggestions);
+		Spice spice =  new Spice(twistLists, suggestions, goodSuggestions, badSuggestions);
+		
+		int j = 0;
+		for (AspectType aspectType : this.expandingPanel.getResult())
+		{
+			spice.addAspectType(i, aspectType);
+			i++;
+		}
+		
+		return spice;
 	}
 	
 }

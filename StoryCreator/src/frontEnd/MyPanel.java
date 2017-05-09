@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 
 public abstract class MyPanel<T> extends JPanel
 {
-	private int yPos = 0;
+	protected int yPos = 0;
 	protected String heading;
 	
 	public MyPanel()
@@ -22,6 +22,14 @@ public abstract class MyPanel<T> extends JPanel
 	
 	public String getHeading() {
 		return heading;
+	}
+	
+	protected MyButton addJButton(ButtonID buttonID, String buttonText)
+	{		
+		MyButton myButton = new MyButton(buttonText, buttonID);
+		this.add(myButton, this.setupGridBagConstraints(0, this.yPos, 1, 1, 0));
+		this.yPos++;
+		return myButton;
 	}
 	
 	

@@ -7,7 +7,9 @@ import javax.json.JsonObject;
 import javax.swing.JLabel;
 
 import main.Main;
+import storyElements.AspectType;
 import storyElements.Spice;
+import storyElements.options.ExpandingContentType;
 
 public class InitialSpiceDialog extends InitialDialog
 {

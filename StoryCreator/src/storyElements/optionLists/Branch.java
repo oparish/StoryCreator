@@ -5,15 +5,21 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import frontEnd.AspectPanel;
 import frontEnd.EditorDialog;
 import frontEnd.FieldDialog;
 import frontEnd.MyPanel;
+import frontEnd.OldOrNewAspectPanel;
 import frontEnd.OldOrNewPanel;
 import frontEnd.fieldPanel.BadExitPointPanel;
 import frontEnd.fieldPanel.ExitPointPanel;
@@ -31,6 +37,8 @@ import frontEnd.fieldPanel.NewOptionPanel;
 import frontEnd.fieldPanel.NewSubplotPanel;
 import frontEnd.fieldPanel.NewTokenPanel;
 import main.Main;
+import storyElements.Aspect;
+import storyElements.AspectType;
 import storyElements.ExitPoint;
 import storyElements.Exitable;
 import storyElements.Scenario;
@@ -50,6 +58,12 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	private Integer badExitPoint = null;
 	private Integer obstacle = null;
 	private Integer branchLevel;
+	private Integer aspectTypeID;
+	private ArrayList<Integer> aspectIDs;
+
+	public AspectType getAspectType() {
+		return Main.getMainSpice().getAspectTypes().get(this.aspectTypeID);
+	}
 
 	public Integer getBranchLevel() {
 		return branchLevel;
@@ -67,13 +81,17 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.defaultExitPoint = defaultExitPoint;
 	}
 
-	public Branch(ArrayList<BranchOption> initialOptions, String description, int branchLevel)
+	public Branch(ArrayList<BranchOption> initialOptions, String description, int branchLevel, int aspectTypeID)
 	{
 		super(initialOptions, description);
 		this.branchLevel = branchLevel;
 		this.useOpening = false;
 		if (Main.getMainScenario() != null)
+		{
 			Main.getMainScenario().recordNewExitPoint(this, branchLevel);
+		}
+		this.aspectTypeID = aspectTypeID;
+		this.aspectIDs = new ArrayList<Integer>();
 	}
 	
 	public Branch(JsonObject jsonObject)
@@ -89,6 +107,12 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.obstacle = Main.processJsonInt(jsonObject, Main.OBSTACLE);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
+		this.aspectTypeID = jsonObject.getInt(Main.ASPECTTYPE);
+		this.aspectIDs = new ArrayList<Integer>();
+		for (JsonValue optionJson : jsonObject.getJsonArray(Main.ASPECTS))
+		{
+			aspectIDs.add(((JsonNumber)optionJson).intValue());
+		}
 		this.useOpening = true;
 	}
 	
@@ -230,7 +254,44 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			jsonObjectBuilder.add(Main.BAD_EXITPOINT, this.badExitPoint);
 		if (this.obstacle != null)
 			jsonObjectBuilder.add(Main.OBSTACLE, this.obstacle);
+		jsonObjectBuilder.add(Main.ASPECTTYPE, this.aspectTypeID);
+		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+		for (Integer aspectID : this.aspectIDs)
+		{
+			jsonArrayBuilder.add(aspectID);
+		}
+		jsonObjectBuilder.add(Main.ASPECTS, jsonArrayBuilder.build());
 		return jsonObjectBuilder;
+	}
+	
+	public Aspect generateAspect(EditorDialog editorDialog)
+	{
+		int number = Main.getRandomNumberInRange(this.aspectIDs.size() + 1);
+		if (number == this.aspectIDs.size())
+		{
+			return this.makeNewAspect(editorDialog);
+		}
+		else
+		{
+			return this.getAspectType().getAspect(number);
+		}
+	}
+	
+	private Aspect makeNewAspect(EditorDialog editorDialog)
+	{
+		AspectType aspectType = this.getAspectType();
+		MyPanel<Aspect> aspectPanel;
+		if (aspectType.getAspectsSize() != 0)
+		{
+			aspectPanel = new OldOrNewAspectPanel(editorDialog, this.getAspectType());
+		}
+		else
+		{
+			aspectPanel = new AspectPanel(editorDialog, this.getAspectType());
+		}
+		Main.showWindowInCentre(new FieldDialog(editorDialog, true, new MyPanel[]{aspectPanel}));
+		Aspect aspect = aspectPanel.getResult();
+		return aspect;
 	}
 	
 	public Generator getGenerator()

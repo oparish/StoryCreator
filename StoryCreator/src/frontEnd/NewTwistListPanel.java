@@ -1,5 +1,7 @@
 package frontEnd;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JTextField;
@@ -12,6 +14,7 @@ import frontEnd.fieldPanel.FieldPanel;
 
 public class NewTwistListPanel extends MyOptionListPanel<TwistList>
 {
+	private static final String NEW_OPTION = "New Option";
 	private static final String TWIST_LIST_DESCRIPTION = "Twist List Description";
 	private JTextField descriptionField;
 	
@@ -32,6 +35,4 @@ public class NewTwistListPanel extends MyOptionListPanel<TwistList>
 		}
 		return new TwistList(twistOptions, this.descriptionField.getText());
 	}
-
-
 }

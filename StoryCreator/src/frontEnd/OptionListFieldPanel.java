@@ -8,12 +8,12 @@ import javax.swing.JTextField;
 import frontEnd.fieldPanel.FieldPanel;
 import storyElements.options.StoryElement;
 
-public abstract class NewOptionListPanel<T extends StoryElement> extends FieldPanel<T>
+public abstract class OptionListFieldPanel<T extends StoryElement> extends FieldPanel<T>
 {
 	protected static final String INITIAL_OPTION = "Initial Option";	
 	protected ArrayList<JTextField> initialOptionFields;
 	
-	public NewOptionListPanel(int branchLevel)
+	public OptionListFieldPanel(int branchLevel)
 	{
 		super(branchLevel);
 	}

@@ -40,6 +40,7 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		{
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
-		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch());
+		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch(), 
+				Main.getMainSpice().getRandomAspectTypeID());
 	}
 }

@@ -425,7 +425,8 @@ public class Scenario implements JsonStructure, StoryElement
 	
 	private Branch setupNewBranch(ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLevel)
 	{
-		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription, branchLevel);
+		Branch newBranch = new Branch(initialBranchOptions, initialBranchDescription, branchLevel, 
+				Main.getMainSpice().getRandomAspectTypeID());
 		this.recordNewExitPoint(newBranch, branchLevel);
 		return newBranch;
 	}

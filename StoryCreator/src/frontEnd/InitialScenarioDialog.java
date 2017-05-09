@@ -59,6 +59,7 @@ public class InitialScenarioDialog extends InitialDialog
 		FieldDialog newScenarioDialog = new FieldDialog(null, true, new MyPanel[]{newScenarioPanel});
 		Main.showWindowInCentre(newScenarioDialog);
 		Scenario newScenario = newScenarioPanel.getResult();
+        Main.setMainScenario(newScenario);
         this.addScenarioToSpice();
 		this.addedScenario = newScenario;
 	}
@@ -66,9 +67,10 @@ public class InitialScenarioDialog extends InitialDialog
 	private void loadScenario()
 	{
 		File file = this.loadFile();
-		Main.getMainScenario().setFile(file);
 		JsonObject scenarioObject = this.loadJsonObject(file);
-		Scenario newScenario = new Scenario(scenarioObject);
+		Scenario newScenario = new Scenario(scenarioObject);	
+		Main.setMainScenario(newScenario);
+		newScenario.setFile(file);
 		this.addScenarioToSpice();
 		this.addedScenario = newScenario;
 	}

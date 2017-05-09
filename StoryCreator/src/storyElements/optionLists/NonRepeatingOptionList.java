@@ -55,14 +55,19 @@ public class NonRepeatingOptionList<T extends Option> extends OptionList<T> {
 		}
 		else
 		{
-			MyPanel<T> panel = this.getOptionPanel();
-			FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{panel});
-			newOptionDialog.setTitle("New " + this.type);
-			Main.showWindowInCentre(newOptionDialog);
-        	T option = panel.getResult();
-            NonRepeatingOptionList.this.add(option);
-            return option;
+			return this.generateNewOption(editorDialog);
 		}	
+	}
+
+	protected T generateNewOption(EditorDialog editorDialog)
+	{
+		MyPanel<T> panel = this.getOptionPanel();
+		FieldDialog newOptionDialog = new FieldDialog(editorDialog, true, new MyPanel[]{panel});
+		newOptionDialog.setTitle("New " + this.type);
+		Main.showWindowInCentre(newOptionDialog);
+		T option = panel.getResult();
+		NonRepeatingOptionList.this.add(option);
+		return option;
 	}
 	
 }
