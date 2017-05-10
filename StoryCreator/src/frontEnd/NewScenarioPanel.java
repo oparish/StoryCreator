@@ -37,7 +37,6 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private static final String MINIMUM_SCENARIO_LENGTH = "Minimum Scenario Length";
 
 	private JTextField scenarioDescriptionField;
-	private JTextField initialBranchDescriptionField;
 	private NumberSpinner optionToBranchSpinner;
 	private NumberSpinner optionWithSubPlotSpinner;
 	private NumberSpinner optionWithFlavourSpinner;
@@ -58,11 +57,6 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		
 		this.scenarioDescriptionField = new JTextField();
 		this.addTextField(this.scenarioDescriptionField, SCENARIO_DESCRIPTION);
-		
-		this.initialBranchDescriptionField = new JTextField();
-		this.addTextField(this.initialBranchDescriptionField, INITIAL_BRANCH_DESCRIPTION);
-		
-		this.addInitialOptions(Main.INITIALOPTIONS_FOR_SCENARIO);
 		
 		this.optionToBranchSpinner = new NumberSpinner();
 		this.addSpinner(this.optionToBranchSpinner, OPTION_WITH_EXITPOINT);
@@ -106,12 +100,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	
 	public Scenario getResult()
 	{
-		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
-		for (JTextField textField : this.initialOptionFields)
-		{
-			initialOptions.add(new BranchOption(textField.getText()));
-		}
-		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), initialOptions, this.initialBranchDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
+		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
 		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
 		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
 		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));

@@ -56,11 +56,9 @@ public class Scenario implements JsonStructure, StoryElement
 	
 	File file;
 
-	public Scenario(String description, ArrayList<BranchOption> initialBranchOptions, String initialBranchDescription, int branchLength, int subplotLength, int scenarioLength)
+	public Scenario(String description, int branchLength, int subplotLength, int scenarioLength)
 	{
 		this.description = description;
-		this.currentBranch = this.setupNewBranch(initialBranchOptions, initialBranchDescription, 0);
-		exitPoints.put(0, this.currentBranch);
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
 		this.maximumScenarioLength = scenarioLength;
