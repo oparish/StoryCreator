@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import javax.swing.JTextField;
 
 import frontEnd.MyPanel;
+import frontEnd.StoryElementList;
 import main.Main;
+import storyElements.AspectType;
 import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
 import storyElements.options.OptionContentType;
@@ -17,12 +19,16 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 
 	private JTextField branchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
+	private StoryElementList<AspectType> aspectTypes;
 	
 	public AbstractBranchPanel(int branchLevel, String suggestion)
 	{
 		super();
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
+		
+		this.aspectTypes = StoryElementList.create(Main.getMainSpice().getAspectTypes().values());
+		this.addStoryElementList(this.aspectTypes);
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
 		for (int i = 0; i < Main.INITIALOPTIONS_FOR_BRANCH; i++)
@@ -41,6 +47,6 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
 		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch(), 
-				Main.getMainSpice().getRandomAspectTypeID());
+				Main.getMainSpice().getAspectIDByType(this.aspectTypes.getSelectedElement()) );
 	}
 }

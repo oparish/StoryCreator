@@ -62,7 +62,6 @@ public class Scenario implements JsonStructure, StoryElement
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
 		this.maximumScenarioLength = scenarioLength;
-		this.nextBranch = 1;
 	}
 	
 	public Scenario(JsonObject jsonObject)

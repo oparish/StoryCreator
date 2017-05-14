@@ -159,6 +159,16 @@ public class Spice implements JsonStructure, StoryElement
 		return this.badSuggestions.get(rnd);
 	}
 	
+	public Integer getAspectIDByType(AspectType aspectType)
+	{
+		for (Entry<Integer, AspectType> entry : this.aspectTypes.entrySet())
+		{
+			if (aspectType == entry.getValue())
+				return entry.getKey();
+		}
+		return null;
+	}
+	
 	@Override
 	public String getDescription()
 	{
