@@ -39,6 +39,15 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		}	
 	}
 	
+	private AspectType getAspectType()
+	{
+		AspectType selectedType = this.aspectTypes.getSelectedElement();
+		if (selectedType == null)
+			return this.aspectTypes.getModel().getElementAt(0);
+		else
+			return selectedType;
+	}
+	
 	public Branch getResult()
 	{
 		ArrayList<BranchOption> initialOptions = new ArrayList<BranchOption>();
@@ -47,6 +56,6 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
 		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch(), 
-				Main.getMainSpice().getAspectIDByType(this.aspectTypes.getSelectedElement()) );
+				Main.getMainSpice().getAspectIDByType(this.getAspectType()));
 	}
 }

@@ -77,7 +77,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	
 	private Generator mainGenerator = null;
 	private ExitPoint nextExitPoint = null;
-	private ArrayList<ExitPoint> pastExitPoints = new ArrayList<ExitPoint>();
+	private ArrayList<CurrentStatus> history = new ArrayList<CurrentStatus>();
 	private Subplot nextSubplot = null;
 	private Subplot.Generator subplotGenerator = null;
 	private int subplotCounter = 0;
@@ -112,16 +112,17 @@ public class EditorDialog extends JFrame implements ActionListener
 		if (scenario.getCurrentBranch() == null)
 		{
 			Branch currentBranch = (Branch) this.setupStartingBranch(startingLevel);
-			this.pastExitPoints.add(currentBranch);
 			scenario.setCurrentBranch(currentBranch);
+			this.currentAspect = scenario.getCurrentBranch().generateAspect(this);
+			this.history.add(new CurrentStatus(currentBranch, this.currentAspect));
 			scenario.getExitPointID(currentBranch);
 		}
 		else
 		{
-			this.pastExitPoints.add(scenario.getCurrentBranch());
+			this.history.add(new CurrentStatus(scenario.getCurrentBranch(), this.currentAspect));
 		}
 		
-		this.currentAspect = scenario.getCurrentBranch().generateAspect(this);
+
 		
 		this.updateDisplay();
 	}
@@ -266,40 +267,37 @@ public class EditorDialog extends JFrame implements ActionListener
 		this.displayPanel.setText(this.storyBuilder.toString());
 	}
 	
-	private void backtrack()
+	private void startBacktrack()
 	{
-		BacktrackPanel backtrackPanel = new BacktrackPanel(this.pastExitPoints);
+		BacktrackPanel backtrackPanel = new BacktrackPanel(this.history);
 		Main.showWindowInCentre(new FieldDialog(this, true, new MyPanel[]{backtrackPanel}));
-		ExitPoint newExitPoint = backtrackPanel.getResult();
-		if (newExitPoint instanceof Branch)
+		CurrentStatus newStatus = backtrackPanel.getResult();
+		this.finishBacktrack(newStatus);
+	}
+
+	private void finishBacktrack(CurrentStatus newStatus) {
+		int newBranchLevel = newStatus.branch.getBranchLevel();
+		int currentBranchLevel = Main.getMainScenario().getCurrentBranch().getBranchLevel();
+		
+		for (int i = currentBranchLevel; i >= newBranchLevel; i--)
 		{
-			Branch newBranch = (Branch) newExitPoint;
-			int newBranchLevel = newBranch.getBranchLevel();
-			int currentBranchLevel = Main.getMainScenario().getCurrentBranch().getBranchLevel();
+			this.history.remove(i);
+			if (this.heldTokens.get(i) != null)
+				for (Token token : this.heldTokens.get(i))
+				{
+					this.unheldTokens.add(token);
+				}
+			this.heldTokens.remove(i);
+		}
 			
-			for (int i = currentBranchLevel; i >= newBranchLevel; i--)
-			{
-				this.pastExitPoints.remove(i);
-				if (this.heldTokens.get(i) != null)
-					for (Token token : this.heldTokens.get(i))
-					{
-						this.unheldTokens.add(token);
-					}
-				this.heldTokens.remove(i);
-			}
-				
-			Main.getMainScenario().setCurrentBranch(newBranch);
-			this.nextExitPoint = newBranch;
-			this.flavour = null;
-			newBranch.setUseOpening(true);
-			this.progressButton.setEnabled(true);
-			this.progress();
-			this.moveText("\r\n\r\nBACKTRACKING TO " + newBranch.getDescription() + "\r\n\r\n");
-		}
-		else
-		{
-			return;
-		}
+		Main.getMainScenario().setCurrentBranch(newStatus.branch);
+		this.currentAspect = newStatus.aspect;
+		this.nextExitPoint = newStatus.branch;
+		this.flavour = null;
+		newStatus.branch.setUseOpening(true);
+		this.progressButton.setEnabled(true);
+		this.progress();
+		this.moveText("\r\n\r\nBACKTRACKING TO " + newStatus.branch.getDescription() + "\r\n\r\n");
 	}
 	
 	public void reachEnding(EndingOption ending)
@@ -522,9 +520,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	private void startNewBranch(Branch branch)
 	{
 		Scenario scenario = Main.getMainScenario();
-		this.pastExitPoints.add(branch);
 		this.currentAspect = branch.generateAspect(this);
 		scenario.setCurrentBranch(branch);
+		this.history.add(new CurrentStatus(branch, this.currentAspect));
 		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
@@ -596,7 +594,7 @@ public class EditorDialog extends JFrame implements ActionListener
 				this.progress();
 			break;
 			case BACKTRACK:
-				this.backtrack();
+				this.startBacktrack();
 			break;
 			case SAVESTORYTOFILE:
 				this.saveStoryToFile();
@@ -612,5 +610,24 @@ public class EditorDialog extends JFrame implements ActionListener
 			default:
 				break;
 		}
+	}
+	
+	public class CurrentStatus implements StoryElement
+	{
+		public Branch branch;
+		public Aspect aspect;
+		
+		public CurrentStatus(Branch branch, Aspect aspect)
+		{
+			this.branch = branch;
+			this.aspect = aspect;
+		}
+
+		@Override
+		public String getDescription()
+		{
+			return this.branch.getDescription();
+		}
+	
 	}
 }

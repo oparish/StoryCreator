@@ -8,6 +8,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import frontEnd.InitialSpiceDialog;
 import main.Main;
 import storyElements.options.AspectOption;
 import storyElements.options.StoryElement;
@@ -68,5 +69,17 @@ public class Aspect implements StoryElement
 		
 		jsonObjectBuilder.add(Main.DESCRIPTION, this.description);
 		return jsonObjectBuilder;
+	}
+	
+	public static void main(String[] args)
+	{
+		InitialSpiceDialog initialSpiceDialog = new InitialSpiceDialog();
+        Main.showWindowInCentre(initialSpiceDialog); 
+        AspectType aspectType = Main.getMainSpice().getAspectTypes().get(0);
+        for (AspectList aspectList : aspectType.getAspectLists().values())
+        {
+        	AspectOption aspectOption = (AspectOption) aspectList.get(Main.getRandomNumberInRange(aspectList.size()));
+        	System.out.println(aspectOption.getDescription());
+        }
 	}
 }

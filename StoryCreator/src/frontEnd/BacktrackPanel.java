@@ -2,13 +2,14 @@ package frontEnd;
 
 import java.util.ArrayList;
 
+import frontEnd.EditorDialog.CurrentStatus;
 import storyElements.ExitPoint;
 
-public class BacktrackPanel extends MyPanel<ExitPoint>
+public class BacktrackPanel extends MyPanel<CurrentStatus>
 {
-	StoryElementList<ExitPoint> exitPointList;
+	StoryElementList<CurrentStatus> exitPointList;
 	
-	public BacktrackPanel(ArrayList<ExitPoint> exitPoints)
+	public BacktrackPanel(ArrayList<CurrentStatus> exitPoints)
 	{
 		super();
 		this.exitPointList = StoryElementList.create(exitPoints);
@@ -16,7 +17,7 @@ public class BacktrackPanel extends MyPanel<ExitPoint>
 	}
 	
 	@Override
-	public ExitPoint getResult()
+	public CurrentStatus getResult()
 	{
 		return this.exitPointList.getSelectedElement();
 	}
