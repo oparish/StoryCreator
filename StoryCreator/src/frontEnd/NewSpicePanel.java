@@ -19,6 +19,8 @@ import main.Main;
 
 public class NewSpicePanel extends MyPanel<Spice>
 {
+	private static final String ASPECTTYPE_TITLE = "Aspect Type";
+	
 	ArrayList<NewAspectTypePanel> newAspectTypePanels;
 	ArrayList<NewTwistListPanel> newTwistListPanels;
 	ArrayList<JTextField> suggestionFields;
@@ -42,7 +44,8 @@ public class NewSpicePanel extends MyPanel<Spice>
 		this.suggestionFields = this.addSuggestionFields("Suggestion ");
 		this.goodSuggestionFields = this.addSuggestionFields("Good Suggestion ");
 		this.badSuggestionFields = this.addSuggestionFields("Bad Suggestion ");
-		this.expandingPanel = new ExpandingPanel<AspectTypePanel, AspectType>(ExpandingContentType.ASPECTTYPE);
+		this.expandingPanel = new ExpandingPanel<AspectTypePanel, AspectType>(ExpandingContentType.ASPECTTYPE, 
+				ASPECTTYPE_TITLE);
 		this.addPanel(this.expandingPanel);
 	}
 

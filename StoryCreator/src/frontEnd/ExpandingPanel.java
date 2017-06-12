@@ -1,5 +1,6 @@
 package frontEnd;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -7,11 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
+import javax.swing.border.Border;
 
 import main.Main;
 import storyElements.options.AspectOption;
@@ -24,14 +28,17 @@ public class ExpandingPanel<T extends MyPanel, U extends StoryElement> extends J
 	ExpandingContentType expandingContentType;
 	int yPos = 0;
 	
-	public ExpandingPanel(ExpandingContentType expandingContentType)
+	public ExpandingPanel(ExpandingContentType expandingContentType, String title)
 	{
 		super();
 		this.expandingContentType = expandingContentType;
 		this.setLayout(new GridBagLayout());
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		JButton expandButton = new JButton(this.expandingContentType.getText());
 		expandButton.addActionListener(this);
-		this.add(expandButton, this.setupGridBagConstraints(0, 0, 1, 1, 0));
+		this.add(new JLabel(title), this.setupGridBagConstraints(0, 0, 1, 1, 0));
+		yPos++;
+		this.add(expandButton, this.setupGridBagConstraints(0, 1, 1, 1, 0));
 		yPos++;
 	}
 	
@@ -79,7 +86,7 @@ public class ExpandingPanel<T extends MyPanel, U extends StoryElement> extends J
 		JDialog window = new JDialog(new JDialog(), true);
 		window.setSize(500, 500);
 		ExpandingPanel<AspectOptionPanel, AspectOption> expandingPanel = 
-				new ExpandingPanel<AspectOptionPanel, AspectOption>(ExpandingContentType.ASPECTOPTION);
+				new ExpandingPanel<AspectOptionPanel, AspectOption>(ExpandingContentType.ASPECTOPTION, "Aspect Option");
 		window.add(expandingPanel);
 		Main.showWindowInCentre(window);
 		for (AspectOption aspectOption : expandingPanel.getResult())

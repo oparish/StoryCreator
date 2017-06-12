@@ -11,6 +11,8 @@ import storyElements.options.StoryElement;
 
 public class AspectListPanel extends MyPanel<AspectList>
 {
+	private static final String ASPECTOPTION_TITLE = "Aspect Option";
+	
 	JTextField description;
 	ExpandingPanel<AspectOptionPanel, AspectOption> expandingPanel;
 	
@@ -19,7 +21,7 @@ public class AspectListPanel extends MyPanel<AspectList>
 		super();
 		this.description = new JTextField();
 		this.addTextField(this.description, "Description");
-		this.expandingPanel = new ExpandingPanel<AspectOptionPanel, AspectOption>(ExpandingContentType.ASPECTOPTION);
+		this.expandingPanel = new ExpandingPanel<AspectOptionPanel, AspectOption>(ExpandingContentType.ASPECTOPTION, ASPECTOPTION_TITLE);
 		this.addPanel(this.expandingPanel);
 	}
 	
