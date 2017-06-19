@@ -26,7 +26,13 @@ public class OldOrNewAspectPanel extends MyPanel<Aspect> implements ActionListen
 		super();
 		this.aspectPanel = new AspectPanel(editorDialog, aspectType);
 		this.heading = this.aspectPanel.getHeading();
+		
+		Collection storyElements = aspectType.getAspectCollection();
+		this.storyElementList = StoryElementList.create(storyElements);
 
+		Aspect suggestedAspect = this.storyElementList.getRandomStoryElement();
+		this.addJLabel(suggestedAspect.getDescription());
+		
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(this.oldButton);
 		this.oldButton.addActionListener(this);
@@ -34,8 +40,6 @@ public class OldOrNewAspectPanel extends MyPanel<Aspect> implements ActionListen
 		this.newButton.addActionListener(this);
 		this.addPanel(buttonsPanel);
 
-		Collection storyElements = aspectType.getAspectCollection();
-		this.storyElementList = StoryElementList.create(storyElements);
 		this.addStoryElementList(this.storyElementList);
 		
 		this.addPanel(this.aspectPanel);

@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 
+import main.Main;
 import storyElements.options.StoryElement;
 
 public class StoryElementList<T extends StoryElement> extends JScrollPane
@@ -36,6 +37,12 @@ public class StoryElementList<T extends StoryElement> extends JScrollPane
 	public T getSelectedElement()
 	{
 		return this.innerList.getSelectedValue();
+	}
+	
+	public T getRandomStoryElement()
+	{
+		int number = Main.getRandomNumberInRange(this.innerList.getModel().getSize());
+		return this.innerList.getModel().getElementAt(number);
 	}
 	
 	private class StoryElementListCellRenderer implements ListCellRenderer<StoryElement>
