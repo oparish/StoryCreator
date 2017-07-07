@@ -24,6 +24,7 @@ public class AspectType implements StoryElement
 		this.description = description;
 		this.aspectLists = aspectLists;
 		this.aspects = aspects;
+		this.registerAspectLists(aspectLists.values(), this);
 	}
 	
 	public AspectType(JsonObject jsonObject)
@@ -48,6 +49,15 @@ public class AspectType implements StoryElement
 			JsonObject innerObject = aspectsObject.getJsonObject(key);
 			this.aspects.put(intKey, new Aspect(this, innerObject));
 		}
+		this.registerAspectLists(aspectLists.values(), this);
+	}
+	
+	public void registerAspectLists(Collection<AspectList> aspectLists, AspectType aspectType)
+	{
+		for (AspectList aspectList : aspectLists)
+		{
+			aspectList.setAspectType(this);
+		}	
 	}
 	
 	public Collection<Aspect> getAspectCollection()

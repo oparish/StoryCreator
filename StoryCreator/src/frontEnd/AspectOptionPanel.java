@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 
 import frontEnd.fieldPanel.FieldPanel;
 import storyElements.AspectList;
+import storyElements.AspectType;
 import storyElements.optionLists.FlavourList;
 import storyElements.optionLists.TwistList;
 import storyElements.options.AspectOption;
@@ -22,6 +23,7 @@ public class AspectOptionPanel extends MyPanel<AspectOption>
 	{
 		super();
 		this.heading = "Aspect Option";
+		this.addJLabel(aspectList.getAspectType().getDescription());
 		this.addJLabel(aspectList.getDescription());
 		this.descriptionField = new JTextField();
 		this.addStoryElementList(StoryElementList.create(aspectList));

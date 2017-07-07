@@ -22,7 +22,16 @@ import storyElements.options.StoryElement;
 public class AspectList extends NonRepeatingOptionList<AspectOption> implements StoryElement
 {
 	private String description;
+	private AspectType aspectType;
 	
+	public AspectType getAspectType() {
+		return aspectType;
+	}
+
+	public void setAspectType(AspectType aspectType) {
+		this.aspectType = aspectType;
+	}
+
 	public AspectList(JsonObject jsonObject)
 	{
 		super(AspectOptionPanel.class);
