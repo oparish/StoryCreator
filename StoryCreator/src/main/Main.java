@@ -71,6 +71,7 @@ public class Main
 	public static final String OPTION_HAS_TOKEN = "optionHasToken";
 	public static final String EXITPOINTS = "exitpoints";
 	public static final String FLAVOURLISTS = "flavourLists";
+	public static final String BRANCHLEVELS = "branchLevels";
 	public static final String SUBPLOTS = "subplots";
 	public static final String OPTIONS = "options";
 	public static final String SUBPLOT = "subplot";

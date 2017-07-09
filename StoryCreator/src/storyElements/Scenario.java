@@ -34,7 +34,7 @@ public class Scenario implements JsonStructure, StoryElement
 	HashMap<Integer, ExitPoint> exitPoints = new HashMap<Integer, ExitPoint>();
 	HashMap<Integer, Subplot> subplots = new HashMap<Integer, Subplot>();
 	HashMap<Integer, FlavourList> flavourLists = new HashMap<Integer, FlavourList>();
-	HashMap<Integer, ArrayList<ExitPoint>> branchLevels = new HashMap<Integer, ArrayList<ExitPoint>>();
+	HashMap<Integer, ArrayList<ExitPoint>> branchHierarchy = new HashMap<Integer, ArrayList<ExitPoint>>();
 	HashMap<Integer, Token> tokens = new HashMap<Integer, Token>();
 	Branch currentBranch;
 	int nextBranch = 0;
@@ -47,21 +47,21 @@ public class Scenario implements JsonStructure, StoryElement
 	Chance branchHasOpening = null;
 	Chance suddenEnding = null;
 
+	ArrayList<BranchLevel> branchLevels;
 	int branchLength;
 	int subplotLength;
-	int maximumScenarioLength;
 	int minimumScenarioLength;
 
 	String description;
 	
 	File file;
 
-	public Scenario(String description, int branchLength, int subplotLength, int scenarioLength)
+	public Scenario(String description, int branchLength, int subplotLength, ArrayList<BranchLevel> branchLevels)
 	{
 		this.description = description;
 		this.branchLength = branchLength;
 		this.subplotLength = subplotLength;
-		this.maximumScenarioLength = scenarioLength;
+		this.branchLevels = branchLevels;
 	}
 	
 	public Scenario(JsonObject jsonObject)
@@ -69,7 +69,6 @@ public class Scenario implements JsonStructure, StoryElement
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLength = Main.processJsonInt(jsonObject, Main.BRANCH_LENGTH);
 		this.subplotLength = Main.processJsonInt(jsonObject, Main.SUBPLOT_LENGTH);
-		this.maximumScenarioLength = Main.processJsonInt(jsonObject, Main.SCENARIO_LENGTH);
 		Integer optionBecomesSubplotProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_SUBPLOT);
 		Integer optionBecomesNewExitPointProb = Main.processJsonInt(jsonObject, Main.OPTION_BECOMES_NEW_EXITPOINT);
 		Integer flavourHasSubFlavourProb = Main.processJsonInt(jsonObject, Main.FLAVOUR_HAS_SUBFLAVOUR);
@@ -100,20 +99,27 @@ public class Scenario implements JsonStructure, StoryElement
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
 		{
 			JsonObject exitPointObject = (JsonObject) entry.getValue();
-			ExitPoint exitPoint = Main.getFromJson(exitPointObject, this.maximumScenarioLength);
+			ExitPoint exitPoint = Main.getFromJson(exitPointObject, this.getMaximumScenarioLength());
 			this.exitPoints.put(Integer.valueOf(entry.getKey()), exitPoint);
 			int branchLevel = exitPointObject.getInt(Main.BRANCH_LEVEL);
 			
-			if (!this.branchLevels.containsKey(branchLevel))
-				this.branchLevels.put(branchLevel, new ArrayList<ExitPoint>());
+			if (!this.branchHierarchy.containsKey(branchLevel))
+				this.branchHierarchy.put(branchLevel, new ArrayList<ExitPoint>());
 				
-			this.branchLevels.get(branchLevel).add(exitPoint);
+			this.branchHierarchy.get(branchLevel).add(exitPoint);
 		}
 		
 		JsonObject flavourListsObject = jsonObject.getJsonObject(Main.FLAVOURLISTS);
 		for (Entry<String, JsonValue> entry:  flavourListsObject.entrySet())
 		{
 			this.flavourLists.put(Integer.valueOf(entry.getKey()), new FlavourList((JsonObject) entry.getValue()));
+		}
+		
+		this.branchLevels = new ArrayList<BranchLevel>();
+		ArrayList<String> branchLevelStrings = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.BRANCHLEVELS));
+		for (String branchLevelString : branchLevelStrings)
+		{
+			this.branchLevels.add(new BranchLevel(branchLevelString));
 		}
 		
 		JsonObject subplotsObject = jsonObject.getJsonObject(Main.SUBPLOTS);
@@ -129,6 +135,11 @@ public class Scenario implements JsonStructure, StoryElement
 		}
 	}
 	
+	public int getMaximumScenarioLength()
+	{
+		return this.branchLevels.size();
+	}
+	
 	public File getFile() {
 		return file;
 	}
@@ -141,14 +152,10 @@ public class Scenario implements JsonStructure, StoryElement
 	{
 		return this.minimumScenarioLength <= this.nextBranch;
 	}
-	
-	public int getMaximumScenarioLength() {
-		return maximumScenarioLength;
-	}
-	
+
 	public void setToLastBranch()
 	{
-		this.nextBranch = this.maximumScenarioLength;
+		this.nextBranch = this.getMaximumScenarioLength();
 	}
 	
 	public int getMinimumScenarioLength() {
@@ -234,7 +241,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	public boolean pastScenarioMidPoint()
 	{
-		double midPoint = (double)this.maximumScenarioLength/(double)2;
+		double midPoint = (double)this.getMaximumScenarioLength()/(double)2;
 		if ((double)this.currentBranch.getBranchLevel()< midPoint)
 			return false;
 		else
@@ -243,23 +250,23 @@ public class Scenario implements JsonStructure, StoryElement
 	
 	public ArrayList<ExitPoint> getExitPointsAtBranchLevel(int branchLevel)
 	{
-		if (this.branchLevels.containsKey(branchLevel))
-			return this.branchLevels.get(branchLevel);
+		if (this.branchHierarchy.containsKey(branchLevel))
+			return this.branchHierarchy.get(branchLevel);
 		else
 			return null;
 	}
 	
 	public void recordNewExitPoint(ExitPoint exitPoint, int branchLevel)
 	{
-		if (this.branchLevels.containsKey(branchLevel))
+		if (this.branchHierarchy.containsKey(branchLevel))
 		{
-			this.branchLevels.get(branchLevel).add(exitPoint);
+			this.branchHierarchy.get(branchLevel).add(exitPoint);
 		}
 		else
 		{
 			ArrayList<ExitPoint> exitPoints = new ArrayList<ExitPoint>();
 			exitPoints.add(exitPoint);
-			this.branchLevels.put(branchLevel, exitPoints);
+			this.branchHierarchy.put(branchLevel, exitPoints);
 		}
 	}
 	
@@ -274,7 +281,7 @@ public class Scenario implements JsonStructure, StoryElement
 
 	public boolean checkLastBranch()
 	{
-		return this.nextBranch >= this.maximumScenarioLength;
+		return this.nextBranch >= this.branchLevels.size();
 	}
 	
 	public JsonObject getJsonObject()
@@ -283,8 +290,7 @@ public class Scenario implements JsonStructure, StoryElement
 				.add(Main.DESCRIPTION, this.description)
 				.add(Main.BRANCH_LENGTH, this.branchLength)
 				.add(Main.SUBPLOT_LENGTH, this.subplotLength)
-				.add(Main.MINIMUM_SCENARIO_LENGTH, this.minimumScenarioLength)
-				.add(Main.SCENARIO_LENGTH, this.maximumScenarioLength);
+				.add(Main.MINIMUM_SCENARIO_LENGTH, this.minimumScenarioLength);
 		if (this.optionBecomesSubplot != null)
 			jsonObjectBuilder.add(Main.OPTION_BECOMES_SUBPLOT, this.optionBecomesSubplot.getProb());
 		if (this.optionBecomesNewExitPoint != null)
@@ -326,6 +332,14 @@ public class Scenario implements JsonStructure, StoryElement
 			tokensBuilder.add(String.valueOf(entry.getKey()), entry.getValue().getJsonObjectBuilder().build());
 		}		
 		jsonObjectBuilder.add(Main.TOKENS, tokensBuilder.build());
+		
+		ArrayList<String> branchLevelStrings = new ArrayList<String>();
+		for (BranchLevel branchLevel : this.branchLevels)
+		{
+			branchLevelStrings.add(branchLevel.getDescription());
+		}
+		
+		jsonObjectBuilder.add(Main.BRANCHLEVELS, Main.getJsonBuilderForStrings(branchLevelStrings));
 		
 		return jsonObjectBuilder.build();
 	}
@@ -489,76 +503,20 @@ public class Scenario implements JsonStructure, StoryElement
 		return subplotID;
 	}
 	
+	public BranchLevel getBranchLevel(int level)
+	{
+		return this.branchLevels.get(level);
+	}
+	
 	public static void main(String[] args)
 	{
-		
-//		ArrayList<BranchOption> branchOptions1 = new ArrayList<BranchOption>();
-//		branchOptions1.add(new BranchOption("One"));
-//		branchOptions1.add(new BranchOption("Two"));
-//		branchOptions1.add(new BranchOption("Three"));
-//		
-//		ArrayList<BranchOption> branchOptions2 = new ArrayList<BranchOption>();
-//		branchOptions2.add(new BranchOption("Four"));
-//		branchOptions2.add(new BranchOption("Five"));
-//		branchOptions2.add(new BranchOption("Six"));
-//		
-//		ArrayList<FlavourOption> flavourOptions = new ArrayList<FlavourOption>();
-//		flavourOptions.add(new FlavourOption("Seven"));
-//		flavourOptions.add(new FlavourOption("Eight"));
-//		flavourOptions.add(new FlavourOption("Nine"));
-//		
-//		ArrayList<FlavourOption> flavourOptions2 = new ArrayList<FlavourOption>();
-//		flavourOptions2.add(new FlavourOption("Strawberry"));
-//		flavourOptions2.add(new FlavourOption("Vanilla"));
-//		flavourOptions2.add(new FlavourOption("Chocolate"));
-//		
-//		ArrayList<SubplotOption> subplotOptions = new ArrayList<SubplotOption>();
-//		subplotOptions.add(new SubplotOption("A"));
-//		subplotOptions.add(new SubplotOption("B"));
-//		subplotOptions.add(new SubplotOption("C"));
-//		
-//		Scenario testScenario = new Scenario("Scenario 1", branchOptions1, "Descrip1", 0, 0, 2);
-//		testScenario.setOptionHasFlavour(new Chance(50));
-//		testScenario.setOptionBecomesSubplot(new Chance(50));
-//		testScenario.setOptionBecomesNewExitPoint(new Chance(50));
-//		testScenario.setOptionHasObstacle(new Chance(50));
-//		testScenario.setOptionHasToken(new Chance(50));
-//		
-//		Branch newBranch = new Branch(branchOptions2, "Descrip2", 0);	
-//		Integer newBranchId = testScenario.getExitPointID(newBranch);;
-//		testScenario.getCurrentBranch().setDefaultExitPoint(newBranchId);
-//		
-//		FlavourList flavourList = new FlavourList(flavourOptions, "Flavour 1");
-//		Integer flavourListId = testScenario.getFlavourListID(flavourList);
-//		
-//		FlavourList flavourList2 = new FlavourList(flavourOptions2, "Flavour 2");
-//		int flavourListId2 = testScenario.getFlavourListID(flavourList2);
-//		
-//		((FlavourOption) flavourList.get(0)).setSubFlavourList(flavourListId2);
-//		
-//		BranchOption newOption = new BranchOption("Ten");
-//		newOption.setFlavourList(flavourListId);
-//		newBranch.add(newOption);
-//		
-//		EndingOption ending1 = new EndingOption("END", 2);
-//		Integer endingPointId = testScenario.getExitPointID(ending1);
-//		newOption.setExitPoint(endingPointId);
-//		
-//		BranchOption newOption2 = new BranchOption("Eleven");
-//		newBranch.add(newOption2);
-//		
-//		Subplot subplot = new Subplot(subplotOptions, "subplotDescrip");
-//		Integer subplotID = testScenario.addSubPlot(subplot);
-//		newOption2.setSubPlot(subplotID);
-//		
-//		Token token = new Token("TestToken");
-//		testScenario.getTokenID(token);
-//		
-//		Main.setMainScenario(testScenario);
-//		System.out.println(testScenario.getJsonObject());
-//		
-//		Scenario newScenario = new Scenario(testScenario.getJsonObject());
-//		Main.setMainScenario(newScenario);
-//		System.out.println(newScenario.getJsonObject());
+		BranchLevel branchLevel = new BranchLevel("Branch Level One");
+		ArrayList<BranchLevel> branchLevels = new ArrayList<BranchLevel>();
+		branchLevels.add(branchLevel);
+		Scenario testScenario = new Scenario("Test Scenario", 1, 1, branchLevels);
+		Scenario newScenario = new Scenario(testScenario.getJsonObject());
+		Main.setMainScenario(newScenario);
+		System.out.println(testScenario.getJsonObject());
+		System.out.println(newScenario.getJsonObject());
 	}
 }

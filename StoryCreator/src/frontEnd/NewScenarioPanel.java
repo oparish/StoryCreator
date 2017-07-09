@@ -15,9 +15,11 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import main.Main;
+import storyElements.BranchLevel;
 import storyElements.Chance;
 import storyElements.Scenario;
 import storyElements.options.BranchOption;
+import storyElements.options.ExpandingContentType;
 
 @SuppressWarnings("serial")
 public class NewScenarioPanel extends MyOptionListPanel<Scenario>
@@ -48,6 +50,7 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 	private NumberSpinner openingChanceSpinner;
 	private NumberSpinner suddenEndingSpinner;
 	private NumberSpinner minimumScenarioLengthSpinner;
+	private ExpandingPanel<BranchLevelPanel, BranchLevel> branchLevelsPanel;
 	
 	public NewScenarioPanel()
 	{
@@ -81,10 +84,6 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		this.subplotLengthSpinner.setValue(Main.DEFAULTSUBPLOTLENGTH);
 		this.addSpinner(this.subplotLengthSpinner, SUBPLOT_LENGTH);
 		
-		this.scenarioLengthSpinner = new NumberSpinner();
-		this.scenarioLengthSpinner.setValue(Main.DEFAULTSCENARIOLENGTH);
-		this.addSpinner(this.scenarioLengthSpinner, SCENARIO_LENGTH);
-		
 		this.openingChanceSpinner = new NumberSpinner();
 		this.openingChanceSpinner.setValue(Main.DEFAULTOPENINGCHANCE);
 		this.addSpinner(this.openingChanceSpinner, NEW_OPENING_CHANCE);
@@ -96,11 +95,14 @@ public class NewScenarioPanel extends MyOptionListPanel<Scenario>
 		this.minimumScenarioLengthSpinner = new NumberSpinner();
 		this.minimumScenarioLengthSpinner.setValue(Main.DEFAULT_MINIMUM_SCENARIO_LENGTH);
 		this.addSpinner(this.minimumScenarioLengthSpinner, MINIMUM_SCENARIO_LENGTH);
+		
+		this.branchLevelsPanel = new ExpandingPanel<>(ExpandingContentType.BRANCHLEVEL, "Branch Levels");
+		this.addPanel(this.branchLevelsPanel);
 	}
 	
 	public Scenario getResult()
 	{
-		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.scenarioLengthSpinner.getInt());
+		Scenario newScenario =  new Scenario(this.scenarioDescriptionField.getText(), this.branchLengthSpinner.getInt(), this.subplotLengthSpinner.getInt(), this.branchLevelsPanel.getResult());
 		newScenario.setOptionBecomesNewExitPoint(new Chance(this.optionToBranchSpinner.getInt()));
 		newScenario.setOptionHasFlavour(new Chance(this.optionWithFlavourSpinner.getInt()));
 		newScenario.setOptionHasObstacle(new Chance(this.optionHasObstacleSpinner.getInt()));

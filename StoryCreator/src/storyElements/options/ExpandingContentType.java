@@ -4,9 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import storyElements.AspectList;
 import storyElements.AspectType;
+import storyElements.BranchLevel;
 import frontEnd.AspectListPanel;
 import frontEnd.AspectOptionPanel;
 import frontEnd.AspectTypePanel;
+import frontEnd.BranchLevelPanel;
 import frontEnd.InitialAspectOptionPanel;
 import frontEnd.MyPanel;
 import frontEnd.fieldPanel.FieldPanel;
@@ -15,7 +17,8 @@ public enum ExpandingContentType
 {
 	ASPECTOPTION(AspectOption.class, InitialAspectOptionPanel.class, "New Aspect Option"), 
 	ASPECTLIST(AspectList.class, AspectListPanel.class, "New Aspect List"),
-	ASPECTTYPE(AspectType.class, AspectTypePanel.class, "New Aspect Type");
+	ASPECTTYPE(AspectType.class, AspectTypePanel.class, "New Aspect Type"),
+	BRANCHLEVEL(BranchLevel.class, BranchLevelPanel.class, "New Branch Level");
 	
 	Class<? extends StoryElement> storyElementClass;
 	public Class<? extends StoryElement> getStoryElementClass() {

@@ -24,6 +24,9 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 	public AbstractBranchPanel(int branchLevel, String suggestion)
 	{
 		super();
+		
+		this.addJLabel(Main.getMainScenario().getBranchLevel(branchLevel).getDescription());
+		
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		
