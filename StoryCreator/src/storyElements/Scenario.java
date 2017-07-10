@@ -95,6 +95,13 @@ public class Scenario implements JsonStructure, StoryElement
 		
 		this.minimumScenarioLength = minimumScenarioLength;
 		
+		this.branchLevels = new ArrayList<BranchLevel>();
+		ArrayList<String> branchLevelStrings = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.BRANCHLEVELS));
+		for (String branchLevelString : branchLevelStrings)
+		{
+			this.branchLevels.add(new BranchLevel(branchLevelString));
+		}
+		
 		JsonObject exitPointListObject = jsonObject.getJsonObject(Main.EXITPOINTS);
 		for (Entry<String, JsonValue> entry:  exitPointListObject.entrySet())
 		{
@@ -113,13 +120,6 @@ public class Scenario implements JsonStructure, StoryElement
 		for (Entry<String, JsonValue> entry:  flavourListsObject.entrySet())
 		{
 			this.flavourLists.put(Integer.valueOf(entry.getKey()), new FlavourList((JsonObject) entry.getValue()));
-		}
-		
-		this.branchLevels = new ArrayList<BranchLevel>();
-		ArrayList<String> branchLevelStrings = Main.getStringsFromJsonArray(jsonObject.getJsonArray(Main.BRANCHLEVELS));
-		for (String branchLevelString : branchLevelStrings)
-		{
-			this.branchLevels.add(new BranchLevel(branchLevelString));
 		}
 		
 		JsonObject subplotsObject = jsonObject.getJsonObject(Main.SUBPLOTS);
