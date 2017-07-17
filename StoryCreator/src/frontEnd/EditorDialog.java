@@ -113,7 +113,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			Branch currentBranch = (Branch) this.setupStartingBranch(startingLevel);
 			scenario.setCurrentBranch(currentBranch);
-			this.currentAspect = scenario.getCurrentBranch().generateAspect(this);
+			this.currentAspect = scenario.getCurrentBranch().makeNewAspect(this);
 			this.history.add(new CurrentStatus(currentBranch, this.currentAspect));
 			scenario.getExitPointID(currentBranch);
 		}
@@ -520,7 +520,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private void startNewBranch(Branch branch)
 	{
 		Scenario scenario = Main.getMainScenario();
-		this.currentAspect = branch.generateAspect(this);
+		this.currentAspect = branch.makeNewAspect(this);
 		scenario.setCurrentBranch(branch);
 		this.history.add(new CurrentStatus(branch, this.currentAspect));
 		this.mainGenerator = null;

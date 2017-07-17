@@ -59,7 +59,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	private Integer obstacle = null;
 	private Integer branchLevel;
 	private Integer aspectTypeID;
-	private ArrayList<Integer> aspectIDs;
 
 	public AspectType getAspectType() {
 		return Main.getMainSpice().getAspectTypes().get(this.aspectTypeID);
@@ -91,7 +90,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			Main.getMainScenario().recordNewExitPoint(this, branchLevel);
 		}
 		this.aspectTypeID = aspectTypeID;
-		this.aspectIDs = new ArrayList<Integer>();
 	}
 	
 	public Branch(JsonObject jsonObject)
@@ -108,11 +106,6 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
 		this.aspectTypeID = jsonObject.getInt(Main.ASPECTTYPE);
-		this.aspectIDs = new ArrayList<Integer>();
-		for (JsonValue optionJson : jsonObject.getJsonArray(Main.ASPECTS))
-		{
-			aspectIDs.add(((JsonNumber)optionJson).intValue());
-		}
 		this.useOpening = true;
 	}
 	
@@ -255,29 +248,10 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		if (this.obstacle != null)
 			jsonObjectBuilder.add(Main.OBSTACLE, this.obstacle);
 		jsonObjectBuilder.add(Main.ASPECTTYPE, this.aspectTypeID);
-		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-		for (Integer aspectID : this.aspectIDs)
-		{
-			jsonArrayBuilder.add(aspectID);
-		}
-		jsonObjectBuilder.add(Main.ASPECTS, jsonArrayBuilder.build());
 		return jsonObjectBuilder;
 	}
 	
-	public Aspect generateAspect(EditorDialog editorDialog)
-	{
-		int number = Main.getRandomNumberInRange(this.aspectIDs.size() + 1);
-		if (number == this.aspectIDs.size())
-		{
-			return this.makeNewAspect(editorDialog);
-		}
-		else
-		{
-			return this.getAspectType().getAspect(number);
-		}
-	}
-	
-	private Aspect makeNewAspect(EditorDialog editorDialog)
+	public Aspect makeNewAspect(EditorDialog editorDialog)
 	{
 		AspectType aspectType = this.getAspectType();
 		MyPanel<Aspect> aspectPanel;
