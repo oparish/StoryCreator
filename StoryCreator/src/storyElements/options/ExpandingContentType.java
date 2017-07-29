@@ -7,6 +7,7 @@ import storyElements.AspectType;
 import storyElements.BranchLevel;
 import frontEnd.AspectListPanel;
 import frontEnd.AspectOptionPanel;
+import frontEnd.AspectTypeListPanel;
 import frontEnd.AspectTypePanel;
 import frontEnd.BranchLevelPanel;
 import frontEnd.InitialAspectOptionPanel;
@@ -18,7 +19,8 @@ public enum ExpandingContentType
 	ASPECTOPTION(AspectOption.class, InitialAspectOptionPanel.class, "New Aspect Option"), 
 	ASPECTLIST(AspectList.class, AspectListPanel.class, "New Aspect List"),
 	ASPECTTYPE(AspectType.class, AspectTypePanel.class, "New Aspect Type"),
-	BRANCHLEVEL(BranchLevel.class, BranchLevelPanel.class, "New Branch Level");
+	BRANCHLEVEL(BranchLevel.class, BranchLevelPanel.class, "New Branch Level"),
+	EXISTING_ASPECTTYPE(AspectType.class, AspectTypeListPanel.class, "Aspect Type");
 	
 	Class<? extends StoryElement> storyElementClass;
 	public Class<? extends StoryElement> getStoryElementClass() {

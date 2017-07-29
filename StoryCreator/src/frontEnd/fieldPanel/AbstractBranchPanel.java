@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
+import frontEnd.AspectTypeListPanel;
+import frontEnd.ExpandingPanel;
 import frontEnd.MyPanel;
 import frontEnd.StoryElementList;
 import main.Main;
 import storyElements.AspectType;
 import storyElements.optionLists.Branch;
 import storyElements.options.BranchOption;
+import storyElements.options.ExpandingContentType;
 import storyElements.options.OptionContentType;
 
 public abstract class AbstractBranchPanel extends MyPanel<Branch>
@@ -19,7 +22,7 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 
 	private JTextField branchDescriptionField;
 	private ArrayList<JTextField> initialOptionFields;
-	private StoryElementList<AspectType> aspectTypes;
+	private ExpandingPanel<AspectTypeListPanel, AspectType> aspectTypesPanel;
 	
 	public AbstractBranchPanel(int branchLevel, String suggestion)
 	{
@@ -30,8 +33,8 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		
-		this.aspectTypes = StoryElementList.create(Main.getMainSpice().getAspectTypes().values());
-		this.addStoryElementList(this.aspectTypes);
+		this.aspectTypesPanel = new ExpandingPanel<>(ExpandingContentType.EXISTING_ASPECTTYPE, "Aspect Types");
+		this.addPanel(this.aspectTypesPanel);
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
 		for (int i = 0; i < Main.INITIALOPTIONS_FOR_BRANCH; i++)
@@ -42,13 +45,15 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		}	
 	}
 	
-	private AspectType getAspectType()
+	private ArrayList<Integer> getAspectTypes()
 	{
-		AspectType selectedType = this.aspectTypes.getSelectedElement();
-		if (selectedType == null)
-			return this.aspectTypes.getModel().getElementAt(0);
-		else
-			return selectedType;
+		ArrayList<AspectType> aspectTypes = this.aspectTypesPanel.getResult();
+		ArrayList<Integer> aspectTypeIDs = new ArrayList<Integer>();
+		for (AspectType aspectType : aspectTypes)
+		{
+			aspectTypeIDs.add(Main.getMainSpice().getAspectIDByType(aspectType));
+		}
+		return aspectTypeIDs;
 	}
 	
 	public Branch getResult()
@@ -59,6 +64,6 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 			initialOptions.add(new BranchOption(textField.getText()));
 		}
 		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch(), 
-				Main.getMainSpice().getAspectIDByType(this.getAspectType()));
+				this.getAspectTypes());
 	}
 }

@@ -71,7 +71,7 @@ public class EditorDialog extends JFrame implements ActionListener
 	private StringBuilder storyBuilder;
 	private StringBuilder techBuilder;
 	private Token currentObstacle;
-	private Aspect currentAspect;
+	private ArrayList<Aspect> currentAspects;
 	
 	MyButton progressButton;
 	
@@ -113,13 +113,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		{
 			Branch currentBranch = (Branch) this.setupStartingBranch(startingLevel);
 			scenario.setCurrentBranch(currentBranch);
-			this.currentAspect = scenario.getCurrentBranch().makeNewAspect(this);
-			this.history.add(new CurrentStatus(currentBranch, this.currentAspect));
+			this.currentAspects = scenario.getCurrentBranch().makeNewAspects(this);
+			this.history.add(new CurrentStatus(currentBranch, this.currentAspects));
 			scenario.getExitPointID(currentBranch);
 		}
 		else
 		{
-			this.history.add(new CurrentStatus(scenario.getCurrentBranch(), this.currentAspect));
+			this.history.add(new CurrentStatus(scenario.getCurrentBranch(), this.currentAspects));
 		}
 		
 
@@ -291,7 +291,7 @@ public class EditorDialog extends JFrame implements ActionListener
 		}
 			
 		Main.getMainScenario().setCurrentBranch(newStatus.branch);
-		this.currentAspect = newStatus.aspect;
+		this.currentAspects = newStatus.aspects;
 		this.nextExitPoint = newStatus.branch;
 		this.flavour = null;
 		newStatus.branch.setUseOpening(true);
@@ -503,10 +503,13 @@ public class EditorDialog extends JFrame implements ActionListener
 		infoBuilder.append("Current Option: " + this.getCurrentOptionDescription() + "\r\n");	
 		infoBuilder.append("Current Flavour: " + this.getCurrentFlavourDescription() + "\r\n");
 		infoBuilder.append("Current Obstacle: " + this.getCurrentObstacleDescription() + "\r\n");
-		if (this.currentAspect != null)
+		if (this.currentAspects != null)
 		{
-			infoBuilder.append("Current Aspect: " + this.currentAspect.getDescription() + "\r\n");
-			infoBuilder.append(this.currentAspect.getQualitiesDescription() + "\r\n");
+			for (Aspect currentAspect : this.currentAspects)
+			{
+				infoBuilder.append("Aspect: " + currentAspect.getDescription() + "\r\n");
+				infoBuilder.append(currentAspect.getQualitiesDescription() + "\r\n");
+			}		
 		}
 
 		infoBuilder.append("Current Tokens:\r\n");
@@ -520,9 +523,9 @@ public class EditorDialog extends JFrame implements ActionListener
 	private void startNewBranch(Branch branch)
 	{
 		Scenario scenario = Main.getMainScenario();
-		this.currentAspect = branch.makeNewAspect(this);
+		this.currentAspects = branch.makeNewAspects(this);
 		scenario.setCurrentBranch(branch);
-		this.history.add(new CurrentStatus(branch, this.currentAspect));
+		this.history.add(new CurrentStatus(branch, this.currentAspects));
 		this.mainGenerator = null;
 		this.currentOption = null;
 		this.updateDisplay();
@@ -615,12 +618,12 @@ public class EditorDialog extends JFrame implements ActionListener
 	public class CurrentStatus implements StoryElement
 	{
 		public Branch branch;
-		public Aspect aspect;
+		public ArrayList<Aspect> aspects;
 		
-		public CurrentStatus(Branch branch, Aspect aspect)
+		public CurrentStatus(Branch branch, ArrayList<Aspect> aspects)
 		{
 			this.branch = branch;
-			this.aspect = aspect;
+			this.aspects = aspects;
 		}
 
 		@Override

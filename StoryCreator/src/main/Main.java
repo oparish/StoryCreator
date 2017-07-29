@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -263,6 +264,17 @@ public class Main
 		return scenarioFile.getAbsolutePath();
 	}
 	
+	public static ArrayList<Integer> getIntegersFromJsonArray(JsonArray jsonArray)
+	{
+		ArrayList<Integer> integers = new ArrayList<Integer>();
+		if (jsonArray == null)
+			return integers;
+		for (JsonValue stringJson : jsonArray)
+		{
+			integers.add(((JsonNumber) stringJson).intValue());
+		}
+		return integers;
+	}
 	
 	public static ArrayList<String> getStringsFromJsonArray(JsonArray jsonArray)
 	{
@@ -282,6 +294,16 @@ public class Main
 		for (String string: strings)
 		{
 			jsonArrayBuilder.add(string);
+		}
+		return jsonArrayBuilder;
+	}
+	
+	public static JsonArrayBuilder getJsonBuilderForIntegers(ArrayList<Integer> integers)
+	{
+		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+		for (Integer integer: integers)
+		{
+			jsonArrayBuilder.add(integer);
 		}
 		return jsonArrayBuilder;
 	}

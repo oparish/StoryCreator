@@ -58,10 +58,10 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 	private Integer badExitPoint = null;
 	private Integer obstacle = null;
 	private Integer branchLevel;
-	private Integer aspectTypeID;
+	private ArrayList<Integer> aspectTypeIDs;
 
-	public AspectType getAspectType() {
-		return Main.getMainSpice().getAspectTypes().get(this.aspectTypeID);
+	public AspectType getAspectType(int id) {
+		return Main.getMainSpice().getAspectTypes().get(id);
 	}
 
 	public Integer getBranchLevel() {
@@ -80,7 +80,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.defaultExitPoint = defaultExitPoint;
 	}
 
-	public Branch(ArrayList<BranchOption> initialOptions, String description, int branchLevel, int aspectTypeID)
+	public Branch(ArrayList<BranchOption> initialOptions, String description, int branchLevel, ArrayList<Integer> aspectTypeIDs)
 	{
 		super(initialOptions, description);
 		this.branchLevel = branchLevel;
@@ -89,7 +89,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		{
 			Main.getMainScenario().recordNewExitPoint(this, branchLevel);
 		}
-		this.aspectTypeID = aspectTypeID;
+		this.aspectTypeIDs = aspectTypeIDs;
 	}
 	
 	public Branch(JsonObject jsonObject)
@@ -105,7 +105,7 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 		this.obstacle = Main.processJsonInt(jsonObject, Main.OBSTACLE);
 		this.description = jsonObject.getString(Main.DESCRIPTION);
 		this.branchLevel = jsonObject.getInt(Main.BRANCH_LEVEL);
-		this.aspectTypeID = jsonObject.getInt(Main.ASPECTTYPE);
+		this.aspectTypeIDs = Main.getIntegersFromJsonArray(jsonObject.getJsonArray(Main.ASPECTTYPES));
 		this.useOpening = true;
 	}
 	
@@ -247,25 +247,31 @@ public class Branch extends StorySection<BranchOption> implements ExitPoint, Exi
 			jsonObjectBuilder.add(Main.BAD_EXITPOINT, this.badExitPoint);
 		if (this.obstacle != null)
 			jsonObjectBuilder.add(Main.OBSTACLE, this.obstacle);
-		jsonObjectBuilder.add(Main.ASPECTTYPE, this.aspectTypeID);
+		jsonObjectBuilder.add(Main.ASPECTTYPES, Main.getJsonBuilderForIntegers(this.aspectTypeIDs));
 		return jsonObjectBuilder;
 	}
 	
-	public Aspect makeNewAspect(EditorDialog editorDialog)
+	public ArrayList<Aspect> makeNewAspects(EditorDialog editorDialog)
 	{
-		AspectType aspectType = this.getAspectType();
-		MyPanel<Aspect> aspectPanel;
-		if (aspectType.getAspectsSize() != 0)
+		ArrayList<Aspect> aspects = new ArrayList<Aspect>();
+		for (Integer id : this.aspectTypeIDs)
 		{
-			aspectPanel = new OldOrNewAspectPanel(editorDialog, this.getAspectType());
+			AspectType aspectType = this.getAspectType(id);
+			MyPanel<Aspect> aspectPanel;
+			if (aspectType.getAspectsSize() != 0)
+			{
+				aspectPanel = new OldOrNewAspectPanel(editorDialog, aspectType);
+			}
+			else
+			{
+				aspectPanel = new AspectPanel(editorDialog, aspectType);
+			}
+			Main.showWindowInCentre(new FieldDialog(editorDialog, true, new MyPanel[]{aspectPanel}));
+			Aspect aspect = aspectPanel.getResult();
+			aspects.add(aspect);
 		}
-		else
-		{
-			aspectPanel = new AspectPanel(editorDialog, this.getAspectType());
-		}
-		Main.showWindowInCentre(new FieldDialog(editorDialog, true, new MyPanel[]{aspectPanel}));
-		Aspect aspect = aspectPanel.getResult();
-		return aspect;
+
+		return aspects;
 	}
 	
 	public Generator getGenerator()
