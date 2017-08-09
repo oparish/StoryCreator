@@ -21,7 +21,6 @@ public class NewSpicePanel extends MyPanel<Spice>
 {
 	private static final String ASPECTTYPE_TITLE = "Aspect Type";
 	
-	ArrayList<NewAspectTypePanel> newAspectTypePanels;
 	ArrayList<NewTwistListPanel> newTwistListPanels;
 	ArrayList<JTextField> suggestionFields;
 	ArrayList<JTextField> goodSuggestionFields;

@@ -40,6 +40,12 @@ public class FieldDialog extends JDialog
 		this.add(new JScrollPane(this.innerPanel));
 	}
 	
+	public FieldDialog(Frame owner, boolean modal, MyPanel<?> myPanel)
+	{
+		this(owner, modal);	
+		this.addMyPanel(myPanel);
+	}
+	
 	public FieldDialog(Frame owner, boolean modal, ArrayList<MyPanel> myPanels)
 	{
 		this(owner, modal);	

@@ -8,14 +8,17 @@ import javax.json.JsonObject;
 import javax.swing.JLabel;
 
 import main.Main;
+import storyElements.AspectType;
 import storyElements.Scenario;
 import storyElements.Spice;
+import storyElements.options.ExpandingContentType;
 
 public class InitialScenarioDialog extends InitialDialog
 {
 	private static final String NEW_SCENARIO = "New Scenario";
 	private static final String LOAD_SCENARIO = "Load Scenario";
 	private static final String STARTING_LEVEL = "Starting Level";
+	private static final String NEW_ASPECT_TYPE = "New Aspect Type";
 	
 	StoryElementList<Scenario> existingScenarios; 
 	NumberSpinner startingSpinner;
@@ -27,6 +30,7 @@ public class InitialScenarioDialog extends InitialDialog
 		this.loadScenarioFiles();
 		this.add(this.makeButton(NEW_SCENARIO, ButtonID.NEW_SCENARIO), this.setupGridBagConstraints(0, 1, 1, 1));
 		this.add(this.makeButton(LOAD_SCENARIO, ButtonID.LOAD_SCENARIO), this.setupGridBagConstraints(1, 1, 1, 1));
+		this.add(this.makeButton(NEW_ASPECT_TYPE, ButtonID.NEW_ASPECT_TYPE), this.setupGridBagConstraints(0, 3, 2, 1));
 		this.startingSpinner = new NumberSpinner();
 		this.add(new JLabel(STARTING_LEVEL), this.setupGridBagConstraints(0, 2, 1, 1));
 		this.add(this.startingSpinner, this.setupGridBagConstraints(1, 2, 1, 1));
@@ -89,6 +93,14 @@ public class InitialScenarioDialog extends InitialDialog
 		Main.getMainSpice().addScenarioFilePath(scenarioFilePath);
 	}
 	
+	private void newAspectType()
+	{
+		AspectTypePanel aspectTypePanel = new AspectTypePanel();
+		FieldDialog fieldDialog = new FieldDialog(null, true, aspectTypePanel);
+		Main.showWindowInCentre(fieldDialog);
+		Main.getMainSpice().addAspectType(Main.getMainSpice().getAspectTypes().size(), aspectTypePanel.getResult());
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -100,6 +112,9 @@ public class InitialScenarioDialog extends InitialDialog
 				break;
 			case LOAD_SCENARIO:
 				this.loadScenario();
+				break;
+			case NEW_ASPECT_TYPE:
+				this.newAspectType();
 				break;
 		}
 	}
