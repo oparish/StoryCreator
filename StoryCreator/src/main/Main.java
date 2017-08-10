@@ -205,8 +205,10 @@ public class Main
 	
 	public static void showWindowInCentre(Window window)
 	{
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
 		Dimension screenCentre = main.Main.getScreenCentre();
 		Main.window = window;
+		window.setMinimumSize(new Dimension(screenSize.width/2, screenSize.height/2));
 		window.setLocation(screenCentre.width - window.getWidth()/2, screenCentre.height - window.getHeight()/2);
 		window.setVisible(true);
 	}
