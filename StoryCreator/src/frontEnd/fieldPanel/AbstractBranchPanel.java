@@ -1,11 +1,18 @@
 package frontEnd.fieldPanel;
 
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
 import frontEnd.AspectTypeListPanel;
+import frontEnd.AspectTypePanel;
+import frontEnd.ButtonID;
 import frontEnd.ExpandingPanel;
+import frontEnd.FieldDialog;
+import frontEnd.MyButton;
 import frontEnd.MyPanel;
 import frontEnd.StoryElementList;
 import main.Main;
@@ -15,7 +22,7 @@ import storyElements.options.BranchOption;
 import storyElements.options.ExpandingContentType;
 import storyElements.options.OptionContentType;
 
-public abstract class AbstractBranchPanel extends MyPanel<Branch>
+public abstract class AbstractBranchPanel extends MyPanel<Branch> implements ActionListener
 {
 	private static final String BRANCH_DESCRIPTION = "Branch Description";
 	private static final String INITIAL_OPTION = "Initial Option";
@@ -33,8 +40,8 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		this.branchDescriptionField = new JTextField();
 		this.addTextField(this.branchDescriptionField, BRANCH_DESCRIPTION);
 		
-		this.aspectTypesPanel = new ExpandingPanel<>(ExpandingContentType.EXISTING_ASPECTTYPE, "Aspect Types");
-		this.addPanel(this.aspectTypesPanel);
+		MyButton myButton = this.addJButton(ButtonID.NEW_ASPECT_TYPE, "New Aspect Type");
+		myButton.addActionListener(this);
 		
 		this.initialOptionFields = new ArrayList<JTextField>();
 		for (int i = 0; i < Main.INITIALOPTIONS_FOR_BRANCH; i++)
@@ -42,7 +49,10 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 			JTextField initialOptionField = new JTextField();
 			this.initialOptionFields.add(initialOptionField);
 			this.addTextField(initialOptionField, INITIAL_OPTION + " " + i);
-		}	
+		}
+		
+		this.aspectTypesPanel = new ExpandingPanel<>(ExpandingContentType.EXISTING_ASPECTTYPE, "Aspect Types");
+		this.addPanel(this.aspectTypesPanel);
 	}
 	
 	private ArrayList<Integer> getAspectTypes()
@@ -65,5 +75,30 @@ public abstract class AbstractBranchPanel extends MyPanel<Branch>
 		}
 		return new Branch(initialOptions, this.branchDescriptionField.getText(), Main.getMainScenario().getNextBranch(), 
 				this.getAspectTypes());
+	}
+	
+	private void newAspectType()
+	{
+		AspectTypePanel aspectTypePanel = new AspectTypePanel();
+		FieldDialog fieldDialog = new FieldDialog(null, true, aspectTypePanel);
+		Main.showWindowInCentre(fieldDialog);
+		Main.getMainSpice().addAspectType(Main.getMainSpice().getAspectTypes().size(), aspectTypePanel.getResult());
+		Main.setWindow(Main.findWindow(this));
+		this.remove(this.aspectTypesPanel);
+		this.aspectTypesPanel = new ExpandingPanel<>(ExpandingContentType.EXISTING_ASPECTTYPE, "Aspect Types");
+		this.addPanel(this.aspectTypesPanel);
+		Main.findWindow(this).validate();
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		MyButton button = (MyButton) e.getSource();
+		switch(button.getId())
+		{
+			case NEW_ASPECT_TYPE:
+				this.newAspectType();
+				break;
+			default:
+		}
 	}
 }

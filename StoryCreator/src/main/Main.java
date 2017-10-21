@@ -1,5 +1,6 @@
 package main;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -211,6 +212,21 @@ public class Main
 		window.setMinimumSize(new Dimension(screenSize.width/2, screenSize.height/2));
 		window.setLocation(screenCentre.width - window.getWidth()/2, screenCentre.height - window.getHeight()/2);
 		window.setVisible(true);
+	}
+	
+	public static void setWindow(Window window)
+	{
+		Main.window = window;
+	}
+	
+	public static Window findWindow(Component component)
+	{
+		Container container = component.getParent();
+		while (!(container instanceof Window))
+		{
+			container = container.getParent();
+		}
+		return (Window) container;
 	}
 	
 	public static String saveScenario(Component parent)
